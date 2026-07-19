@@ -7,7 +7,7 @@ export function formatCurrency(amount: number): string {
 
 export function formatDateTime(date: Date | string | number): string {
   const targetDate = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
