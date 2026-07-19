@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useCartStore } from "@/features/store/store/use-cart-store";
-import { CartDrawer } from "./cart-drawer";
+import { useCartStore } from "@/features/cart/store/use-cart-store";
+import { CartDrawer } from "@/features/cart/components/cart-drawer";
 
 interface StoreHeaderProps {
   tenantId: string;

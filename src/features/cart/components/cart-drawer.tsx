@@ -1,8 +1,8 @@
 "use client";
 
-import { useCartStore } from "@/features/store/store/use-cart-store";
+import { useCartStore } from "@/features/cart/store/use-cart-store";
 import { useState, useEffect } from "react";
-import { formatCurrency } from "@/lib/utils/format";
+import { formatCurrency } from "@/features/shared/utils/format";
 
 interface CartDrawerProps {
   tenantId: string;

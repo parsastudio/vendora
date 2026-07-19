@@ -1,10 +1,8 @@
-"use server";
-
-import { db } from "../../../lib/db";
-import { users, usersToRoles } from "../../../lib/db/schema/users";
-import { hashPassword } from "../../auth/lib/auth-utils";
+import { db } from "@/lib/db";
+import { users, usersToRoles } from "@/lib/db/schema/users";
+import { hashPassword } from "@/features/auth/lib/auth-utils";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
