@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useUIStore } from "@/features/shared/store/use-ui-store";
+import { useUIStore } from "../store/use-ui-store";
 
 export function AdminSidebar() {
   const pathname = usePathname();

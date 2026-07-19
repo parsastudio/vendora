@@ -3,8 +3,8 @@ import { db } from "@/lib/db";
 import { discounts } from "@/lib/db/schema/orders";
 import { productVariants, inventory } from "@/lib/db/schema/products";
 import { eq, and, inArray } from "drizzle-orm";
-import { CartItem } from "@/features/store/types/cart";
-import { calculateCartTotals } from "@/features/store/utils/cart-math";
+import { CartItem } from "@/features/cart/types/cart";
+import { calculateCartTotals } from "@/features/cart/utils/cart-math";
 
 export async function POST(request: Request) {
   try {

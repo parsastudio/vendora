@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq } from "drizzle-orm";
-import { formatCurrency } from "@/lib/utils/format";
+import { formatCurrency } from "@/features/shared/utils/format";
 
 interface CartPageProps {
   params: Promise<{ domain: string }>;

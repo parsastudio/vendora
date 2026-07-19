@@ -1,10 +1,10 @@
-import { db } from "@/lib/db";
-import { categories } from "@/lib/db/schema/products";
+import { db } from "../../../../lib/db";
+import { categories } from "../../../../lib/db/schema/products";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "../../../../features/auth/lib/auth";
 import { redirect } from "next/navigation";
-import { createCategory, deleteCategory } from "@/lib/actions/category";
+import { createCategory, deleteCategory } from "../../../../features/products/actions/category";
 import { ReactNode } from "react";
 
 interface DbCategory {

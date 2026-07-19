@@ -1,9 +1,9 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useUIStore } from "@/features/shared/store/use-ui-store";
+import { useUIStore } from "../store/use-ui-store";
 import { AdminSidebar } from "./sidebar";
-import { UserNav } from "./user-nav";
+import { UserNav } from "../../auth/components/user-nav";
 
 interface AdminLayoutWrapperProps {
   children: ReactNode;

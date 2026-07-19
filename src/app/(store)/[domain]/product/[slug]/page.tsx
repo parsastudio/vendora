@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq, and } from "drizzle-orm";
-import { ProductVariantSelector } from "@/components/store/product-variant-selector";
+import { ProductVariantSelector } from "@/features/products/components/product-variant-selector";
 
 interface ProductPageProps {
   params: Promise<{ domain: string; slug: string }>;

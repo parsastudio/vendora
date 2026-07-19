@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq } from "drizzle-orm";
 import { Metadata } from "next";
-import { StoreHeader } from "@/components/store/store-header";
+import { StoreHeader } from "@/features/tenant/components/store-header";
 
 interface StorefrontLayoutProps {
   children: ReactNode;

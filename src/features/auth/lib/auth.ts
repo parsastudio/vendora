@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "@/lib/db";
-import { users, usersToRoles, rolesToPermissions, permissions } from "@/lib/db/schema/users";
+import { db } from "../../../lib/db";
+import { users, usersToRoles, rolesToPermissions, permissions } from "../../../lib/db/schema/users";
 import { eq, inArray } from "drizzle-orm";
 import { verifyPassword } from "./auth-utils";
 

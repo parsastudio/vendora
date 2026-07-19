@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
-import { productSchema } from "@/features/admin/validation/product";
+import { productSchema } from "@/features/products/validation/product";
 import { eq, and, like, sql } from "drizzle-orm";
 
 export async function GET(request: Request) {
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
       for (const variant of validated.variants) {
         await tx.insert(productVariants).values({
-          id: `var-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+          id: `var-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
           productId,
           sku: variant.sku,
           price: variant.price,

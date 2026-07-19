@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useCartStore } from "@/features/store/store/use-cart-store";
-import { formatCurrency } from "@/lib/utils/format";
+import { useCartStore } from "../../cart/store/use-cart-store";
+import { formatCurrency } from "../../shared/utils/format";
 
 interface Variant {
   id: string;

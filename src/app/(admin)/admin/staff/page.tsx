@@ -1,11 +1,11 @@
-import { db } from "@/lib/db";
-import { users, roles, usersToRoles } from "@/lib/db/schema/users";
+import { db } from "../../../../lib/db";
+import { users, roles, usersToRoles } from "../../../../lib/db/schema/users";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "../../../../features/auth/lib/auth";
 import { redirect } from "next/navigation";
-import { AddStaffDialog } from "@/components/admin/add-staff-dialog";
-import { deleteStaffMember } from "@/lib/actions/staff";
+import { AddStaffDialog } from "../../../../features/staff/components/add-staff-dialog";
+import { deleteStaffMember } from "../../../../features/staff/actions/staff";
 
 export default async function StaffMembersPage() {
   const session = await getServerSession(authOptions);

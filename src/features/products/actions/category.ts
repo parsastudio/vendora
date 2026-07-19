@@ -1,9 +1,9 @@
 "use server";
 
-import { db } from "@/lib/db";
-import { categories } from "@/lib/db/schema/products";
+import { db } from "../../../lib/db";
+import { categories } from "../../../lib/db/schema/products";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "../../auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 

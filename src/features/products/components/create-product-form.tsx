@@ -2,9 +2,9 @@
 
 import { useState, useTransition, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { FileUpload } from "@/components/ui/file-upload";
+import { FileUpload } from "../../shared/components/ui/file-upload";
 import { CategoryPicker } from "./category-picker";
-import { generateSKU } from "@/lib/utils/sku-generator";
+import { generateSKU } from "../utils/sku-generator";
 import Image from "next/image";
 
 interface DbCategory {
