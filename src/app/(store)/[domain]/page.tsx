@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { products } from "@/lib/db/schema/products";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq } from "drizzle-orm";
+import Link from "next/link";
 
 interface StorefrontProps {
   params: Promise<{ domain: string }>;
@@ -66,9 +67,12 @@ export default async function StorefrontPage({ params }: StorefrontProps) {
                 </p>
               </div>
               <div className="mt-4">
-                <button className="w-full rounded-md bg-zinc-950 px-3 py-2 text-center text-xs font-semibold text-zinc-50 hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                <Link
+                  href={`/${tenantDomain}/product/${product.slug}`}
+                  className="block w-full rounded-md bg-zinc-950 px-3 py-2 text-center text-xs font-semibold text-zinc-50 hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+                >
                   View Details
-                </button>
+                </Link>
               </div>
             </div>
           </div>

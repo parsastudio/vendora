@@ -67,6 +67,20 @@ export function AdminSidebar() {
       ),
     },
     {
+      name: "Discounts & Coupons",
+      href: "/admin/discounts",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4l1 3H7l1-3h4z"
+          />
+        </svg>
+      ),
+    },
+    {
       name: "Staff Members",
       href: "/admin/staff",
       icon: (

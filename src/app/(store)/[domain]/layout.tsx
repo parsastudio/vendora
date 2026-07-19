@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq } from "drizzle-orm";
 import { Metadata } from "next";
+import { StoreHeader } from "@/components/store/store-header";
 
 interface StorefrontLayoutProps {
   children: ReactNode;
@@ -62,6 +63,7 @@ export default async function StorefrontLayout({ children, params }: StorefrontL
 
   return (
     <div style={customStyles} className="flex-1">
+      <StoreHeader tenantId={tenant.id} tenantName={tenant.name} />
       {children}
     </div>
   );
