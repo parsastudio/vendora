@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { createStaffMember } from "../actions/staff";
+import { createStaffMember } from "@/features/staff/actions/staff";
 
 interface Role {
   id: string;

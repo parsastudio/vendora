@@ -2,9 +2,9 @@ import { db } from "@/lib/db";
 import { warehouses, inventory, productVariants, products } from "@/lib/db/schema/products";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
-import { createWarehouse, updateStock } from "@/lib/actions/inventory";
+import { createWarehouse, updateStock } from "@/features/inventory/actions/inventory";
 
 export default async function InventoryPage() {
   const session = await getServerSession(authOptions);

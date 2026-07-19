@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { db } from "@/lib/db";
 import { carts, cartItems } from "@/lib/db/schema/orders";
 import { eq } from "drizzle-orm";
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     if (items.length > 0) {
       const itemsToInsert = items.map((item) => ({
-        id: `ci-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+        id: `ci-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
         cartId,
         variantId: item.variantId,
         quantity: item.quantity,

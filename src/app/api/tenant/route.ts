@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getActiveTenant } from "@/lib/tenant";
+import { getActiveTenant } from "@/features/tenant/lib/tenant";
 
 export async function GET() {
   const tenant = await getActiveTenant();

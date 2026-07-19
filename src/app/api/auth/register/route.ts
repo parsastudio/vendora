@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
 import { users, roles, permissions, rolesToPermissions, usersToRoles } from "@/lib/db/schema/users";
-import { hashPassword } from "@/lib/auth-utils";
+import { hashPassword } from "@/features/auth/lib/auth-utils";
 
 export async function POST(request: Request) {
   try {

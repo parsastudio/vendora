@@ -2,10 +2,10 @@ import { db } from "@/lib/db";
 import { discounts } from "@/lib/db/schema/orders";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
-import { createDiscount, deleteDiscount } from "@/lib/actions/discount";
-import { formatCurrency } from "@/lib/utils/format";
+import { createDiscount, deleteDiscount } from "@/features/discounts/actions/discount";
+import { formatCurrency } from "@/features/shared/utils/format";
 
 export default async function DiscountsPage() {
   const session = await getServerSession(authOptions);

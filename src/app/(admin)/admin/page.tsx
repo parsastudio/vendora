@@ -4,8 +4,8 @@ import { users } from "@/lib/db/schema/users";
 import { orders } from "@/lib/db/schema/orders";
 import { sql, eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { formatCurrency } from "@/lib/utils/format";
+import { authOptions } from "@/features/auth/lib/auth";
+import { formatCurrency } from "@/features/shared/utils/format";
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
