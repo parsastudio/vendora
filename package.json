@@ -9,7 +9,10 @@
     "files": "python3 debug/file_collector.py",
     "tree": "python3 debug/tree_generator.py",
     "errors": "python3 debug/error_checker.py",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx src/lib/db/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1090.0",
@@ -52,6 +55,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.1.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.1",
     "typescript": "^5"
   }
 }
