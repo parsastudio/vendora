@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { roles, rolesToPermissions, permissions } from "@/lib/db/schema/users";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function RolesAccessPage() {

@@ -1,9 +1,7 @@
-"use server";
-
 import { db } from "@/lib/db";
 import { discounts } from "@/lib/db/schema/orders";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
