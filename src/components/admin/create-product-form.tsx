@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FileUpload } from "@/components/ui/file-upload";
 import { CategoryPicker } from "./category-picker";
 import { generateSKU } from "@/lib/utils/sku-generator";
+import Image from "next/image";
 
 interface DbCategory {
   id: string;
@@ -170,7 +171,14 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
         <div className="mt-4">
           {imageUrl ? (
             <div className="relative h-40 w-40 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
-              <img src={imageUrl} alt="Uploaded S3 asset" className="h-full w-full object-cover" />
+              <Image
+                src={imageUrl}
+                alt="Uploaded S3 asset"
+                width={160}
+                height={160}
+                unoptimized
+                className="h-full w-full object-cover"
+              />
             </div>
           ) : (
             <FileUpload onUploadSuccess={handleImageUpload} />

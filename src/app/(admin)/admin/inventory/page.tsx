@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { warehouses, inventory, productVariants, products } from "@/lib/db/schema/products";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";

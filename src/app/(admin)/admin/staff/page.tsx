@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { users, roles, usersToRoles } from "@/lib/db/schema/users";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -35,6 +35,11 @@ export default async function StaffMembersPage() {
     })
     .from(roles)
     .where(eq(roles.tenantId, tenantId));
+
+  const handleDelete = async (id: string) => {
+    "use server";
+    await deleteStaffMember(id);
+  };
 
   return (
     <div className="space-y-6">
@@ -84,7 +89,7 @@ export default async function StaffMembersPage() {
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-right text-xs">
                   {member.id !== session.user.id && (
-                    <form action={deleteStaffMember.bind(null, member.id)}>
+                    <form action={handleDelete.bind(null, member.id)}>
                       <button
                         type="submit"
                         className="text-xs font-semibold text-red-600 hover:underline"

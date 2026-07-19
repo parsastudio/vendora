@@ -17,6 +17,11 @@ export default async function DiscountsPage() {
 
   const discountsList = await db.select().from(discounts).where(eq(discounts.tenantId, tenantId));
 
+  const handleDelete = async (id: string) => {
+    "use server";
+    await deleteDiscount(id);
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -149,7 +154,7 @@ export default async function DiscountsPage() {
                         {disc.usageCount} / {disc.usageLimit || "∞"}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-right text-xs">
-                        <form action={deleteDiscount.bind(null, disc.id)}>
+                        <form action={handleDelete.bind(null, disc.id)}>
                           <button
                             type="submit"
                             className="text-xs font-semibold text-red-600 hover:underline"

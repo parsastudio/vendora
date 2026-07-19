@@ -15,7 +15,10 @@ export function StoreHeader({ tenantId, tenantName }: StoreHeaderProps) {
   const items = useCartStore((state) => state.items);
 
   useEffect(() => {
-    setMounted(true);
+    const handle = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(handle);
   }, []);
 
   const totalItems = items.reduce((acc, curr) => acc + curr.quantity, 0);

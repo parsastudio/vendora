@@ -50,6 +50,11 @@ export default async function CategoriesPage() {
 
   const tree = buildCategoryTree(flatCategories);
 
+  const handleDelete = async (id: string) => {
+    "use server";
+    await deleteCategory(id);
+  };
+
   const renderTree = (nodes: CategoryNode[], depth = 0): ReactNode => {
     return (
       <ul className="space-y-2">
@@ -62,7 +67,7 @@ export default async function CategoriesPage() {
               <span className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 flex items-center gap-2">
                 {"—".repeat(depth)} {node.name}
               </span>
-              <form action={deleteCategory.bind(null, node.id)}>
+              <form action={handleDelete.bind(null, node.id)}>
                 <button
                   type="submit"
                   className="text-[10px] font-bold text-red-600 hover:underline"
