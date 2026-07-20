@@ -108,6 +108,20 @@ export function AdminSidebar() {
         </svg>
       ),
     },
+    {
+      name: "API Access Keys",
+      href: "/admin/settings/api-keys",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 7a2 2 0 012 2m-2-2a2 2 0 00-2-2m2 2a2 2 0 012 2m0 0a2 2 0 01-2 2m0 0a2 2 0 01-2-2m0 0V5a2 2 0 012-2M10 14h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      ),
+    },
   ];
 
   return (
