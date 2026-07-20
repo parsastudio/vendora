@@ -20,6 +20,7 @@ export const checkoutSchema = z.object({
       }),
     )
     .min(1),
+  paymentMethod: z.enum(["cash", "stripe"]).optional().default("cash"),
 });
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>;

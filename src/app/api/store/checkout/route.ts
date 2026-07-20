@@ -163,10 +163,10 @@ export async function POST(request: Request) {
         id: `tx-${Date.now()}`,
         tenantId: validated.tenantId,
         orderId,
-        provider: "cash",
+        provider: validated.paymentMethod || "cash",
         referenceId: `ref-${Date.now()}`,
         amount: calculation.total,
-        status: "success",
+        status: validated.paymentMethod === "stripe" ? "pending" : "success",
       });
 
       return { orderId, totalAmount: calculation.total };
@@ -183,16 +183,18 @@ export async function POST(request: Request) {
       },
     });
 
-    await workflowEmitter.emitEvent("order.paid", validated.tenantId, {
-      orderId: result.orderId,
-      total: result.totalAmount,
-      currency: "USD",
-      customer: {
-        name: validated.name,
-        email: validated.email,
-        phone: validated.phone,
-      },
-    });
+    if (validated.paymentMethod === "cash") {
+      await workflowEmitter.emitEvent("order.paid", validated.tenantId, {
+        orderId: result.orderId,
+        total: result.totalAmount,
+        currency: "USD",
+        customer: {
+          name: validated.name,
+          email: validated.email,
+          phone: validated.phone,
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
