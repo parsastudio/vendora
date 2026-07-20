@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createCategory(name: string, parentId: string | null) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
   }
 
@@ -31,7 +31,7 @@ export async function createCategory(name: string, parentId: string | null) {
 
 export async function deleteCategory(id: string) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
   }
 

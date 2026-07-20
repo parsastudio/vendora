@@ -69,14 +69,14 @@ async function main() {
       id: "user-nike-1",
       tenantId: "tenant-nike",
       email: "nike@admin.com",
-      passwordHash: "bcrypt_hashed_password_here",
+      passwordHash: "$2a$10$X78B8KsmI9Hh6YpZJ7b5duN/wS0vE6o5.D9pL9g6N2v/I0pC8F8Gq",
       name: "Nike Admin",
     },
     {
       id: "user-apple-1",
       tenantId: "tenant-apple",
       email: "apple@admin.com",
-      passwordHash: "bcrypt_hashed_password_here",
+      passwordHash: "$2a$10$X78B8KsmI9Hh6YpZJ7b5duN/wS0vE6o5.D9pL9g6N2v/I0pC8F8Gq",
       name: "Apple Admin",
     },
   ]);

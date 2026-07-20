@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/lib/db";
 import { discounts } from "@/lib/db/schema/orders";
 import { getServerSession } from "next-auth";
@@ -13,8 +15,17 @@ export async function createDiscount(
   usageLimit: number | null,
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
+  }
+
+  const parsedValue = parseFloat(value);
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw new Error("Discount value must be a positive number");
+  }
+
+  if (type === "percentage" && parsedValue > 100) {
+    throw new Error("Percentage discount cannot exceed 100%");
   }
 
   const tenantId = session.user.tenantId;
@@ -22,10 +33,10 @@ export async function createDiscount(
   await db.insert(discounts).values({
     id: `disc-${Date.now()}`,
     tenantId,
-    code,
+    code: code.toUpperCase().trim(),
     type,
-    value,
-    minPurchaseAmount,
+    value: parsedValue.toFixed(2),
+    minPurchaseAmount: minPurchaseAmount ? parseFloat(minPurchaseAmount).toFixed(2) : null,
     usageLimit,
     usageCount: 0,
   });
@@ -36,7 +47,7 @@ export async function createDiscount(
 
 export async function deleteDiscount(id: string) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
   }
 

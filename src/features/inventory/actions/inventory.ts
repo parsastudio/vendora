@@ -33,41 +33,44 @@ export async function updateStock(variantId: string, warehouseId: string, quanti
 
   const tenantId = session.user.tenantId;
 
-  const existing = await db
-    .select()
-    .from(inventory)
-    .where(and(eq(inventory.variantId, variantId), eq(inventory.warehouseId, warehouseId)))
-    .limit(1);
+  await db.transaction(async (tx) => {
+    const existing = await tx
+      .select()
+      .from(inventory)
+      .where(and(eq(inventory.variantId, variantId), eq(inventory.warehouseId, warehouseId)))
+      .limit(1)
+      .for("update");
 
-  let oldQty = 0;
+    let oldQty = 0;
 
-  if (existing.length > 0) {
-    oldQty = existing[0].quantity;
-    await db
-      .update(inventory)
-      .set({ quantity, updatedAt: new Date() })
-      .where(eq(inventory.id, existing[0].id));
-  } else {
-    await db.insert(inventory).values({
-      id: `inv-${Date.now()}`,
-      variantId,
-      warehouseId,
-      quantity,
+    if (existing.length > 0) {
+      oldQty = existing[0].quantity;
+      await tx
+        .update(inventory)
+        .set({ quantity, updatedAt: new Date() })
+        .where(eq(inventory.id, existing[0].id));
+    } else {
+      await tx.insert(inventory).values({
+        id: `inv-${Date.now()}`,
+        variantId,
+        warehouseId,
+        quantity,
+      });
+    }
+
+    await tx.insert(auditLogs).values({
+      id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      tenantId,
+      userId: session.user.id,
+      action: "inventory.update",
+      details: {
+        variantId: [variantId],
+        warehouseId: [warehouseId],
+        previousQuantity: [oldQty.toString()],
+        newQuantity: [quantity.toString()],
+      },
+      ipAddress: "127.0.0.1",
     });
-  }
-
-  await db.insert(auditLogs).values({
-    id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-    tenantId,
-    userId: session.user.id,
-    action: "inventory.update",
-    details: {
-      variantId: [variantId],
-      warehouseId: [warehouseId],
-      previousQuantity: [oldQty.toString()],
-      newQuantity: [quantity.toString()],
-    },
-    ipAddress: "127.0.0.1",
   });
 
   revalidatePath("/admin/inventory");

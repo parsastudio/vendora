@@ -3,13 +3,18 @@
 import { db } from "@/lib/db";
 import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
 import { inventory } from "@/lib/db/schema/products";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function cancelOrderByCustomer(orderId: string, domain: string) {
   try {
     await db.transaction(async (tx) => {
-      const orderResult = await tx.select().from(orders).where(eq(orders.id, orderId)).limit(1);
+      const orderResult = await tx
+        .select()
+        .from(orders)
+        .where(eq(orders.id, orderId))
+        .limit(1)
+        .for("update");
 
       if (orderResult.length === 0) {
         throw new Error("Order not found");
@@ -78,6 +83,16 @@ export async function requestOrderReturn(
 
     if (order.status !== "delivered") {
       throw new Error("Only delivered orders can be returned");
+    }
+
+    const verifiedItemResult = await db
+      .select()
+      .from(orderItems)
+      .where(and(eq(orderItems.orderId, orderId), eq(orderItems.variantId, variantId)))
+      .limit(1);
+
+    if (verifiedItemResult.length === 0) {
+      throw new Error("Invalid request metadata: purchased item mismatch");
     }
 
     const returnId = `ret-${Date.now()}`;

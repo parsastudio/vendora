@@ -16,7 +16,11 @@ const schema = {
   ...workflows,
 };
 
-const globalForDb = global as unknown as { pool: Pool | undefined };
+interface GlobalDb {
+  pool?: Pool;
+}
+
+const globalForDb = global as unknown as GlobalDb;
 
 const pool =
   globalForDb.pool ??
@@ -26,6 +30,10 @@ const pool =
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
   });
+
+pool.on("error", (error: Error) => {
+  console.error("Database connection pool idle client error:", error);
+});
 
 if (process.env.NODE_ENV !== "production") {
   globalForDb.pool = pool;
