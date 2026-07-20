@@ -82,6 +82,7 @@ export async function POST(request: Request) {
         name: validated.name,
         slug: validated.slug,
         description: validated.description,
+        imageUrl: validated.imageUrl,
         seoMetadata: validated.seoMetadata,
         status: "active",
       });

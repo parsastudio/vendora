@@ -16,6 +16,7 @@ export const productSchema = z.object({
   slug: z.string().min(1),
   description: z.string().optional(),
   categoryId: z.string().optional().nullable(),
+  imageUrl: z.string().url().optional().nullable(),
   seoMetadata: z
     .object({
       title: z.string(),

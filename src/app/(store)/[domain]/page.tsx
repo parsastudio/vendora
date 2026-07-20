@@ -4,6 +4,7 @@ import { products } from "@/lib/db/schema/products";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq, and } from "drizzle-orm";
 import Link from "next/link";
+import Image from "next/image";
 
 interface StorefrontProps {
   params: Promise<{ domain: string }>;
@@ -31,6 +32,7 @@ export default async function StorefrontPage({ params }: StorefrontProps) {
       name: products.name,
       slug: products.slug,
       description: products.description,
+      imageUrl: products.imageUrl,
     })
     .from(products)
     .where(and(eq(products.tenantId, tenant.id), eq(products.status, "active")));
@@ -53,9 +55,20 @@ export default async function StorefrontPage({ params }: StorefrontProps) {
             className="group relative flex flex-col rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950"
           >
             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-zinc-100 group-hover:opacity-75 lg:aspect-none lg:h-80">
-              <div className="flex h-full w-full items-center justify-center bg-zinc-50 text-zinc-400 dark:bg-zinc-900">
-                No Image
-              </div>
+              {product.imageUrl ? (
+                <Image
+                  src={product.imageUrl}
+                  alt={product.name}
+                  width={300}
+                  height={320}
+                  unoptimized
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-zinc-50 text-zinc-400 dark:bg-zinc-900">
+                  No Image
+                </div>
+              )}
             </div>
             <div className="mt-4 flex flex-1 flex-col justify-between">
               <div>

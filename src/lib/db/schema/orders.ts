@@ -109,6 +109,17 @@ export const orderReturns = pgTable("order_returns", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const shippingRates = pgTable("shipping_rates", {
+  id: text("id").primaryKey(),
+  tenantId: text("tenant_id")
+    .references(() => tenants.id, { onDelete: "cascade" })
+    .notNull(),
+  name: text("name").notNull(),
+  price: numeric("price", { precision: 12, scale: 2 }).notNull(),
+  minOrderAmount: numeric("min_order_amount", { precision: 12, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export type Cart = typeof carts.$inferSelect;
 export type CartItem = typeof cartItems.$inferSelect;
 export type Discount = typeof discounts.$inferSelect;
@@ -117,3 +128,4 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type Transaction = typeof transactions.$inferSelect;
 export type OrderReturn = typeof orderReturns.$inferSelect;
 export type NewOrderReturn = typeof orderReturns.$inferInsert;
+export type ShippingRate = typeof shippingRates.$inferSelect;

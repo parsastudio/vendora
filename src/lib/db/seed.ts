@@ -3,7 +3,7 @@ import { tenants } from "./schema/tenants";
 import { categories, products, productVariants, warehouses, inventory } from "./schema/products";
 import { users, roles, permissions, rolesToPermissions, usersToRoles } from "./schema/users";
 import { customers } from "./schema/customers";
-import { orders, orderItems, transactions } from "./schema/orders";
+import { orders, orderItems, transactions, shippingRates } from "./schema/orders";
 import { generateDemoCustomers, generateDemoData } from "./demo-generator";
 
 async function main() {
@@ -147,6 +147,8 @@ async function main() {
       name: "Zenith Wireless Headphones",
       slug: "zenith-headphones",
       description: "Premium noise cancelling acoustic audio.",
+      imageUrl:
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80",
       status: "active",
     },
     {
@@ -156,6 +158,8 @@ async function main() {
       name: "Apex Mechanical Keyboard",
       slug: "apex-keyboard",
       description: "Ultra-fast response tactile switches.",
+      imageUrl:
+        "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&auto=format&fit=crop&q=80",
       status: "active",
     },
   ]);
@@ -209,6 +213,23 @@ async function main() {
   await db.insert(inventory).values([
     { id: "inv-demo-1", variantId: "var-demo-1-acoustic", warehouseId: "wh-demo-1", quantity: 8 },
     { id: "inv-demo-2", variantId: "var-demo-2-tactile", warehouseId: "wh-demo-1", quantity: 15 },
+  ]);
+
+  await db.insert(shippingRates).values([
+    {
+      id: "ship-demo-std",
+      tenantId: "tenant-demo",
+      name: "Standard Ground Shipping",
+      price: "10.00",
+      minOrderAmount: null,
+    },
+    {
+      id: "ship-demo-exp",
+      tenantId: "tenant-demo",
+      name: "Express Courier Shipping",
+      price: "25.00",
+      minOrderAmount: null,
+    },
   ]);
 
   const demoCusts = generateDemoCustomers("tenant-demo");

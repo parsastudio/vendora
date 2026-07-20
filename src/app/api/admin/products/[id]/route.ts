@@ -51,6 +51,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
           name: validated.name,
           slug: validated.slug,
           description: validated.description,
+          imageUrl: validated.imageUrl,
           seoMetadata: validated.seoMetadata,
           updatedAt: new Date(),
         })

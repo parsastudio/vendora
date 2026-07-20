@@ -81,6 +81,7 @@ const streetNames = [
   "Ocean Dr",
   "Pine St",
 ];
+const shippingOptions = ["10.00", "25.00"];
 
 export function generateDemoCustomers(tenantId: string): DemoCustomer[] {
   return names.map((name, idx) => ({
@@ -119,7 +120,7 @@ export function generateDemoData(
     const qty = randomInt(1, 3);
     const subtotal = (parseFloat(variant.price) * qty).toFixed(2);
     const tax = (parseFloat(subtotal) * 0.05).toFixed(2);
-    const shipping = "10.00";
+    const shipping = shippingOptions[randomInt(0, shippingOptions.length)];
     const total = (parseFloat(subtotal) + parseFloat(tax) + parseFloat(shipping)).toFixed(2);
 
     const rand = Math.random();

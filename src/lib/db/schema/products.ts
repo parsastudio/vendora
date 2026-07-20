@@ -35,6 +35,7 @@ export const products = pgTable("products", {
     description: string;
     keywords: string[];
   }>(),
+  imageUrl: text("image_url"),
   status: text("status").default("draft").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
