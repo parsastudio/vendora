@@ -1,5 +1,6 @@
 "use server";
 
+import "server-only";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { orders } from "@/lib/db/schema/orders";

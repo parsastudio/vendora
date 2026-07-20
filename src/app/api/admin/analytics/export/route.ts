@@ -18,7 +18,7 @@ export async function GET() {
     "Order ID,Customer Name,Subtotal,Discount,Tax,Total,Order Status,Payment Status,Created Date\n";
 
   for (const o of orderList) {
-    const clientName = o.shippingAddress.name.replace(/"/g, '""').replace(/,/g, " ");
+    const clientName = o.shippingAddress.name.replace(/"/g, '""');
     csvContent += `"${o.id}","${clientName}",${o.subtotalAmount},${o.discountAmount},${o.taxAmount},${o.totalAmount},"${o.status}","${o.paymentStatus}","${o.createdAt.toISOString()}"\n`;
   }
 
