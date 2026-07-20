@@ -41,13 +41,10 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
     setIsUploading(true);
     try {
       const optimizedBlob = await compressAndOptimizeImage(file);
-      const optimizedFile = new File(
-        [optimizedBlob],
-        file.name.replace(/\.[^/.]+$/, "") + ".webp",
-        {
-          type: "image/webp",
-        },
-      );
+      const webpFilename = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+      const optimizedFile = new File([optimizedBlob], webpFilename, {
+        type: "image/webp",
+      });
 
       const presignRes = await fetch("/api/admin/media/presign", {
         method: "POST",
@@ -90,7 +87,7 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
         accept="image/*"
       />
       <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-        {isUploading ? "Uploading file..." : "Drag and drop or click to upload S3 image"}
+        {isUploading ? "Uploading file..." : "Drag and drop or click to upload asset"}
       </span>
     </div>
   );

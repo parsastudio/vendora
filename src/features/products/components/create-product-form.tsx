@@ -173,7 +173,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
             <div className="relative h-40 w-40 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
               <Image
                 src={imageUrl}
-                alt="Uploaded S3 asset"
+                alt="Uploaded storage asset"
                 width={160}
                 height={160}
                 unoptimized

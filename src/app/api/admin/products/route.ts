@@ -88,7 +88,7 @@ export async function POST(request: Request) {
 
       for (const variant of validated.variants) {
         await tx.insert(productVariants).values({
-          id: `var-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          id: `var-${Date.now()}-${nodeCrypto()}`,
           productId,
           sku: variant.sku,
           price: variant.price,
@@ -103,4 +103,8 @@ export async function POST(request: Request) {
     console.error(error);
     return NextResponse.json({ error: "Invalid product input data" }, { status: 400 });
   }
+}
+
+function nodeCrypto(): string {
+  return Math.random().toString(36).substring(2, 7);
 }
