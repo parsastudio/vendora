@@ -4,6 +4,7 @@ import "server-only";
 import { redis } from "@/lib/redis";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
 export async function getActiveSessions() {
   const session = await getServerSession(authOptions);
@@ -26,7 +27,7 @@ export async function getActiveSessions() {
   return list;
 }
 
-export async function revokeSession(jti: string) {
+export const revokeSession = withWriteProtection(async function (jti: string) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -35,4 +36,4 @@ export async function revokeSession(jti: string) {
   const userId = session.user.id;
   await redis.del(`active_session:${userId}:${jti}`);
   return { success: true };
-}
+});

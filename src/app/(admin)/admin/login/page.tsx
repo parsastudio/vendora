@@ -39,6 +39,24 @@ export default function AdminLoginPage() {
     });
   };
 
+  const handleDemoLogin = () => {
+    setError(null);
+    startTransition(async () => {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: "demo@vendora.com",
+        password: "demo-password-2026",
+        otp: "",
+      });
+
+      if (result?.error) {
+        setError("Failed to connect to demo gateway.");
+      } else {
+        router.push("/admin");
+      }
+    });
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
@@ -105,14 +123,35 @@ export default function AdminLoginPage() {
             )}
           </div>
 
-          <div>
+          <div className="space-y-3">
             <button
               type="submit"
               disabled={isPending}
-              className="group relative flex w-full justify-center rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="group relative flex w-full justify-center rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 cursor-pointer"
             >
               {isPending ? "Authenticating..." : require2FA ? "Verify Code" : "Sign In"}
             </button>
+
+            {!require2FA && (
+              <>
+                <div className="relative flex py-2 items-center">
+                  <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+                  <span className="flex-shrink mx-4 text-zinc-400 text-[10px] font-bold uppercase tracking-wider">
+                    Or explore first
+                  </span>
+                  <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  disabled={isPending}
+                  className="flex w-full justify-center rounded-md border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 focus:outline-none disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 cursor-pointer"
+                >
+                  {isPending ? "Connecting Sandbox..." : "Explore Demo Dashboard"}
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>

@@ -9,6 +9,7 @@ import { getTenantSigningSecret } from "@/features/workflows/lib/event-emitter";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { createHmac, randomUUID } from "crypto";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
 export async function getWebhookSecret() {
   const session = await getServerSession(authOptions);
@@ -18,7 +19,10 @@ export async function getWebhookSecret() {
   return getTenantSigningSecret(session.user.tenantId);
 }
 
-export async function saveWebhookWorkflow(triggerEvent: string, url: string) {
+export const saveWebhookWorkflow = withWriteProtection(async function (
+  triggerEvent: string,
+  url: string,
+) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -53,9 +57,9 @@ export async function saveWebhookWorkflow(triggerEvent: string, url: string) {
 
   revalidatePath("/admin/settings/developer");
   return { success: true };
-}
+});
 
-export async function deleteWebhookWorkflow(id: string) {
+export const deleteWebhookWorkflow = withWriteProtection(async function (id: string) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -67,7 +71,7 @@ export async function deleteWebhookWorkflow(id: string) {
 
   revalidatePath("/admin/settings/developer");
   return { success: true };
-}
+});
 
 export async function triggerMockWebhook(url: string, triggerEvent: string) {
   const session = await getServerSession(authOptions);

@@ -9,8 +9,12 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function updateOrderStatus(orderId: string, status: string) {
+export const updateOrderStatus = withWriteProtection(async function (
+  orderId: string,
+  status: string,
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("orders:read")) {
     throw new Error("Unauthorized");
@@ -86,9 +90,12 @@ export async function updateOrderStatus(orderId: string, status: string) {
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin/orders");
   return { success: true };
-}
+});
 
-export async function updateOrderPaymentStatus(orderId: string, paymentStatus: string) {
+export const updateOrderPaymentStatus = withWriteProtection(async function (
+  orderId: string,
+  paymentStatus: string,
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("orders:read")) {
     throw new Error("Unauthorized");
@@ -117,9 +124,12 @@ export async function updateOrderPaymentStatus(orderId: string, paymentStatus: s
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin/orders");
   return { success: true };
-}
+});
 
-export async function updateOrderTracking(orderId: string, trackingCode: string) {
+export const updateOrderTracking = withWriteProtection(async function (
+  orderId: string,
+  trackingCode: string,
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("orders:read")) {
     throw new Error("Unauthorized");
@@ -133,4 +143,4 @@ export async function updateOrderTracking(orderId: string, trackingCode: string)
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin/orders");
   return { success: true };
-}
+});

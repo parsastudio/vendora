@@ -9,8 +9,13 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { hashPassword } from "@/features/auth/lib/auth-utils";
 import crypto, { randomUUID } from "crypto";
 import { logger } from "@/lib/logger";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function createInvitation(email: string, name: string, roleId: string) {
+export const createInvitation = withWriteProtection(async function (
+  email: string,
+  name: string,
+  roleId: string,
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
@@ -33,7 +38,7 @@ export async function createInvitation(email: string, name: string, roleId: stri
 
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
   return { success: true, link: `${baseUrl}/admin/invite?token=${token}` };
-}
+});
 
 export async function getInvitationDetails(token: string) {
   const data = await redis.get(`invite_token:${token}`);
@@ -44,7 +49,10 @@ export async function getInvitationDetails(token: string) {
   return { email: parsed.email, name: parsed.name, tenantId: parsed.tenantId };
 }
 
-export async function acceptInvitation(token: string, password: string) {
+export const acceptInvitation = withWriteProtection(async function (
+  token: string,
+  password: string,
+) {
   const data = await redis.get(`invite_token:${token}`);
   if (!data) {
     throw new Error("Invitation expired or invalid");
@@ -86,4 +94,4 @@ export async function acceptInvitation(token: string, password: string) {
   }
 
   return { success: true };
-}
+});

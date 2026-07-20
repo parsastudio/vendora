@@ -8,8 +8,12 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function createWorkflow(triggerEvent: string, url: string) {
+export const createWorkflow = withWriteProtection(async function (
+  triggerEvent: string,
+  url: string,
+) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -27,9 +31,9 @@ export async function createWorkflow(triggerEvent: string, url: string) {
 
   revalidatePath("/admin/workflows");
   return { success: true };
-}
+});
 
-export async function deleteWorkflow(id: string) {
+export const deleteWorkflow = withWriteProtection(async function (id: string) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -41,9 +45,9 @@ export async function deleteWorkflow(id: string) {
 
   revalidatePath("/admin/workflows");
   return { success: true };
-}
+});
 
-export async function toggleWorkflow(id: string, isActive: string) {
+export const toggleWorkflow = withWriteProtection(async function (id: string, isActive: string) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -56,4 +60,4 @@ export async function toggleWorkflow(id: string, isActive: string) {
 
   revalidatePath("/admin/workflows");
   return { success: true };
-}
+});
