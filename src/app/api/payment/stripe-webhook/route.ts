@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as StripePaymentSessionData;
+    const session = event.data.object as unknown as StripePaymentSessionData;
     const { orderId, tenantId } = session.metadata;
 
     if (orderId && tenantId) {

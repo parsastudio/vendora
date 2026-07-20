@@ -24,6 +24,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     total: "0.00",
   });
   const [couponError, setCouponError] = useState<string | null>(null);
+  const [hasMerged, setHasMerged] = useState(false);
 
   const isClient = useSyncExternalStore(
     () => () => {},
@@ -32,10 +33,9 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
   );
 
   useEffect(() => {
-    if (!isClient || !session?.user) return;
+    if (!isClient || !session?.user || hasMerged || items.length === 0) return;
 
     const executeMerge = async () => {
-      if (items.length === 0) return;
       try {
         const response = await fetch("/api/store/cart/merge", {
           method: "POST",
@@ -55,6 +55,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
             }),
           );
           mergeCart(dbMergedItems);
+          setHasMerged(true);
         }
       } catch (err) {
         console.error(err);
@@ -62,7 +63,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     };
 
     executeMerge();
-  }, [session, isClient]);
+  }, [session, isClient, items, mergeCart, hasMerged]);
 
   useEffect(() => {
     if (!isClient) return;
