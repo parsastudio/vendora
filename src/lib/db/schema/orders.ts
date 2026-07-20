@@ -97,9 +97,23 @@ export const transactions = pgTable("transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const orderReturns = pgTable("order_returns", {
+  id: text("id").primaryKey(),
+  orderId: text("order_id")
+    .references(() => orders.id, { onDelete: "cascade" })
+    .notNull(),
+  variantId: text("variant_id").references(() => productVariants.id, { onDelete: "cascade" }),
+  reason: text("reason").notNull(),
+  status: text("status").default("pending").notNull(),
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export type Cart = typeof carts.$inferSelect;
 export type CartItem = typeof cartItems.$inferSelect;
 export type Discount = typeof discounts.$inferSelect;
 export type Order = typeof orders.$inferSelect;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type Transaction = typeof transactions.$inferSelect;
+export type OrderReturn = typeof orderReturns.$inferSelect;
+export type NewOrderReturn = typeof orderReturns.$inferInsert;

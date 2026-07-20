@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
-import { orders, orderItems } from "@/lib/db/schema/orders";
+import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { formatCurrency } from "@/features/shared/utils/format";
+import { CustomerOrderActions } from "@/features/orders/components/customer-order-actions";
+import Image from "next/image";
 import Link from "next/link";
 
 interface OrderSuccessPageProps {
@@ -25,6 +27,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
   const itemsList = await db
     .select({
       id: orderItems.id,
+      variantId: orderItems.variantId,
       quantity: orderItems.quantity,
       price: orderItems.price,
       sku: productVariants.sku,
@@ -36,20 +39,31 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
     .leftJoin(products, eq(productVariants.productId, products.id))
     .where(eq(orderItems.orderId, order.id));
 
+  const returnClaims = await db
+    .select()
+    .from(orderReturns)
+    .where(eq(orderReturns.orderId, order.id));
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="rounded-2xl border border-zinc-200 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-950 space-y-8 shadow-sm">
         <div className="text-center space-y-2">
-          <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-400">
-            ✓
-          </span>
+          {order.status === "cancelled" ? (
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-800 dark:bg-red-950/20 dark:text-red-400">
+              ✗
+            </span>
+          ) : (
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-400">
+              ✓
+            </span>
+          )}
           <h1 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50">
-            Thank you for your order!
+            {order.status === "cancelled" ? "Order Cancelled" : "Thank you for your order!"}
           </h1>
           <p className="text-xs text-zinc-500">
             Your order{" "}
             <span className="font-mono text-zinc-700 dark:text-zinc-300 font-bold">{order.id}</span>{" "}
-            has been processed.
+            status is <span className="font-bold uppercase">{order.status}</span>.
           </p>
         </div>
 
@@ -98,6 +112,44 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
           </div>
         </div>
 
+        {returnClaims.length > 0 && (
+          <div className="border-t border-zinc-200 dark:border-zinc-800 pt-6 space-y-4">
+            <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
+              Return Claims Submitted
+            </h3>
+            <div className="space-y-2">
+              {returnClaims.map((claim) => {
+                const item = itemsList.find((i) => i.variantId === claim.variantId);
+                return (
+                  <div key={claim.id} className="rounded-lg border p-4 text-xs space-y-2">
+                    <div className="flex justify-between">
+                      <span className="font-semibold">
+                        {item?.productName || "Catalog Item"} ({item?.sku})
+                      </span>
+                      <span className="font-mono uppercase font-bold text-amber-600">
+                        {claim.status}
+                      </span>
+                    </div>
+                    <p className="text-zinc-500">Reason: {claim.reason}</p>
+                    {claim.imageUrl && (
+                      <div className="relative h-16 w-16 overflow-hidden rounded border">
+                        <Image
+                          src={claim.imageUrl}
+                          alt="Defect proof"
+                          width={64}
+                          height={64}
+                          unoptimized
+                          className="object-cover h-full w-full"
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="border-t border-zinc-200 dark:border-zinc-800 pt-6 space-y-2 text-xs text-zinc-600 dark:text-zinc-400">
           <div className="flex justify-between">
             <span>Subtotal</span>
@@ -123,10 +175,21 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
           </div>
         </div>
 
+        <CustomerOrderActions
+          orderId={order.id}
+          status={order.status}
+          domain={domain}
+          items={itemsList.map((i) => ({
+            variantId: i.variantId,
+            sku: i.sku,
+            productName: i.productName,
+          }))}
+        />
+
         <div className="pt-6 text-center">
           <Link
             href={`/${domain}`}
-            className="inline-block rounded-full bg-zinc-950 px-6 py-2.5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+            className="inline-block rounded-full bg-zinc-950 px-6 py-2.5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950"
           >
             Continue Shopping
           </Link>
