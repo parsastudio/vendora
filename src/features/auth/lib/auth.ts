@@ -7,6 +7,7 @@ import { verifyPassword } from "./auth-utils";
 import { verifyTOTPToken } from "./totp";
 import { redis } from "@/lib/redis";
 import { headers } from "next/headers";
+import { logger } from "@/lib/logger";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -103,7 +104,9 @@ export const authOptions: NextAuthOptions = {
             "EX",
             30 * 24 * 60 * 60,
           );
-        } catch {}
+        } catch (error) {
+          logger.error({ error, userId: user.id }, "Failed to persist active session in Redis");
+        }
       } else if (token.id && token.jti) {
         const sessionActive = await redis.get(`active_session:${token.id}:${token.jti}`);
         if (!sessionActive) {

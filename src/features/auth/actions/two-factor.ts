@@ -7,6 +7,7 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { generateTOTPSecret, verifyTOTPToken } from "../lib/totp";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { logger } from "@/lib/logger";
 
 export async function setupTwoFactor() {
   const session = await getServerSession(authOptions);
@@ -29,14 +30,22 @@ export async function activateTwoFactor(secret: string, token: string) {
     throw new Error("Invalid verification code");
   }
 
-  await db
-    .update(users)
-    .set({
-      twoFactorSecret: secret,
-      twoFactorEnabled: new Date(),
-      updatedAt: new Date(),
-    })
-    .where(eq(users.id, session.user.id));
+  try {
+    await db
+      .update(users)
+      .set({
+        twoFactorSecret: secret,
+        twoFactorEnabled: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, session.user.id));
+  } catch (error) {
+    logger.error(
+      { error, userId: session.user.id },
+      "Failed to update 2FA configuration in database",
+    );
+    throw new Error("Database transaction failed");
+  }
 
   revalidatePath("/admin/settings/security");
   return { success: true };
@@ -48,14 +57,22 @@ export async function disableTwoFactor() {
     throw new Error("Unauthorized");
   }
 
-  await db
-    .update(users)
-    .set({
-      twoFactorSecret: null,
-      twoFactorEnabled: null,
-      updatedAt: new Date(),
-    })
-    .where(eq(users.id, session.user.id));
+  try {
+    await db
+      .update(users)
+      .set({
+        twoFactorSecret: null,
+        twoFactorEnabled: null,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, session.user.id));
+  } catch (error) {
+    logger.error(
+      { error, userId: session.user.id },
+      "Failed to disable 2FA configuration in database",
+    );
+    throw new Error("Database transaction failed");
+  }
 
   revalidatePath("/admin/settings/security");
   return { success: true };

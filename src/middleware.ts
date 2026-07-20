@@ -27,8 +27,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const host = request.headers.get("host") || "localhost:3000";
-  const currentHost = host.replace(".localhost:3000", "").replace(":3000", "");
+  const host = request.headers.get("host") || "localhost";
+  const hostname = host.split(":")[0];
+  const currentHost = hostname.replace(".localhost", "").replace(".vendora", "");
 
   let tenantDomain = "default";
   if (currentHost !== "localhost" && currentHost !== "vendora") {
