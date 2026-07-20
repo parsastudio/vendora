@@ -1,11 +1,13 @@
 import { db } from "@/lib/db";
-import { products } from "@/lib/db/schema/products";
+import { products, productVariants } from "@/lib/db/schema/products";
 import { users } from "@/lib/db/schema/users";
-import { orders } from "@/lib/db/schema/orders";
+import { orders, orderItems } from "@/lib/db/schema/orders";
 import { sql, eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { formatCurrency } from "@/features/shared/utils/format";
+import { AnalyticsCharts } from "@/features/analytics/components/analytics-charts";
+import { TopProducts } from "@/features/analytics/components/top-products";
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
@@ -54,6 +56,50 @@ export default async function AdminDashboardPage() {
     },
   ];
 
+  const recentOrders = await db
+    .select({
+      createdAt: orders.createdAt,
+      totalAmount: orders.totalAmount,
+    })
+    .from(orders)
+    .where(eq(orders.tenantId, tenantId))
+    .limit(30);
+
+  const chartMap: Record<string, { revenue: number; orders: number }> = {};
+  recentOrders.forEach((o) => {
+    const day = new Date(o.createdAt).toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+    });
+    if (!chartMap[day]) {
+      chartMap[day] = { revenue: 0, orders: 0 };
+    }
+    chartMap[day].revenue += parseFloat(o.totalAmount);
+    chartMap[day].orders += 1;
+  });
+
+  const chartData = Object.entries(chartMap)
+    .map(([date, val]) => ({
+      date,
+      revenue: val.revenue,
+      orders: val.orders,
+    }))
+    .slice(-10);
+
+  const topProductsList = await db
+    .select({
+      sku: productVariants.sku,
+      name: products.name,
+      quantity: sql<number>`cast(sum(${orderItems.quantity}) as integer)`,
+      revenue: sql<string>`sum(${orderItems.price} * ${orderItems.quantity})`,
+    })
+    .from(orderItems)
+    .leftJoin(productVariants, eq(orderItems.variantId, productVariants.id))
+    .leftJoin(products, eq(productVariants.productId, products.id))
+    .where(eq(products.tenantId, tenantId))
+    .groupBy(productVariants.sku, products.name)
+    .limit(5);
+
   return (
     <div className="space-y-8">
       <div>
@@ -80,15 +126,9 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
-        <h2 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
-          Operational Directives
-        </h2>
-        <p className="mt-1 text-xs text-zinc-500">
-          To proceed with setting up your storefront, complete product entries and verify active
-          staff privileges in the left menu.
-        </p>
-      </div>
+      <AnalyticsCharts data={chartData} />
+
+      <TopProducts products={topProductsList} />
     </div>
   );
 }
