@@ -4,6 +4,7 @@ import { orders, orderItems, transactions, discounts } from "@/lib/db/schema/ord
 import { inventory, productVariants } from "@/lib/db/schema/products";
 import { checkoutSchema } from "@/features/checkout/validation/checkout";
 import { calculateCartTotals } from "@/features/cart/utils/cart-math";
+import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
 import { eq, and, inArray } from "drizzle-orm";
 
 export async function POST(request: Request) {
@@ -152,7 +153,29 @@ export async function POST(request: Request) {
         status: "success",
       });
 
-      return { orderId };
+      return { orderId, totalAmount: calculation.total };
+    });
+
+    await workflowEmitter.emitEvent("order.created", validated.tenantId, {
+      orderId: result.orderId,
+      total: result.totalAmount,
+      currency: "USD",
+      customer: {
+        name: validated.name,
+        email: validated.email,
+        phone: validated.phone,
+      },
+    });
+
+    await workflowEmitter.emitEvent("order.paid", validated.tenantId, {
+      orderId: result.orderId,
+      total: result.totalAmount,
+      currency: "USD",
+      customer: {
+        name: validated.name,
+        email: validated.email,
+        phone: validated.phone,
+      },
     });
 
     return NextResponse.json({ success: true, data: result });

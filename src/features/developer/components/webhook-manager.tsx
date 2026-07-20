@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import {
   saveWebhookWorkflow,
   deleteWebhookWorkflow,
   triggerMockWebhook,
+  getWebhookSecret,
 } from "@/features/developer/actions/webhooks";
 
 interface WebhookItem {
@@ -22,7 +23,14 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
   const [triggerEvent, setTriggerEvent] = useState("order.paid");
   const [targetUrl, setTargetUrl] = useState("");
   const [testResult, setTestResult] = useState<string | null>(null);
+  const [secret, setSecret] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    getWebhookSecret()
+      .then(setSecret)
+      .catch(() => {});
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +82,34 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
         <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
           Configure Outbound Webhook
         </h3>
+
+        {secret && (
+          <div className="rounded-lg bg-zinc-50 border p-4 text-xs dark:bg-zinc-900 dark:border-zinc-850 space-y-2">
+            <span className="font-bold text-zinc-700 dark:text-zinc-300">
+              Your Webhook Signing Secret Key:
+            </span>
+            <div className="flex gap-2 items-center">
+              <input
+                type="text"
+                readOnly
+                value={secret}
+                className="block flex-1 rounded border border-zinc-300 bg-white px-3 py-1.5 text-xs font-mono select-all focus:outline-none dark:bg-zinc-950 dark:border-zinc-800 dark:text-zinc-50"
+              />
+              <button
+                type="button"
+                onClick={() => navigator.clipboard.writeText(secret)}
+                className="rounded bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950 px-3 py-1.5 text-xs font-bold"
+              >
+                Copy
+              </button>
+            </div>
+            <p className="text-[10px] text-zinc-400">
+              Each payload includes an X-Vendora-Signature header calculated with this HMAC-SHA256
+              key.
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSave} className="grid grid-cols-1 gap-4 sm:grid-cols-3 items-end">
           <div>
             <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">

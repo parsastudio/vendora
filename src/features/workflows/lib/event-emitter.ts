@@ -1,7 +1,16 @@
 import { EventEmitter } from "events";
 import { db } from "@/lib/db";
-import { workflowSettings } from "@/lib/db/schema/workflows";
+import { workflowSettings, auditLogs } from "@/lib/db/schema/workflows";
 import { eq, and } from "drizzle-orm";
+import crypto from "crypto";
+
+export function getTenantSigningSecret(tenantId: string): string {
+  const baseSecret = process.env.NEXT_PUBLIC_APP_URL || "vendora_prod_signing_secret_key_2026";
+  return crypto
+    .createHash("sha256")
+    .update(tenantId + baseSecret)
+    .digest("hex");
+}
 
 class WorkflowEventEmitter extends EventEmitter {
   async emitEvent(triggerEvent: string, tenantId: string, payload: Record<string, unknown>) {
@@ -19,14 +28,49 @@ class WorkflowEventEmitter extends EventEmitter {
           ),
         );
 
+      const secret = getTenantSigningSecret(tenantId);
+      const bodyString = JSON.stringify({ event: triggerEvent, payload });
+      const signature = crypto.createHmac("sha256", secret).update(bodyString).digest("hex");
+
       for (const flow of activeFlows) {
         for (const action of flow.actions) {
           if (action.type === "webhook") {
-            await fetch(action.config.url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ event: triggerEvent, payload }),
-            }).catch(() => {});
+            try {
+              const res = await fetch(action.config.url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Vendora-Signature": `sha256=${signature}`,
+                },
+                body: bodyString,
+              });
+
+              await db.insert(auditLogs).values({
+                id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                tenantId,
+                userId: null,
+                action: `webhook:${triggerEvent}`,
+                details: {
+                  status: [res.ok ? "success" : "failed"],
+                  statusCode: [res.status.toString()],
+                  url: [action.config.url],
+                },
+                ipAddress: "127.0.0.1",
+              });
+            } catch (err) {
+              await db.insert(auditLogs).values({
+                id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                tenantId,
+                userId: null,
+                action: `webhook:${triggerEvent}`,
+                details: {
+                  status: ["failed"],
+                  error: [err instanceof Error ? err.message : "Network error"],
+                  url: [action.config.url],
+                },
+                ipAddress: "127.0.0.1",
+              });
+            }
           }
         }
       }

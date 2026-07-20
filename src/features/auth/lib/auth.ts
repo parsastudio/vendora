@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { users, usersToRoles, rolesToPermissions, permissions } from "@/lib/db/schema/users";
 import { eq, inArray } from "drizzle-orm";
 import { verifyPassword } from "./auth-utils";
+import { redis } from "@/lib/redis";
+import { headers } from "next/headers";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -72,10 +74,39 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.tenantId = user.tenantId;
         token.permissions = user.permissions;
+
+        try {
+          const headersList = await headers();
+          const userAgent = headersList.get("user-agent") || "Unknown Device";
+          const ip = headersList.get("x-forwarded-for") || "127.0.0.1";
+
+          await redis.set(
+            `active_session:${user.id}:${token.jti}`,
+            JSON.stringify({
+              jti: token.jti,
+              userAgent,
+              ip,
+              createdAt: new Date().toISOString(),
+            }),
+            "EX",
+            30 * 24 * 60 * 60,
+          );
+        } catch {}
+      } else if (token.id && token.jti) {
+        const sessionActive = await redis.get(`active_session:${token.id}:${token.jti}`);
+        if (!sessionActive) {
+          return {};
+        }
       }
       return token;
     },
     async session({ session, token }) {
+      if (!token.id) {
+        return {
+          ...session,
+          user: null as any,
+        };
+      }
       if (session.user) {
         session.user.id = token.id;
         session.user.tenantId = token.tenantId;

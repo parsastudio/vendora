@@ -4,8 +4,9 @@ import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
-import { AddStaffDialog } from "@/features/staff/components/add-staff-dialog";
+import { InviteStaffDialog } from "@/features/staff/components/invite-staff-dialog";
 import { deleteStaffMember } from "@/features/staff/actions/staff";
+import Link from "next/link";
 
 export default async function StaffMembersPage() {
   const session = await getServerSession(authOptions);
@@ -52,7 +53,15 @@ export default async function StaffMembersPage() {
             Configure roles and team permissions for administrative access.
           </p>
         </div>
-        <AddStaffDialog roles={tenantRoles} />
+        <div className="flex gap-2">
+          <Link
+            href="/admin/staff/sessions"
+            className="rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 h-9"
+          >
+            Manage Active Sessions
+          </Link>
+          <InviteStaffDialog roles={tenantRoles} />
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">

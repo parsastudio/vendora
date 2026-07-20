@@ -1,12 +1,13 @@
 import { db } from "@/lib/db";
-import { workflowSettings } from "@/lib/db/schema/workflows";
-import { eq } from "drizzle-orm";
+import { workflowSettings, auditLogs } from "@/lib/db/schema/workflows";
+import { eq, desc } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
 import { WorkflowList } from "@/features/workflows/components/workflow-list";
-import Link from "next/link";
 import { deleteWorkflow } from "@/features/workflows/actions/workflow";
+import { formatDateTime } from "@/features/shared/utils/format";
+import Link from "next/link";
 
 export default async function WorkflowsSettingsPage() {
   const session = await getServerSession(authOptions);
@@ -20,6 +21,13 @@ export default async function WorkflowsSettingsPage() {
     .select()
     .from(workflowSettings)
     .where(eq(workflowSettings.tenantId, tenantId));
+
+  const historyLogs = await db
+    .select()
+    .from(auditLogs)
+    .where(eq(auditLogs.tenantId, tenantId))
+    .orderBy(desc(auditLogs.createdAt))
+    .limit(10);
 
   const handleDelete = async (id: string) => {
     "use server";
@@ -81,6 +89,56 @@ export default async function WorkflowsSettingsPage() {
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
+        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
+          Recent Webhook Execution Logs
+        </h3>
+        {historyLogs.length === 0 ? (
+          <p className="text-xs text-zinc-400">No recent webhook executions found.</p>
+        ) : (
+          <div className="overflow-x-auto rounded-lg border border-zinc-100 dark:border-zinc-900">
+            <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-xs">
+              <thead className="bg-zinc-50 dark:bg-zinc-900">
+                <tr>
+                  <th className="px-4 py-2 text-left text-zinc-500 uppercase">Event</th>
+                  <th className="px-4 py-2 text-left text-zinc-500 uppercase">Target URL</th>
+                  <th className="px-4 py-2 text-left text-zinc-500 uppercase">Status</th>
+                  <th className="px-4 py-2 text-right text-zinc-500 uppercase">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono text-[11px]">
+                {historyLogs.map((log) => {
+                  const details = log.details as Record<string, string[]>;
+                  const isSuccess = details?.status?.[0] === "success";
+                  return (
+                    <tr key={log.id}>
+                      <td className="px-4 py-2.5 font-bold">{log.action}</td>
+                      <td className="px-4 py-2.5 text-zinc-500 truncate max-w-xs">
+                        {details?.url?.[0] || "N/A"}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
+                            isSuccess
+                              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-400"
+                              : "bg-red-100 text-red-800 dark:bg-red-950/20 dark:text-red-400"
+                          }`}
+                        >
+                          {isSuccess ? "Success" : "Failed"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5 text-right text-zinc-400">
+                        {formatDateTime(log.createdAt)}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

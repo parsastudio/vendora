@@ -4,8 +4,17 @@ import { db } from "@/lib/db";
 import { workflowSettings } from "@/lib/db/schema/workflows";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
+import { getTenantSigningSecret } from "@/features/workflows/lib/event-emitter";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+
+export async function getWebhookSecret() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+  return getTenantSigningSecret(session.user.tenantId);
+}
 
 export async function saveWebhookWorkflow(triggerEvent: string, url: string) {
   const session = await getServerSession(authOptions);
@@ -64,6 +73,8 @@ export async function triggerMockWebhook(url: string, triggerEvent: string) {
     throw new Error("Unauthorized");
   }
 
+  const secret = getTenantSigningSecret(session.user.tenantId);
+
   const mockPayload = {
     event: triggerEvent,
     timestamp: new Date().toISOString(),
@@ -76,14 +87,17 @@ export async function triggerMockWebhook(url: string, triggerEvent: string) {
     },
   };
 
+  const bodyString = JSON.stringify(mockPayload);
+  const signature = crypto.createHmac("sha256", secret).update(bodyString).digest("hex");
+
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Vendora-Signature": "sha256-mock-signature-for-testing",
+        "X-Vendora-Signature": `sha256=${signature}`,
       },
-      body: JSON.stringify(mockPayload),
+      body: bodyString,
     });
 
     return {
