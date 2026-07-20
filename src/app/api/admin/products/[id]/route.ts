@@ -6,7 +6,7 @@ import { products, productVariants } from "@/lib/db/schema/products";
 import { productSchema } from "@/features/products/validation/product";
 import { eq, and, inArray } from "drizzle-orm";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

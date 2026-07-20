@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import {
   AreaChart,
   Area,
@@ -24,13 +24,13 @@ interface AnalyticsChartsProps {
 }
 
 export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
-  const [mounted, setMounted] = useState(false);
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  if (!isClient) {
     return <div className="h-72 w-full rounded-xl bg-zinc-100 animate-pulse dark:bg-zinc-900" />;
   }
 

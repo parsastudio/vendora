@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect, useTransition, useCallback } from "react";
 import Link from "next/link";
 import { deleteProduct } from "@/features/products/actions/product";
 
@@ -18,7 +18,7 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/products?search=${search}`);
@@ -31,14 +31,14 @@ export default function AdminProductsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchProducts();
     }, 300);
     return () => clearTimeout(delayDebounceFn);
-  }, [search]);
+  }, [fetchProducts]);
 
   const handleDelete = (id: string) => {
     startTransition(async () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { useCartStore } from "@/features/cart/store/use-cart-store";
 import { formatCurrency } from "@/features/shared/utils/format";
 import Link from "next/link";
@@ -12,7 +12,6 @@ interface CartPageContentProps {
 
 export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
   const { items, updateQuantity, removeItem, couponCode, setCouponCode } = useCartStore();
-  const [mounted, setMounted] = useState(false);
   const [couponInput, setCouponInput] = useState(couponCode || "");
   const [totals, setTotals] = useState({
     subtotal: "0.00",
@@ -23,12 +22,14 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
   });
   const [couponError, setCouponError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!isClient) return;
 
     const validateAndRecalculate = async () => {
       if (items.length === 0) {
@@ -67,9 +68,9 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     };
 
     validateAndRecalculate();
-  }, [items, couponCode, tenantId, mounted]);
+  }, [items, couponCode, tenantId, isClient]);
 
-  if (!mounted) {
+  if (!isClient) {
     return (
       <div className="mt-12 flex h-40 items-center justify-center text-sm text-zinc-500">
         Loading shopping details...
