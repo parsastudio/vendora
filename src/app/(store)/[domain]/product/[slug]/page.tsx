@@ -28,7 +28,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const productResult = await db
     .select()
     .from(products)
-    .where(and(eq(products.slug, slug), eq(products.tenantId, tenant.id)))
+    .where(
+      and(eq(products.slug, slug), eq(products.tenantId, tenant.id), eq(products.status, "active")),
+    )
     .limit(1);
 
   if (productResult.length === 0) {

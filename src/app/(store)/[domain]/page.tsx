@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { products } from "@/lib/db/schema/products";
 import { tenants } from "@/lib/db/schema/tenants";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import Link from "next/link";
 
 interface StorefrontProps {
@@ -33,7 +33,7 @@ export default async function StorefrontPage({ params }: StorefrontProps) {
       description: products.description,
     })
     .from(products)
-    .where(eq(products.tenantId, tenant.id));
+    .where(and(eq(products.tenantId, tenant.id), eq(products.status, "active")));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

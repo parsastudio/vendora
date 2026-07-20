@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
+import { deleteProduct } from "@/features/products/actions/product";
 
 interface Product {
   id: string;
@@ -15,29 +16,40 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isPending, startTransition] = useTransition();
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/products?search=${search}`);
+      const { data } = await res.json();
+      if (data && data.items) {
+        setProducts(data.items);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/admin/products?search=${search}`);
-        const { data } = await res.json();
-        if (data && data.items) {
-          setProducts(data.items);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const delayDebounceFn = setTimeout(() => {
       fetchProducts();
     }, 300);
-
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
+
+  const handleDelete = (id: string) => {
+    startTransition(async () => {
+      try {
+        await deleteProduct(id);
+        fetchProducts();
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -96,6 +108,9 @@ export default function AdminProductsPage() {
                 <th className="px-6 py-3 text-left text-xs font-semibold text-zinc-500 uppercase">
                   Status
                 </th>
+                <th className="px-6 py-3 text-right text-xs font-semibold text-zinc-500 uppercase">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
@@ -109,6 +124,21 @@ export default function AdminProductsPage() {
                     <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400">
                       {p.status}
                     </span>
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-right text-xs space-x-3">
+                    <Link
+                      href={`/admin/products/edit/${p.id}`}
+                      className="text-zinc-900 hover:underline dark:text-zinc-100"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      disabled={isPending}
+                      className="text-red-600 hover:underline disabled:opacity-50"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

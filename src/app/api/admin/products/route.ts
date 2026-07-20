@@ -4,7 +4,7 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
 import { productSchema } from "@/features/products/validation/product";
-import { eq, and, like, sql } from "drizzle-orm";
+import { eq, and, like, sql, ne } from "drizzle-orm";
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
@@ -25,6 +25,7 @@ export async function GET(request: Request) {
       .where(
         and(
           eq(products.tenantId, session.user.tenantId),
+          ne(products.status, "deleted"),
           search ? like(products.name, `%${search}%`) : undefined,
         ),
       )
@@ -37,6 +38,7 @@ export async function GET(request: Request) {
       .where(
         and(
           eq(products.tenantId, session.user.tenantId),
+          ne(products.status, "deleted"),
           search ? like(products.name, `%${search}%`) : undefined,
         ),
       );
