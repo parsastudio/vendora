@@ -2,13 +2,13 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq } from "drizzle-orm";
-import { CartPageContent } from "@/features/cart/components/cart-page-content";
+import { CheckoutForm } from "@/features/checkout/components/checkout-form";
 
-interface CartPageProps {
+interface CheckoutPageProps {
   params: Promise<{ domain: string }>;
 }
 
-export default async function CartPage({ params }: CartPageProps) {
+export default async function StorefrontCheckoutPage({ params }: CheckoutPageProps) {
   const resolvedParams = await params;
   const tenantResult = await db
     .select()
@@ -24,15 +24,15 @@ export default async function CartPage({ params }: CartPageProps) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="border-b border-zinc-200 dark:border-zinc-800 pb-5">
+      <div className="text-center pb-10 border-b border-zinc-200 dark:border-zinc-800">
         <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Shopping Cart
+          Secure Checkout
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          Review your chosen items from {tenant.name} before checking out.
+          Fill in your delivery options to complete your purchase with {tenant.name}.
         </p>
       </div>
-      <CartPageContent tenantId={tenant.id} domain={tenant.subdomain} />
+      <CheckoutForm tenantId={tenant.id} domain={tenant.subdomain} />
     </div>
   );
 }
