@@ -123,8 +123,8 @@ export function AdminSidebar() {
       ),
     },
     {
-      name: "API Access Keys",
-      href: "/admin/settings/api-keys",
+      name: "Developer Settings",
+      href: "/admin/settings/developer",
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
