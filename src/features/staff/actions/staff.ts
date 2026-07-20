@@ -9,8 +9,9 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function createStaffMember(formData: {
+export const createStaffMember = withWriteProtection(async function (formData: {
   name: string;
   email: string;
   password: string;
@@ -42,9 +43,9 @@ export async function createStaffMember(formData: {
 
   revalidatePath("/admin/staff");
   return { success: true };
-}
+});
 
-export async function deleteStaffMember(userId: string) {
+export const deleteStaffMember = withWriteProtection(async function (userId: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
@@ -69,4 +70,4 @@ export async function deleteStaffMember(userId: string) {
 
   revalidatePath("/admin/staff");
   return { success: true };
-}
+});

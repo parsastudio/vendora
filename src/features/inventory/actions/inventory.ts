@@ -9,8 +9,12 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function createWarehouse(name: string, location: string | null) {
+export const createWarehouse = withWriteProtection(async function (
+  name: string,
+  location: string | null,
+) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -27,9 +31,13 @@ export async function createWarehouse(name: string, location: string | null) {
 
   revalidatePath("/admin/inventory");
   return { success: true };
-}
+});
 
-export async function updateStock(variantId: string, warehouseId: string, quantity: number) {
+export const updateStock = withWriteProtection(async function (
+  variantId: string,
+  warehouseId: string,
+  quantity: number,
+) {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error("Unauthorized");
@@ -79,4 +87,4 @@ export async function updateStock(variantId: string, warehouseId: string, quanti
 
   revalidatePath("/admin/inventory");
   return { success: true };
-}
+});

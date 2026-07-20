@@ -8,8 +8,9 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function createDiscount(
+export const createDiscount = withWriteProtection(async function (
   code: string,
   type: "percentage" | "fixed",
   value: string,
@@ -45,9 +46,9 @@ export async function createDiscount(
 
   revalidatePath("/admin/discounts");
   return { success: true };
-}
+});
 
-export async function deleteDiscount(id: string) {
+export const deleteDiscount = withWriteProtection(async function (id: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
@@ -59,4 +60,4 @@ export async function deleteDiscount(id: string) {
 
   revalidatePath("/admin/discounts");
   return { success: true };
-}
+});

@@ -8,8 +8,12 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function createCategory(name: string, parentId: string | null) {
+export const createCategory = withWriteProtection(async function (
+  name: string,
+  parentId: string | null,
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
@@ -31,9 +35,9 @@ export async function createCategory(name: string, parentId: string | null) {
 
   revalidatePath("/admin/categories");
   return { success: true };
-}
+});
 
-export async function deleteCategory(id: string) {
+export const deleteCategory = withWriteProtection(async function (id: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
@@ -45,4 +49,4 @@ export async function deleteCategory(id: string) {
 
   revalidatePath("/admin/categories");
   return { success: true };
-}
+});

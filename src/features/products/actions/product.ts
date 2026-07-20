@@ -7,8 +7,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { withWriteProtection } from "@/features/shared/lib/write-protection";
 
-export async function deleteProduct(id: string) {
+export const deleteProduct = withWriteProtection(async function (id: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("products:write")) {
     throw new Error("Unauthorized");
@@ -21,4 +22,4 @@ export async function deleteProduct(id: string) {
 
   revalidatePath("/admin/products");
   return { success: true };
-}
+});
