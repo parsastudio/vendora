@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
 import { inventory } from "@/lib/db/schema/products";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function cancelOrderByCustomer(orderId: string, domain: string) {

@@ -95,7 +95,12 @@ export const authOptions: NextAuthOptions = {
       } else if (token.id && token.jti) {
         const sessionActive = await redis.get(`active_session:${token.id}:${token.jti}`);
         if (!sessionActive) {
-          return {};
+          return {
+            ...token,
+            id: "",
+            tenantId: "",
+            permissions: [],
+          };
         }
       }
       return token;
@@ -104,7 +109,14 @@ export const authOptions: NextAuthOptions = {
       if (!token.id) {
         return {
           ...session,
-          user: null as any,
+          user: {
+            id: "",
+            tenantId: "",
+            permissions: [],
+            name: "",
+            email: "",
+            image: "",
+          },
         };
       }
       if (session.user) {

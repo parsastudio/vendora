@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { formatCurrency } from "@/features/shared/utils/format";
 import { CustomerOrderActions } from "@/features/orders/components/customer-order-actions";
 import Image from "next/image";

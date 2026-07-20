@@ -7,6 +7,7 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { getTenantSigningSecret } from "@/features/workflows/lib/event-emitter";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import * as nodeCrypto from "crypto";
 
 export async function getWebhookSecret() {
   const session = await getServerSession(authOptions);
@@ -88,7 +89,7 @@ export async function triggerMockWebhook(url: string, triggerEvent: string) {
   };
 
   const bodyString = JSON.stringify(mockPayload);
-  const signature = crypto.createHmac("sha256", secret).update(bodyString).digest("hex");
+  const signature = nodeCrypto.createHmac("sha256", secret).update(bodyString).digest("hex");
 
   try {
     const res = await fetch(url, {
