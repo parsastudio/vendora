@@ -5,19 +5,33 @@ import { productVariants, inventory } from "@/lib/db/schema/products";
 import { eq, and, inArray } from "drizzle-orm";
 import { CartItem } from "@/features/cart/types/cart";
 import { calculateCartTotals } from "@/features/cart/utils/cart-math";
+import { z } from "zod";
+
+const cartItemValidator = z.object({
+  variantId: z.string(),
+  sku: z.string(),
+  name: z.string(),
+  price: z.string(),
+  quantity: z.number().min(1),
+  attributes: z.record(z.string(), z.string()),
+});
+
+const cartValidateSchema = z.object({
+  items: z.array(cartItemValidator),
+  couponCode: z.string().nullable(),
+  tenantId: z.string(),
+});
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { items, couponCode, tenantId } = body as {
-      items: CartItem[];
-      couponCode: string | null;
-      tenantId: string;
-    };
+    const parsed = cartValidateSchema.safeParse(body);
 
-    if (!items || !Array.isArray(items) || !tenantId) {
-      return NextResponse.json({ error: "Missing required details" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid request payload format" }, { status: 400 });
     }
+
+    const { items, couponCode, tenantId } = parsed.data;
 
     const variantIds = items.map((i) => i.variantId);
     if (variantIds.length === 0) {
@@ -105,8 +119,7 @@ export async function POST(request: Request) {
         },
       },
     });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return NextResponse.json({ error: "Validation process failed" }, { status: 500 });
   }
 }

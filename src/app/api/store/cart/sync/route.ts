@@ -4,6 +4,16 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { db } from "@/lib/db";
 import { carts, cartItems } from "@/lib/db/schema/orders";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
+
+const syncItemValidator = z.object({
+  variantId: z.string(),
+  quantity: z.number().min(1),
+});
+
+const syncCartSchema = z.object({
+  items: z.array(syncItemValidator),
+});
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -13,12 +23,13 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { items } = body as { items: { variantId: string; quantity: number }[] };
+    const parsed = syncCartSchema.safeParse(body);
 
-    if (!items || !Array.isArray(items)) {
-      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid payload format" }, { status: 400 });
     }
 
+    const { items } = parsed.data;
     const tenantId = session.user.tenantId;
     const customerId = session.user.id;
 
@@ -53,8 +64,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return NextResponse.json({ error: "Cart sync failed" }, { status: 500 });
   }
 }

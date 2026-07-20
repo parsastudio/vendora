@@ -5,7 +5,20 @@ import { db } from "@/lib/db";
 import { carts, cartItems } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
 import { eq } from "drizzle-orm";
-import { CartItem } from "@/features/cart/types/cart";
+import { z } from "zod";
+
+const guestItemValidator = z.object({
+  variantId: z.string(),
+  sku: z.string(),
+  name: z.string(),
+  price: z.string(),
+  quantity: z.number().min(1),
+  attributes: z.record(z.string(), z.string()),
+});
+
+const mergeCartSchema = z.object({
+  guestItems: z.array(guestItemValidator),
+});
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -15,12 +28,13 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { guestItems } = body as { guestItems: CartItem[] };
+    const parsed = mergeCartSchema.safeParse(body);
 
-    if (!guestItems || !Array.isArray(guestItems)) {
-      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid payload format" }, { status: 400 });
     }
 
+    const { guestItems } = parsed.data;
     const tenantId = session.user.tenantId;
     const customerId = session.user.id;
 
@@ -79,8 +93,7 @@ export async function POST(request: Request) {
       .where(eq(cartItems.cartId, cartId));
 
     return NextResponse.json({ success: true, data: finalDbItems });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return NextResponse.json({ error: "Cart merging process failed" }, { status: 500 });
   }
 }
