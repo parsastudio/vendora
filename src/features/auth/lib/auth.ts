@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { users, usersToRoles, rolesToPermissions, permissions } from "@/lib/db/schema/users";
 import { eq, inArray } from "drizzle-orm";
 import { verifyPassword } from "./auth-utils";
+import { verifyTOTPToken } from "./totp";
 import { redis } from "@/lib/redis";
 import { headers } from "next/headers";
 
@@ -18,6 +19,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        otp: { label: "OTP", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -38,6 +40,16 @@ export const authOptions: NextAuthOptions = {
         const isValid = await verifyPassword(credentials.password, user.passwordHash);
         if (!isValid) {
           return null;
+        }
+
+        if (user.twoFactorEnabled) {
+          if (!credentials.otp) {
+            throw new Error("2FA_REQUIRED");
+          }
+          const isValidOTP = verifyTOTPToken(user.twoFactorSecret || "", credentials.otp);
+          if (!isValidOTP) {
+            throw new Error("INVALID_OTP");
+          }
         }
 
         const userRolesResult = await db

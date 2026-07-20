@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { warehouses, inventory } from "@/lib/db/schema/products";
+import { auditLogs } from "@/lib/db/schema/workflows";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
@@ -30,13 +31,18 @@ export async function updateStock(variantId: string, warehouseId: string, quanti
     throw new Error("Unauthorized");
   }
 
+  const tenantId = session.user.tenantId;
+
   const existing = await db
     .select()
     .from(inventory)
     .where(and(eq(inventory.variantId, variantId), eq(inventory.warehouseId, warehouseId)))
     .limit(1);
 
+  let oldQty = 0;
+
   if (existing.length > 0) {
+    oldQty = existing[0].quantity;
     await db
       .update(inventory)
       .set({ quantity, updatedAt: new Date() })
@@ -49,6 +55,20 @@ export async function updateStock(variantId: string, warehouseId: string, quanti
       quantity,
     });
   }
+
+  await db.insert(auditLogs).values({
+    id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    tenantId,
+    userId: session.user.id,
+    action: "inventory.update",
+    details: {
+      variantId: [variantId],
+      warehouseId: [warehouseId],
+      previousQuantity: [oldQty.toString()],
+      newQuantity: [quantity.toString()],
+    },
+    ipAddress: "127.0.0.1",
+  });
 
   revalidatePath("/admin/inventory");
   return { success: true };

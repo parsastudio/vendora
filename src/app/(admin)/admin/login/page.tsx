@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [require2FA, setRequire2FA] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -20,10 +22,17 @@ export default function AdminLoginPage() {
         redirect: false,
         email,
         password,
+        otp,
       });
 
       if (result?.error) {
-        setError("Invalid email or password combination.");
+        if (result.error === "2FA_REQUIRED") {
+          setRequire2FA(true);
+        } else if (result.error === "INVALID_OTP") {
+          setError("The authenticator code is incorrect.");
+        } else {
+          setError("Invalid email or password combination.");
+        }
       } else {
         router.push("/admin");
       }
@@ -50,31 +59,50 @@ export default function AdminLoginPage() {
           )}
 
           <div className="space-y-4 rounded-md">
-            <div>
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Email Address
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
-              />
-            </div>
+            {!require2FA ? (
+              <>
+                <div>
+                  <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                  />
+                </div>
 
-            <div>
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Password
-              </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
-              />
-            </div>
+                <div>
+                  <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                  />
+                </div>
+              </>
+            ) : (
+              <div>
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                  Two-Factor Verification Token
+                </label>
+                <input
+                  type="text"
+                  required
+                  maxLength={6}
+                  placeholder="Enter 6-digit authenticator code"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 tracking-widest text-center focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+                />
+              </div>
+            )}
           </div>
 
           <div>
@@ -83,7 +111,7 @@ export default function AdminLoginPage() {
               disabled={isPending}
               className="group relative flex w-full justify-center rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
             >
-              {isPending ? "Authenticating..." : "Sign In"}
+              {isPending ? "Authenticating..." : require2FA ? "Verify Code" : "Sign In"}
             </button>
           </div>
         </form>

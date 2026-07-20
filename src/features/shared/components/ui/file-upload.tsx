@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, type DragEvent, type ChangeEvent } from "react";
+import { compressAndOptimizeImage } from "@/features/products/utils/image-optimizer";
 
 interface FileUploadProps {
   onUploadSuccess: (url: string) => void;
@@ -39,17 +40,26 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
   const uploadFile = async (file: File) => {
     setIsUploading(true);
     try {
+      const optimizedBlob = await compressAndOptimizeImage(file);
+      const optimizedFile = new File(
+        [optimizedBlob],
+        file.name.replace(/\.[^/.]+$/, "") + ".webp",
+        {
+          type: "image/webp",
+        },
+      );
+
       const presignRes = await fetch("/api/admin/media/presign", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fileName: file.name, contentType: file.type }),
+        body: JSON.stringify({ fileName: optimizedFile.name, contentType: optimizedFile.type }),
       });
       const { data } = await presignRes.json();
 
       await fetch(data.uploadUrl, {
         method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
+        headers: { "Content-Type": optimizedFile.type },
+        body: optimizedFile,
       });
 
       onUploadSuccess(data.fileUrl);

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { orders, orderItems, transactions, discounts } from "@/lib/db/schema/orders";
 import { inventory, productVariants } from "@/lib/db/schema/products";
+import { auditLogs } from "@/lib/db/schema/workflows";
 import { checkoutSchema } from "@/features/checkout/validation/checkout";
 import { calculateCartTotals } from "@/features/cart/utils/cart-math";
 import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
@@ -125,6 +126,21 @@ export async function POST(request: Request) {
             .update(inventory)
             .set({ quantity: inv.quantity - deduct, updatedAt: new Date() })
             .where(eq(inventory.id, inv.id));
+
+          await tx.insert(auditLogs).values({
+            id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+            tenantId: validated.tenantId,
+            userId: null,
+            action: "inventory.deduct",
+            details: {
+              variantId: [item.variantId],
+              warehouseId: [inv.warehouseId],
+              deductedAmount: [deduct.toString()],
+              orderId: [orderId],
+            },
+            ipAddress: "127.0.0.1",
+          });
+
           remainingDeduction -= deduct;
         }
       }
