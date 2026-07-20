@@ -1,6 +1,6 @@
 import { redis } from "@/lib/redis";
 
-interface RateLimitResult {
+export interface RateLimitResult {
   success: boolean;
   limit: number;
   remaining: number;
@@ -12,26 +12,29 @@ export async function rateLimit(
   limit: number,
   windowSeconds: number,
 ): Promise<RateLimitResult> {
-  const now = Date.now();
-  const clearBefore = now - windowSeconds * 1000;
-  const pipeline = redis.multi();
-  pipeline.zremrangebyscore(key, 0, clearBefore);
-  pipeline.zcard(key);
-  pipeline.zadd(key, now, `${now}-${Math.random()}`);
-  pipeline.pexpire(key, windowSeconds * 1000);
-  const results = await pipeline.exec();
+  const now = Math.floor(Date.now() / 1000);
+  const clearBefore = now - windowSeconds;
+  const multi = redis.multi();
+  multi.zremrangebyscore(key, 0, clearBefore);
+  multi.zcard(key);
+  multi.zadd(key, now, `${now}-${Math.random()}`);
+  multi.expire(key, windowSeconds);
+  const results = await multi.exec();
   if (!results) {
-    return { success: false, limit, remaining: 0, reset: now + windowSeconds * 1000 };
+    return {
+      success: false,
+      limit,
+      remaining: 0,
+      reset: now + windowSeconds,
+    };
   }
-  const currentRequests = results[1][1] as number;
-  const success = currentRequests < limit;
-  if (!success) {
-    return { success: false, limit, remaining: 0, reset: now + windowSeconds * 1000 };
-  }
+  const cardResult = results[1][1];
+  const count = typeof cardResult === "number" ? cardResult : 0;
+  const success = count < limit;
   return {
-    success: true,
+    success,
     limit,
-    remaining: limit - currentRequests,
-    reset: now + windowSeconds * 1000,
+    remaining: Math.max(0, limit - count),
+    reset: now + windowSeconds,
   };
 }
