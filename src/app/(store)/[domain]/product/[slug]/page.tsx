@@ -49,7 +49,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-2 lg:gap-x-16">
         <div>
           <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900">
-            <div className="flex h-[400px] w-full items-center justify-center text-zinc-450 dark:text-zinc-500">
+            <div className="flex h-[400px] w-full items-center justify-center text-zinc-455 dark:text-zinc-500">
               Product Catalog Asset
             </div>
           </div>
