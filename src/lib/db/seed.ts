@@ -2,7 +2,9 @@ import { db } from "./index";
 import { tenants } from "./schema/tenants";
 import { categories, products, productVariants, warehouses, inventory } from "./schema/products";
 import { users, roles, permissions, rolesToPermissions, usersToRoles } from "./schema/users";
+import { customers } from "./schema/customers";
 import { orders, orderItems, transactions } from "./schema/orders";
+import { generateDemoCustomers, generateDemoData } from "./demo-generator";
 
 async function main() {
   await db.insert(tenants).values([
@@ -110,6 +112,13 @@ async function main() {
       slug: "devices",
     },
     { id: "cat-demo-audio", tenantId: "tenant-demo", parentId: null, name: "Audio", slug: "audio" },
+    {
+      id: "cat-demo-computers",
+      tenantId: "tenant-demo",
+      parentId: null,
+      name: "Computers",
+      slug: "computers",
+    },
   ]);
 
   await db.insert(products).values([
@@ -140,6 +149,15 @@ async function main() {
       description: "Premium noise cancelling acoustic audio.",
       status: "active",
     },
+    {
+      id: "prod-demo-2",
+      tenantId: "tenant-demo",
+      categoryId: "cat-demo-computers",
+      name: "Apex Mechanical Keyboard",
+      slug: "apex-keyboard",
+      description: "Ultra-fast response tactile switches.",
+      status: "active",
+    },
   ]);
 
   await db.insert(productVariants).values([
@@ -167,6 +185,14 @@ async function main() {
       compareAtPrice: "349.00",
       attributes: { color: "black", type: "acoustic" },
     },
+    {
+      id: "var-demo-2-tactile",
+      productId: "prod-demo-2",
+      sku: "VEN-APX-TAC",
+      price: "149.00",
+      compareAtPrice: "179.00",
+      attributes: { switches: "brown", layout: "tenkeyless" },
+    },
   ]);
 
   await db
@@ -180,79 +206,28 @@ async function main() {
       },
     ]);
 
-  await db
-    .insert(inventory)
-    .values([
-      { id: "inv-demo-1", variantId: "var-demo-1-acoustic", warehouseId: "wh-demo-1", quantity: 8 },
-    ]);
+  await db.insert(inventory).values([
+    { id: "inv-demo-1", variantId: "var-demo-1-acoustic", warehouseId: "wh-demo-1", quantity: 8 },
+    { id: "inv-demo-2", variantId: "var-demo-2-tactile", warehouseId: "wh-demo-1", quantity: 15 },
+  ]);
 
-  const demoOrders = [];
-  const demoOrderItems = [];
-  const demoTxns = [];
-  const now = Date.now();
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  for (let i = 0; i < 110; i++) {
-    const orderId = `ord-demo-${i}`;
-    const daysAgo = Math.floor(Math.random() * 300) + 1;
-    const createdAt = new Date(now - daysAgo * oneDay);
-
-    const price = 299.0;
-    const tax = (price * 0.05).toFixed(2);
-    const shipping = "10.00";
-    const total = (price + parseFloat(tax) + parseFloat(shipping)).toFixed(2);
-
-    demoOrders.push({
-      id: orderId,
-      tenantId: "tenant-demo",
-      customerId: null,
-      status: "delivered",
-      paymentStatus: "paid",
-      shippingAddress: {
-        name: "Jessica Demo",
-        line1: "456 Demo Avenue",
-        city: "San Francisco",
-        state: "CA",
-        postalCode: "94103",
-        country: "US",
-      },
-      totalAmount: total,
-      subtotalAmount: price.toFixed(2),
-      discountAmount: "0.00",
-      shippingAmount: shipping,
-      taxAmount: tax,
-      createdAt,
-      updatedAt: createdAt,
-    });
-
-    demoOrderItems.push({
-      id: `oi-demo-${i}`,
-      orderId,
-      variantId: "var-demo-1-acoustic",
-      quantity: 1,
-      price: price.toFixed(2),
-      createdAt,
-    });
-
-    demoTxns.push({
-      id: `tx-demo-${i}`,
-      tenantId: "tenant-demo",
-      orderId,
-      provider: "stripe",
-      referenceId: `ch_demo_${i}`,
-      amount: total,
-      status: "success",
-      createdAt,
-    });
+  const demoCusts = generateDemoCustomers("tenant-demo");
+  for (const c of demoCusts) {
+    await db.insert(customers).values(c);
   }
 
-  for (const o of demoOrders) {
+  const { ordersList, itemsList, txnsList } = generateDemoData("tenant-demo", demoCusts, [
+    { id: "var-demo-1-acoustic", price: "299.00" },
+    { id: "var-demo-2-tactile", price: "149.00" },
+  ]);
+
+  for (const o of ordersList) {
     await db.insert(orders).values(o);
   }
-  for (const oi of demoOrderItems) {
+  for (const oi of itemsList) {
     await db.insert(orderItems).values(oi);
   }
-  for (const tx of demoTxns) {
+  for (const tx of txnsList) {
     await db.insert(transactions).values(tx);
   }
 
