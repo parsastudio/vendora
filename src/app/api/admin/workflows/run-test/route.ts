@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
     }
 
     const mockPayload = {
-      orderId: `ord-mock-${Date.now()}`,
+      orderId: `ord-mock-${randomUUID()}`,
       total: "199.99",
       currency: "USD",
     };

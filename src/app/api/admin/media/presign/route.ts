@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/features/auth/lib/auth";
 import { generatePresignedUrl } from "@/lib/s3";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
-    const key = `tenants/${session.user.tenantId}/uploads/${Date.now()}-${fileName}`;
+    const key = `tenants/${session.user.tenantId}/uploads/${randomUUID()}-${fileName}`;
     const uploadUrl = await generatePresignedUrl(key, contentType);
 
     return NextResponse.json({

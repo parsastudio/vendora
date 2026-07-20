@@ -1,5 +1,6 @@
 "use server";
 
+import "server-only";
 import { db } from "@/lib/db";
 import { workflowSettings } from "@/lib/db/schema/workflows";
 import { getServerSession } from "next-auth";
@@ -7,7 +8,7 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { getTenantSigningSecret } from "@/features/workflows/lib/event-emitter";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import * as nodeCrypto from "crypto";
+import { createHmac, randomUUID } from "crypto";
 
 export async function getWebhookSecret() {
   const session = await getServerSession(authOptions);
@@ -81,7 +82,7 @@ export async function triggerMockWebhook(url: string, triggerEvent: string) {
     timestamp: new Date().toISOString(),
     tenantId: session.user.tenantId,
     data: {
-      id: `mock-${Date.now()}`,
+      id: `mock-${randomUUID()}`,
       amount: "150.00",
       currency: "USD",
       status: "paid",
@@ -89,7 +90,7 @@ export async function triggerMockWebhook(url: string, triggerEvent: string) {
   };
 
   const bodyString = JSON.stringify(mockPayload);
-  const signature = nodeCrypto.createHmac("sha256", secret).update(bodyString).digest("hex");
+  const signature = createHmac("sha256", secret).update(bodyString).digest("hex");
 
   try {
     const res = await fetch(url, {

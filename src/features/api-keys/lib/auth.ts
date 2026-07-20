@@ -1,7 +1,8 @@
+import "server-only";
 import { db } from "@/lib/db";
 import { apiKeys } from "@/lib/db/schema/api-keys";
 import { eq } from "drizzle-orm";
-import crypto from "crypto";
+import { createHash } from "crypto";
 
 export async function validateApiKey(request: Request) {
   const authHeader = request.headers.get("authorization") || request.headers.get("x-api-key");
@@ -11,7 +12,7 @@ export async function validateApiKey(request: Request) {
   if (!rawKey.startsWith("vk_")) return null;
 
   const preview = rawKey.slice(0, 12);
-  const hash = crypto.createHash("sha256").update(rawKey).digest("hex");
+  const hash = createHash("sha256").update(rawKey).digest("hex");
 
   const keys = await db.select().from(apiKeys).where(eq(apiKeys.preview, preview)).limit(1);
 
