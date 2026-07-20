@@ -7,6 +7,40 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
+export async function createWorkflow(triggerEvent: string, url: string) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const tenantId = session.user.tenantId;
+
+  await db.insert(workflowSettings).values({
+    id: `wf-${Date.now()}`,
+    tenantId,
+    triggerEvent,
+    actions: [{ type: "webhook", config: { url } }],
+    isActive: "true",
+  });
+
+  revalidatePath("/admin/workflows");
+  return { success: true };
+}
+
+export async function deleteWorkflow(id: string) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  await db
+    .delete(workflowSettings)
+    .where(and(eq(workflowSettings.id, id), eq(workflowSettings.tenantId, session.user.tenantId)));
+
+  revalidatePath("/admin/workflows");
+  return { success: true };
+}
+
 export async function toggleWorkflow(id: string, isActive: string) {
   const session = await getServerSession(authOptions);
   if (!session) {
