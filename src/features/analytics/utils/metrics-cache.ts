@@ -5,11 +5,17 @@ export async function getOrSetMetricsCache<T>(
   fn: () => Promise<T>,
   ttlSeconds: number = 300,
 ): Promise<T> {
-  const cached = await redis.get(key);
-  if (cached) {
-    return JSON.parse(cached) as T;
+  try {
+    const cached = await redis.get(key);
+    if (cached) {
+      return JSON.parse(cached) as T;
+    }
+  } catch {
+    return await fn();
   }
   const freshData = await fn();
-  await redis.set(key, JSON.stringify(freshData), "EX", ttlSeconds);
+  try {
+    await redis.set(key, JSON.stringify(freshData), "EX", ttlSeconds);
+  } catch {}
   return freshData;
 }

@@ -18,6 +18,9 @@ export function AbandonedCarts({
   estimatedLostRevenue,
   recentList,
 }: AbandonedCartsProps) {
+  const leakRate =
+    abandonedCount > 0 ? Math.round((abandonedCount / (abandonedCount + 5)) * 100) : 0;
+
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-6">
       <div className="flex items-center justify-between">
@@ -51,9 +54,7 @@ export function AbandonedCarts({
             Estimated Conversion Leak
           </span>
           <p className="mt-1 text-2xl font-extrabold text-zinc-800 dark:text-zinc-200">
-            {abandonedCount > 0
-              ? `${Math.round((abandonedCount / (abandonedCount + 5)) * 100)}%`
-              : "0%"}
+            {leakRate}%
           </p>
         </div>
       </div>
