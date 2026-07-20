@@ -3,6 +3,7 @@
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { useCartStore } from "@/features/cart/store/use-cart-store";
 import { formatCurrency } from "@/features/shared/utils/format";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 interface CartPageContentProps {
@@ -11,7 +12,9 @@ interface CartPageContentProps {
 }
 
 export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
-  const { items, updateQuantity, removeItem, couponCode, setCouponCode } = useCartStore();
+  const { data: session } = useSession();
+  const { items, updateQuantity, removeItem, couponCode, setCouponCode, mergeCart } =
+    useCartStore();
   const [couponInput, setCouponInput] = useState(couponCode || "");
   const [totals, setTotals] = useState({
     subtotal: "0.00",
@@ -27,6 +30,39 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     () => true,
     () => false,
   );
+
+  useEffect(() => {
+    if (!isClient || !session?.user) return;
+
+    const executeMerge = async () => {
+      if (items.length === 0) return;
+      try {
+        const response = await fetch("/api/store/cart/merge", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ guestItems: items }),
+        });
+        const result = await response.json();
+        if (result.success) {
+          const dbMergedItems = result.data.map(
+            (item: { variantId: string; quantity: number }) => ({
+              variantId: item.variantId,
+              quantity: item.quantity,
+              sku: "",
+              name: "Merged Store Item",
+              price: "0.00",
+              attributes: {},
+            }),
+          );
+          mergeCart(dbMergedItems);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    executeMerge();
+  }, [session, isClient]);
 
   useEffect(() => {
     if (!isClient) return;
@@ -94,9 +130,22 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     );
   }
 
+  const hasBogoActive = items.some(
+    (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
+  );
+
   return (
     <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
-      <section className="lg:col-span-7">
+      <section className="lg:col-span-7 space-y-6">
+        {hasBogoActive && (
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50/30 p-4 dark:border-emerald-950/20 dark:bg-emerald-950/5">
+            <p className="text-xs font-bold text-emerald-800 dark:text-emerald-400">
+              🎁 Multi-Buy Automatic Discount applied: Buy 1 Get 1 Free on all selected Black
+              variants!
+            </p>
+          </div>
+        )}
+
         <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-6">
           {items.map((item) => (
             <div
@@ -108,6 +157,11 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
                   {item.name}
                 </h3>
                 <p className="text-xs text-zinc-500">{formatCurrency(parseFloat(item.price))}</p>
+                {(item.attributes.color === "black" || item.attributes.bogo === "true") && (
+                  <span className="inline-block mt-1 text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded uppercase">
+                    BOGO Eligible
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -173,7 +227,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
           </div>
           {parseFloat(totals.discountAmount) > 0 && (
             <div className="flex items-center justify-between text-emerald-600">
-              <span>Discount</span>
+              <span>Discount (incl. BOGO)</span>
               <span>-{formatCurrency(parseFloat(totals.discountAmount))}</span>
             </div>
           )}

@@ -64,6 +64,10 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
 
   if (!isOpen) return null;
 
+  const hasBogoActive = items.some(
+    (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
+  );
+
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
@@ -76,7 +80,13 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
             </button>
           </div>
 
-          <div className="mt-6 flex-1 overflow-y-auto space-y-4 max-h-[50vh]">
+          <div className="mt-6 flex-1 overflow-y-auto space-y-4 max-h-[45vh]">
+            {hasBogoActive && (
+              <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-3 text-[10px] text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900 dark:text-emerald-400">
+                🎁 Buy 1 Get 1 Free Promo Code applied automatically.
+              </div>
+            )}
+
             {items.length === 0 ? (
               <p className="text-center text-sm text-zinc-500 py-12">Your cart is empty.</p>
             ) : (

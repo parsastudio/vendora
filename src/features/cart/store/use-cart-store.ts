@@ -10,6 +10,7 @@ interface CartState {
   updateQuantity: (variantId: string, quantity: number) => void;
   setCouponCode: (code: string | null) => void;
   clearCart: () => void;
+  mergeCart: (incomingItems: CartItem[]) => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -43,6 +44,19 @@ export const useCartStore = create<CartState>()(
         })),
       setCouponCode: (code) => set({ couponCode: code }),
       clearCart: () => set({ items: [], couponCode: null }),
+      mergeCart: (incomingItems) =>
+        set((state) => {
+          const merged = [...state.items];
+          for (const incoming of incomingItems) {
+            const existingIdx = merged.findIndex((item) => item.variantId === incoming.variantId);
+            if (existingIdx > -1) {
+              merged[existingIdx].quantity += incoming.quantity;
+            } else {
+              merged.push(incoming);
+            }
+          }
+          return { items: merged };
+        }),
     }),
     {
       name: "vendora-cart",

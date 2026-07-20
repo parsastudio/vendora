@@ -1,5 +1,6 @@
 import Decimal from "decimal.js";
 import { CartItem, CartCalculationResult } from "../types/cart";
+import { calculateBogoDiscount } from "./bogo";
 
 export function calculateCartTotals(
   items: CartItem[],
@@ -30,6 +31,10 @@ export function calculateCartTotals(
       discountDec = new Decimal(discountValue);
     }
   }
+
+  const bogoResult = calculateBogoDiscount(items);
+  const bogoDiscountDec = new Decimal(bogoResult.discountAmount);
+  discountDec = discountDec.add(bogoDiscountDec);
 
   if (discountDec.gt(subtotalDec)) {
     discountDec = subtotalDec;
