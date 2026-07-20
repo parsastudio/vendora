@@ -1,3 +1,5 @@
+import { randomInt } from "crypto";
+
 export function generateSKU(productName: string, attributes: Record<string, string>): string {
   const prefix = "VEN";
   const productCode = productName
@@ -14,7 +16,7 @@ export function generateSKU(productName: string, attributes: Record<string, stri
     )
     .join("-");
 
-  const randomSuffix = Math.floor(100 + Math.random() * 900).toString();
+  const randomSuffix = randomInt(100, 1000).toString();
 
   return attributeString
     ? `${prefix}-${productCode}-${attributeString}-${randomSuffix}`

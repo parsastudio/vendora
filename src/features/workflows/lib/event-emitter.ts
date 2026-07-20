@@ -2,12 +2,11 @@ import { EventEmitter } from "events";
 import { db } from "@/lib/db";
 import { workflowSettings, auditLogs } from "@/lib/db/schema/workflows";
 import { eq, and } from "drizzle-orm";
-import crypto from "crypto";
+import { createHash, createHmac, randomUUID } from "crypto";
 
 export function getTenantSigningSecret(tenantId: string): string {
   const baseSecret = process.env.NEXT_PUBLIC_APP_URL || "vendora_prod_signing_secret_key_2026";
-  return crypto
-    .createHash("sha256")
+  return createHash("sha256")
     .update(tenantId + baseSecret)
     .digest("hex");
 }
@@ -30,7 +29,7 @@ class WorkflowEventEmitter extends EventEmitter {
 
       const secret = getTenantSigningSecret(tenantId);
       const bodyString = JSON.stringify({ event: triggerEvent, payload });
-      const signature = crypto.createHmac("sha256", secret).update(bodyString).digest("hex");
+      const signature = createHmac("sha256", secret).update(bodyString).digest("hex");
 
       for (const flow of activeFlows) {
         for (const action of flow.actions) {
@@ -46,7 +45,7 @@ class WorkflowEventEmitter extends EventEmitter {
               });
 
               await db.insert(auditLogs).values({
-                id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                id: `log-${randomUUID()}`,
                 tenantId,
                 userId: null,
                 action: `webhook:${triggerEvent}`,
@@ -59,7 +58,7 @@ class WorkflowEventEmitter extends EventEmitter {
               });
             } catch (err) {
               await db.insert(auditLogs).values({
-                id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                id: `log-${randomUUID()}`,
                 tenantId,
                 userId: null,
                 action: `webhook:${triggerEvent}`,

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { redis } from "@/lib/redis";
 import { logger } from "@/lib/logger";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({ success: true });
     }
-    const token = crypto.randomUUID();
+    const token = randomUUID();
     await redis.set(`reset_token:${token}`, user.id, "EX", 3600);
     logger.info(
       `Password reset link generated for ${user.email}: /admin/reset-password?token=${token}`,

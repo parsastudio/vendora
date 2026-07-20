@@ -1,3 +1,4 @@
+import "server-only";
 import { redis } from "@/lib/redis";
 
 export async function getOrSetMetricsCache<T>(
