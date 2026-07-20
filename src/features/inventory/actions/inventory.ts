@@ -1,3 +1,6 @@
+"use server";
+
+import "server-only";
 import { db } from "@/lib/db";
 import { warehouses, inventory } from "@/lib/db/schema/products";
 import { auditLogs } from "@/lib/db/schema/workflows";
@@ -5,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { randomUUID } from "crypto";
 
 export async function createWarehouse(name: string, location: string | null) {
   const session = await getServerSession(authOptions);
@@ -15,7 +19,7 @@ export async function createWarehouse(name: string, location: string | null) {
   const tenantId = session.user.tenantId;
 
   await db.insert(warehouses).values({
-    id: `wh-${Date.now()}`,
+    id: `wh-${randomUUID()}`,
     tenantId,
     name,
     location,
@@ -51,7 +55,7 @@ export async function updateStock(variantId: string, warehouseId: string, quanti
         .where(eq(inventory.id, existing[0].id));
     } else {
       await tx.insert(inventory).values({
-        id: `inv-${Date.now()}`,
+        id: `inv-${randomUUID()}`,
         variantId,
         warehouseId,
         quantity,
@@ -59,7 +63,7 @@ export async function updateStock(variantId: string, warehouseId: string, quanti
     }
 
     await tx.insert(auditLogs).values({
-      id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      id: `log-${randomUUID()}`,
       tenantId,
       userId: session.user.id,
       action: "inventory.update",

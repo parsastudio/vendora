@@ -1,11 +1,13 @@
 "use server";
 
+import "server-only";
 import { db } from "@/lib/db";
 import { discounts } from "@/lib/db/schema/orders";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { randomUUID } from "crypto";
 
 export async function createDiscount(
   code: string,
@@ -31,7 +33,7 @@ export async function createDiscount(
   const tenantId = session.user.tenantId;
 
   await db.insert(discounts).values({
-    id: `disc-${Date.now()}`,
+    id: `disc-${randomUUID()}`,
     tenantId,
     code: code.toUpperCase().trim(),
     type,

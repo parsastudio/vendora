@@ -1,3 +1,6 @@
+"use server";
+
+import "server-only";
 import { db } from "@/lib/db";
 import { users, usersToRoles } from "@/lib/db/schema/users";
 import { hashPassword } from "@/features/auth/lib/auth-utils";
@@ -5,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { randomUUID } from "crypto";
 
 export async function createStaffMember(formData: {
   name: string;
@@ -19,7 +23,7 @@ export async function createStaffMember(formData: {
 
   const tenantId = session.user.tenantId;
   const hashedPassword = await hashPassword(formData.password);
-  const userId = `user-${Date.now()}`;
+  const userId = `user-${randomUUID()}`;
 
   await db.transaction(async (tx) => {
     await tx.insert(users).values({

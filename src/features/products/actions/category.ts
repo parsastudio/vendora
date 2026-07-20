@@ -1,9 +1,13 @@
+"use server";
+
+import "server-only";
 import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema/products";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { randomUUID } from "crypto";
 
 export async function createCategory(name: string, parentId: string | null) {
   const session = await getServerSession(authOptions);
@@ -18,7 +22,7 @@ export async function createCategory(name: string, parentId: string | null) {
     .replace(/(^-|-$)+/g, "");
 
   await db.insert(categories).values({
-    id: `cat-${Date.now()}`,
+    id: `cat-${randomUUID()}`,
     tenantId,
     parentId,
     name,

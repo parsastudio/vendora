@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
 import { users, roles, permissions, rolesToPermissions, usersToRoles } from "@/lib/db/schema/users";
 import { hashPassword } from "@/features/auth/lib/auth-utils";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -17,9 +18,9 @@ export async function POST(request: Request) {
     }
 
     const passwordHash = await hashPassword(adminPassword);
-    const tenantId = `tenant-${subdomain}`;
-    const userId = `user-${Date.now()}`;
-    const roleId = `role-admin-${subdomain}`;
+    const tenantId = `tenant-${randomUUID()}`;
+    const userId = `user-${randomUUID()}`;
+    const roleId = `role-admin-${randomUUID()}`;
 
     await db.transaction(async (tx) => {
       await tx.insert(tenants).values({

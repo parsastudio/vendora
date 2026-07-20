@@ -1,12 +1,13 @@
 "use server";
 
+import "server-only";
 import { db } from "@/lib/db";
 import { users, usersToRoles } from "@/lib/db/schema/users";
 import { redis } from "@/lib/redis";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { hashPassword } from "@/features/auth/lib/auth-utils";
-import crypto from "crypto";
+import crypto, { randomUUID } from "crypto";
 import { logger } from "@/lib/logger";
 
 export async function createInvitation(email: string, name: string, roleId: string) {
@@ -56,7 +57,7 @@ export async function acceptInvitation(token: string, password: string) {
     tenantId: string;
   };
   const hashedPassword = await hashPassword(password);
-  const userId = `user-${Date.now()}`;
+  const userId = `user-${randomUUID()}`;
 
   try {
     await db.transaction(async (tx) => {

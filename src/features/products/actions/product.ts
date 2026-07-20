@@ -1,5 +1,6 @@
 "use server";
 
+import "server-only";
 import { db } from "@/lib/db";
 import { products } from "@/lib/db/schema/products";
 import { getServerSession } from "next-auth";
