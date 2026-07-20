@@ -66,6 +66,11 @@ export function ApiSandbox({ apiKeysList }: ApiSandboxProps) {
             <option value="/api/v1/categories">GET /api/v1/categories (Categories Tree)</option>
             <option value="/api/tenant">GET /api/tenant (Active Tenant Data)</option>
           </select>
+          {apiKeysList.length > 0 && (
+            <span className="text-[9px] text-zinc-400 mt-1 block">
+              Reference Active Keys: {apiKeysList.map((k) => k.name).join(", ")}
+            </span>
+          )}
         </div>
 
         <div className="md:col-span-2">

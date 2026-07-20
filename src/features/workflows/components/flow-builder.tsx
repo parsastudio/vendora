@@ -48,6 +48,10 @@ export function FlowBuilder() {
     [setEdges],
   );
 
+  const handleReset = () => {
+    setNodes(initialNodes);
+  };
+
   const handleSave = async () => {
     if (!webhookUrl) return;
     setLoading(true);
@@ -77,6 +81,12 @@ export function FlowBuilder() {
             </p>
           </div>
           <div className="flex gap-2 items-center">
+            <button
+              onClick={handleReset}
+              className="rounded border border-zinc-300 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+            >
+              Reset Canvas
+            </button>
             <input
               type="url"
               required
