@@ -1,3 +1,4 @@
+import "server-only";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { tenants } from "@/lib/db/schema/tenants";
