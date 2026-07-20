@@ -45,13 +45,20 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
         const result = await response.json();
         if (result.success) {
           const dbMergedItems = result.data.map(
-            (item: { variantId: string; quantity: number }) => ({
+            (item: {
+              variantId: string;
+              quantity: number;
+              sku: string;
+              name: string;
+              price: string;
+              attributes: Record<string, string>;
+            }) => ({
               variantId: item.variantId,
               quantity: item.quantity,
-              sku: "",
-              name: "Merged Store Item",
-              price: "0.00",
-              attributes: {},
+              sku: item.sku,
+              name: item.name,
+              price: item.price,
+              attributes: item.attributes,
             }),
           );
           mergeCart(dbMergedItems);

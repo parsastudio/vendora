@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/features/auth/lib/auth";
 import { db } from "@/lib/db";
 import { carts, cartItems } from "@/lib/db/schema/orders";
+import { productVariants, products } from "@/lib/db/schema/products";
 import { eq } from "drizzle-orm";
 import { CartItem } from "@/features/cart/types/cart";
 
@@ -63,7 +64,19 @@ export async function POST(request: Request) {
       }
     }
 
-    const finalDbItems = await db.select().from(cartItems).where(eq(cartItems.cartId, cartId));
+    const finalDbItems = await db
+      .select({
+        variantId: cartItems.variantId,
+        quantity: cartItems.quantity,
+        sku: productVariants.sku,
+        price: productVariants.price,
+        attributes: productVariants.attributes,
+        name: products.name,
+      })
+      .from(cartItems)
+      .innerJoin(productVariants, eq(cartItems.variantId, productVariants.id))
+      .innerJoin(products, eq(productVariants.productId, products.id))
+      .where(eq(cartItems.cartId, cartId));
 
     return NextResponse.json({ success: true, data: finalDbItems });
   } catch (error) {

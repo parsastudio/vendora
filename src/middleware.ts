@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
         },
       });
     }
+    return NextResponse.next();
   }
 
   const host = request.headers.get("host") || "localhost:3000";
