@@ -47,7 +47,7 @@ export function LowStockAlert({ items }: LowStockAlertProps) {
                   <td className="whitespace-nowrap px-4 py-2 font-mono text-rose-600 dark:text-rose-400 font-bold">
                     {item.sku}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-2 font-semibold text-zinc-900 dark:text-zinc-50">
+                  <td className="whitespace-nowrap px-4 py-2 font-semibold text-zinc-950 dark:text-zinc-50">
                     {item.name}
                   </td>
                   <td className="whitespace-nowrap px-4 py-2 text-right font-mono font-bold text-rose-700 dark:text-rose-400">
