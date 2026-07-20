@@ -1,57 +1,39 @@
 import { db } from "@/lib/db";
-import { products, productVariants } from "@/lib/db/schema/products";
-import { users } from "@/lib/db/schema/users";
 import { orders, orderItems } from "@/lib/db/schema/orders";
-import { sql, eq } from "drizzle-orm";
+import { productVariants, products } from "@/lib/db/schema/products";
+import { eq, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { formatCurrency } from "@/features/shared/utils/format";
 import { AnalyticsCharts } from "@/features/analytics/components/analytics-charts";
 import { TopProducts } from "@/features/analytics/components/top-products";
+import { getDashboardStats } from "@/features/analytics/services/dashboard";
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
   const tenantId = session?.user?.tenantId || "";
 
-  const productsCountResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(products)
-    .where(eq(products.tenantId, tenantId));
-
-  const staffCountResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(users)
-    .where(eq(users.tenantId, tenantId));
-
-  const ordersCountResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(orders)
-    .where(eq(orders.tenantId, tenantId));
-
-  const totalSalesResult = await db
-    .select({ sum: sql<string>`sum(total_amount)` })
-    .from(orders)
-    .where(eq(orders.tenantId, tenantId));
+  const statsData = await getDashboardStats(tenantId);
 
   const stats = [
     {
       name: "Total Products",
-      value: productsCountResult[0]?.count || 0,
+      value: statsData.productsCount,
       description: "Active items in your inventory",
     },
     {
       name: "Staff Members",
-      value: staffCountResult[0]?.count || 0,
+      value: statsData.staffCount,
       description: "Teammates with active accounts",
     },
     {
       name: "Total Orders",
-      value: ordersCountResult[0]?.count || 0,
+      value: statsData.ordersCount,
       description: "All-time customer sales transactions",
     },
     {
       name: "Gross Revenue",
-      value: formatCurrency(parseFloat(totalSalesResult[0]?.sum || "0.00")),
+      value: formatCurrency(parseFloat(statsData.grossRevenue)),
       description: "Processed sales volume",
     },
   ];

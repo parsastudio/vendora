@@ -81,7 +81,7 @@ export default async function StorefrontPage({ params }: StorefrontProps) {
               </div>
               <div className="mt-4">
                 <Link
-                  href={`/${tenantDomain}/product/${product.slug}`}
+                  href={`/product/${product.slug}`}
                   className="block w-full rounded-md bg-zinc-950 px-3 py-2 text-center text-xs font-semibold text-zinc-50 hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
                 >
                   View Details

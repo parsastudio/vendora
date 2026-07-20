@@ -1,14 +1,12 @@
 import { db } from "@/lib/db";
 import { apiKeys } from "@/lib/db/schema/api-keys";
-import { workflowSettings } from "@/lib/db/schema/workflows";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
-import { eq, and, like } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { ApiKeysManager } from "@/features/api-keys/components/api-keys-manager";
 import { ApiSandbox } from "@/features/developer/components/api-sandbox";
 import { ApiDocs } from "@/features/developer/components/api-docs";
-import { WebhookManager } from "@/features/developer/components/webhook-manager";
 
 export default async function AdminDeveloperSettingsPage() {
   const session = await getServerSession(authOptions);
@@ -28,21 +26,6 @@ export default async function AdminDeveloperSettingsPage() {
     .from(apiKeys)
     .where(eq(apiKeys.tenantId, tenantId));
 
-  const workflowsList = await db
-    .select()
-    .from(workflowSettings)
-    .where(and(eq(workflowSettings.tenantId, tenantId), like(workflowSettings.id, "wf-webhook-%")));
-
-  const mappedWebhooks = workflowsList.map((wf) => {
-    const actionsList = wf.actions as { type: string; config: Record<string, string> }[];
-    const webhookAction = actionsList.find((a) => a.type === "webhook");
-    return {
-      id: wf.id,
-      triggerEvent: wf.triggerEvent,
-      url: webhookAction?.config?.url || "",
-    };
-  });
-
   return (
     <div className="space-y-8">
       <div>
@@ -50,8 +33,8 @@ export default async function AdminDeveloperSettingsPage() {
           Headless Engine &amp; Developer Hub
         </h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Control developer keys, review real-time REST endpoint definitions, run tests in Sandbox,
-          and connect webhooks.
+          Control developer keys, review real-time REST endpoint definitions, and run tests in
+          Sandbox.
         </p>
       </div>
 
@@ -60,8 +43,6 @@ export default async function AdminDeveloperSettingsPage() {
       <ApiSandbox apiKeysList={keysList} />
 
       <ApiDocs />
-
-      <WebhookManager initialWebhooks={mappedWebhooks} />
     </div>
   );
 }

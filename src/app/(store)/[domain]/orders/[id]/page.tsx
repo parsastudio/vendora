@@ -188,7 +188,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
 
         <div className="pt-6 text-center">
           <Link
-            href={`/${domain}`}
+            href="/"
             className="inline-block rounded-full bg-zinc-950 px-6 py-2.5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950"
           >
             Continue Shopping

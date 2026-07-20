@@ -135,7 +135,7 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
             }
           } else {
             clearCart();
-            router.push(`/${domain}/orders/${createdOrderId}`);
+            router.push(`/orders/${createdOrderId}`);
           }
         } else {
           setError(result.error || "Failed to process transaction.");

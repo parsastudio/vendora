@@ -151,6 +151,20 @@ export function AdminSidebar() {
       ),
     },
     {
+      name: "Webhooks & Events",
+      href: "/admin/settings/webhooks",
+      icon: (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+          />
+        </svg>
+      ),
+    },
+    {
       name: "Fluxio Automation",
       href: "/admin/workflows",
       icon: (
@@ -197,7 +211,7 @@ export function AdminSidebar() {
           </svg>
         </button>
       </div>
-      <nav className="flex-1 space-y-1 px-2 py-4">
+      <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (

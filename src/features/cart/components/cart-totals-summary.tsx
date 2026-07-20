@@ -15,7 +15,7 @@ interface CartTotalsSummaryProps {
   couponElement: React.ReactNode;
 }
 
-export function CartTotalsSummary({ totals, domain, couponElement }: CartTotalsSummaryProps) {
+export function CartTotalsSummary({ totals, couponElement }: CartTotalsSummaryProps) {
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-6">
       <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-50">Order summary</h2>
@@ -50,7 +50,7 @@ export function CartTotalsSummary({ totals, domain, couponElement }: CartTotalsS
       </div>
       <div className="pt-2">
         <Link
-          href={`/${domain}/checkout`}
+          href="/checkout"
           className="block w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white hover:bg-zinc-855 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           Proceed to Secure Checkout

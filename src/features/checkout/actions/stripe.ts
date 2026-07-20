@@ -14,6 +14,10 @@ export async function createStripeSession(orderId: string, domain: string) {
   const order = orderResult[0];
 
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const isLocalhost = baseUrl.includes("localhost");
+  const tenantUrl = isLocalhost
+    ? `http://${domain}.localhost:3000`
+    : `https://${domain}.vendora.com`;
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
@@ -30,8 +34,8 @@ export async function createStripeSession(orderId: string, domain: string) {
       },
     ],
     mode: "payment",
-    success_url: `${baseUrl}/${domain}/orders/${order.id}?status=success`,
-    cancel_url: `${baseUrl}/${domain}/checkout?error=cancelled`,
+    success_url: `${tenantUrl}/orders/${order.id}?status=success`,
+    cancel_url: `${tenantUrl}/checkout?error=cancelled`,
     metadata: {
       orderId: order.id,
       tenantId: order.tenantId,
