@@ -1,3 +1,4 @@
+import "server-only";
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as tenants from "./schema/tenants";
@@ -32,7 +33,7 @@ const pool =
   });
 
 pool.on("error", (error: Error) => {
-  console.error("Database connection pool idle client error:", error);
+  console.error(error);
 });
 
 if (process.env.NODE_ENV !== "production") {

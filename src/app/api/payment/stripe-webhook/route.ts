@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import Stripe from "stripe";
 import { StripePaymentSessionData } from "@/features/checkout/types/stripe";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
             .where(eq(orders.id, orderId));
 
           await tx.insert(transactions).values({
-            id: `tx-${Date.now()}`,
+            id: `tx-${randomUUID()}`,
             tenantId,
             orderId,
             provider: "stripe",
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
           });
 
           await tx.insert(auditLogs).values({
-            id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+            id: `log-${randomUUID()}`,
             tenantId,
             userId: null,
             action: "payment.stripe_success",

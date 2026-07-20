@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
 import { productSchema } from "@/features/products/validation/product";
 import { eq, and, like, sql, ne } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
@@ -56,8 +57,7 @@ export async function GET(request: Request) {
         },
       },
     });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = productSchema.parse(body);
 
-    const productId = `prod-${Date.now()}`;
+    const productId = `prod-${randomUUID()}`;
 
     await db.transaction(async (tx) => {
       await tx.insert(products).values({
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
 
       for (const variant of validated.variants) {
         await tx.insert(productVariants).values({
-          id: `var-${Date.now()}-${nodeCrypto()}`,
+          id: `var-${randomUUID()}`,
           productId,
           sku: variant.sku,
           price: variant.price,
@@ -99,12 +99,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, data: { productId } });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return NextResponse.json({ error: "Invalid product input data" }, { status: 400 });
   }
-}
-
-function nodeCrypto(): string {
-  return Math.random().toString(36).substring(2, 7);
 }

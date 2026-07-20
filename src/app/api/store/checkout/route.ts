@@ -7,6 +7,7 @@ import { checkoutSchema } from "@/features/checkout/validation/checkout";
 import { calculateCartTotals } from "@/features/cart/utils/cart-math";
 import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
 import { eq, and, inArray } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -83,7 +84,7 @@ export async function POST(request: Request) {
       }
 
       const calculation = calculateCartTotals(validatedItems, couponType, couponValue);
-      const orderId = `ord-${Date.now()}`;
+      const orderId = `ord-${randomUUID()}`;
 
       await tx.insert(orders).values({
         id: orderId,
@@ -109,7 +110,7 @@ export async function POST(request: Request) {
 
       for (const item of validatedItems) {
         await tx.insert(orderItems).values({
-          id: `oi-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          id: `oi-${randomUUID()}`,
           orderId,
           variantId: item.variantId,
           quantity: item.quantity,
@@ -128,7 +129,7 @@ export async function POST(request: Request) {
             .where(eq(inventory.id, inv.id));
 
           await tx.insert(auditLogs).values({
-            id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+            id: `log-${randomUUID()}`,
             tenantId: validated.tenantId,
             userId: null,
             action: "inventory.deduct",
@@ -160,11 +161,11 @@ export async function POST(request: Request) {
       }
 
       await tx.insert(transactions).values({
-        id: `tx-${Date.now()}`,
+        id: `tx-${randomUUID()}`,
         tenantId: validated.tenantId,
         orderId,
         provider: validated.paymentMethod || "cash",
-        referenceId: `ref-${Date.now()}`,
+        referenceId: `ref-${randomUUID()}`,
         amount: calculation.total,
         status: validated.paymentMethod === "stripe" ? "pending" : "success",
       });

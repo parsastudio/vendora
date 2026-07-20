@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
 import { productSchema } from "@/features/products/validation/product";
 import { eq, and, inArray } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -86,7 +87,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             .where(eq(productVariants.id, existing.id));
         } else {
           await tx.insert(productVariants).values({
-            id: `var-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+            id: `var-${randomUUID()}`,
             productId: id,
             sku: variant.sku,
             price: variant.price,
