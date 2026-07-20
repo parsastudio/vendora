@@ -3,7 +3,9 @@
 import { useState, useTransition, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { CategoryPicker } from "./category-picker";
+import { FileUpload } from "@/features/shared/components/ui/file-upload";
 import { generateSKU } from "../utils/sku-generator";
+import Image from "next/image";
 
 interface DbCategory {
   id: string;
@@ -27,6 +29,7 @@ interface EditProductFormProps {
     slug: string;
     description: string | null;
     categoryId: string | null;
+    imageUrl?: string | null;
     variants: VariantFormState[];
   };
 }
@@ -36,6 +39,7 @@ export function EditProductForm({ categories, productId, initialData }: EditProd
   const [slug, setSlug] = useState(initialData.slug);
   const [description, setDescription] = useState(initialData.description || "");
   const [categoryId, setCategoryId] = useState(initialData.categoryId || "");
+  const [imageUrl, setImageUrl] = useState(initialData.imageUrl || "");
   const [variants, setVariants] = useState<VariantFormState[]>(initialData.variants);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -82,6 +86,10 @@ export function EditProductForm({ categories, productId, initialData }: EditProd
     setVariants(variants.filter((_, i) => i !== index));
   };
 
+  const handleImageUpload = async (url: string) => {
+    setImageUrl(url);
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     startTransition(async () => {
@@ -103,6 +111,7 @@ export function EditProductForm({ categories, productId, initialData }: EditProd
           slug,
           description,
           categoryId: categoryId || null,
+          imageUrl: imageUrl || null,
           seoMetadata: {
             title: name,
             description,
@@ -160,6 +169,33 @@ export function EditProductForm({ categories, productId, initialData }: EditProd
               className="mt-1 block w-full min-h-[100px] rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
             />
           </div>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
+        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Product Image</h2>
+        <div className="mt-4">
+          {imageUrl ? (
+            <div className="relative h-40 w-40 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
+              <Image
+                src={imageUrl}
+                alt="Uploaded storage asset"
+                width={160}
+                height={160}
+                unoptimized
+                className="h-full w-full object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => setImageUrl("")}
+                className="absolute top-2 right-2 rounded-full bg-red-600 text-white p-1 text-xs font-bold"
+              >
+                Remove
+              </button>
+            </div>
+          ) : (
+            <FileUpload onUploadSuccess={handleImageUpload} />
+          )}
         </div>
       </div>
 

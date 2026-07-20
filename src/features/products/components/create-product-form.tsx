@@ -103,6 +103,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
           slug,
           description,
           categoryId: categoryId || null,
+          imageUrl: imageUrl || null,
           seoMetadata: {
             title: name,
             description,

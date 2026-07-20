@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { discounts } from "@/lib/db/schema/orders";
+import { discounts, shippingRates } from "@/lib/db/schema/orders";
 import { productVariants, inventory } from "@/lib/db/schema/products";
 import { eq, and, inArray } from "drizzle-orm";
 import { CartItem } from "@/features/cart/types/cart";
@@ -20,6 +20,7 @@ const cartValidateSchema = z.object({
   items: z.array(cartItemValidator),
   couponCode: z.string().nullable(),
   tenantId: z.string(),
+  shippingRateId: z.string().optional().nullable(),
 });
 
 export async function POST(request: Request) {
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid request payload format" }, { status: 400 });
     }
 
-    const { items, couponCode, tenantId } = parsed.data;
+    const { items, couponCode, tenantId, shippingRateId } = parsed.data;
 
     const variantIds = items.map((i) => i.variantId);
     if (variantIds.length === 0) {
@@ -105,7 +106,26 @@ export async function POST(request: Request) {
       }
     }
 
-    const calculation = calculateCartTotals(validatedItems, couponType, couponValue);
+    let shippingPrice = "10.00";
+    if (shippingRateId) {
+      const rate = await db
+        .select()
+        .from(shippingRates)
+        .where(eq(shippingRates.id, shippingRateId))
+        .limit(1);
+
+      if (rate.length > 0) {
+        shippingPrice = rate[0].price;
+      }
+    }
+
+    const calculation = calculateCartTotals(
+      validatedItems,
+      couponType,
+      couponValue,
+      5,
+      shippingPrice,
+    );
 
     return NextResponse.json({
       success: true,

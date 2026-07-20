@@ -12,6 +12,7 @@ export const checkoutSchema = z.object({
   country: z.string().min(1),
   couponCode: z.string().optional().nullable(),
   tenantId: z.string().min(1),
+  shippingRateId: z.string().optional().nullable(),
   items: z
     .array(
       z.object({

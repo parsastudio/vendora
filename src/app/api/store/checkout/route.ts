@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { orders, orderItems, transactions, discounts } from "@/lib/db/schema/orders";
+import { orders, orderItems, transactions, discounts, shippingRates } from "@/lib/db/schema/orders";
 import { inventory, productVariants } from "@/lib/db/schema/products";
 import { auditLogs } from "@/lib/db/schema/workflows";
 import { checkoutSchema } from "@/features/checkout/validation/checkout";
@@ -83,7 +83,26 @@ export async function POST(request: Request) {
         }
       }
 
-      const calculation = calculateCartTotals(validatedItems, couponType, couponValue);
+      let shippingPrice = "10.00";
+      if (validated.shippingRateId) {
+        const rate = await tx
+          .select()
+          .from(shippingRates)
+          .where(eq(shippingRates.id, validated.shippingRateId))
+          .limit(1);
+
+        if (rate.length > 0) {
+          shippingPrice = rate[0].price;
+        }
+      }
+
+      const calculation = calculateCartTotals(
+        validatedItems,
+        couponType,
+        couponValue,
+        5,
+        shippingPrice,
+      );
       const orderId = `ord-${randomUUID()}`;
 
       await tx.insert(orders).values({

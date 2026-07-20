@@ -4,6 +4,7 @@ import { products, productVariants } from "@/lib/db/schema/products";
 import { tenants } from "@/lib/db/schema/tenants";
 import { eq, and } from "drizzle-orm";
 import { ProductVariantSelector } from "@/features/products/components/product-variant-selector";
+import Image from "next/image";
 
 interface ProductPageProps {
   params: Promise<{ domain: string; slug: string }>;
@@ -26,7 +27,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const tenant = tenantResult[0];
 
   const productResult = await db
-    .select()
+    .select({
+      id: products.id,
+      name: products.name,
+      slug: products.slug,
+      description: products.description,
+      imageUrl: products.imageUrl,
+      tenantId: products.tenantId,
+      status: products.status,
+    })
     .from(products)
     .where(
       and(eq(products.slug, slug), eq(products.tenantId, tenant.id), eq(products.status, "active")),
@@ -49,9 +58,20 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-2 lg:gap-x-16">
         <div>
           <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900">
-            <div className="flex h-[400px] w-full items-center justify-center text-zinc-455 dark:text-zinc-500">
-              Product Catalog Asset
-            </div>
+            {product.imageUrl ? (
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                width={600}
+                height={400}
+                unoptimized
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-[400px] w-full items-center justify-center text-zinc-400 dark:text-zinc-500">
+                Product Catalog Asset
+              </div>
+            )}
           </div>
         </div>
 

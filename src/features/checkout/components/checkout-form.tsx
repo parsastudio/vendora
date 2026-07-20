@@ -14,6 +14,12 @@ interface CheckoutFormProps {
   domain: string;
 }
 
+interface ShippingRate {
+  id: string;
+  name: string;
+  price: string;
+}
+
 export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
   const { items, couponCode, clearCart } = useCartStore();
   const router = useRouter();
@@ -30,6 +36,9 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
   const [country, setCountry] = useState("US");
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "stripe">("cash");
 
+  const [shippingRates, setShippingRates] = useState<ShippingRate[]>([]);
+  const [selectedRateId, setSelectedRateId] = useState<string>("");
+
   const [totals, setTotals] = useState({
     subtotal: "0.00",
     discountAmount: "0.00",
@@ -38,6 +47,18 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
     total: "0.00",
   });
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/store/shipping-rates")
+      .then((res) => res.json())
+      .then((resJson) => {
+        if (resJson.success && resJson.data.length > 0) {
+          setShippingRates(resJson.data);
+          setSelectedRateId(resJson.data[0].id);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (items.length === 0) {
@@ -50,7 +71,12 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
         const response = await fetch("/api/store/cart/validate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items, couponCode, tenantId }),
+          body: JSON.stringify({
+            items,
+            couponCode,
+            tenantId,
+            shippingRateId: selectedRateId || null,
+          }),
         });
         const result = await response.json();
         if (result.success) {
@@ -62,7 +88,7 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
     };
 
     fetchCalculations();
-  }, [items, couponCode, tenantId, domain, router]);
+  }, [items, couponCode, tenantId, domain, router, selectedRateId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +112,7 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
             couponCode: couponCode || null,
             tenantId,
             paymentMethod,
+            shippingRateId: selectedRateId || null,
             items: items.map((i) => ({
               variantId: i.variantId,
               quantity: i.quantity,
@@ -151,6 +178,29 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
             country={country}
             setCountry={setCountry}
           />
+
+          {shippingRates.length > 0 && (
+            <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
+              <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Delivery Method</h3>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {shippingRates.map((rate) => (
+                  <button
+                    key={rate.id}
+                    type="button"
+                    onClick={() => setSelectedRateId(rate.id)}
+                    className={`rounded-lg border p-4 text-left transition-all ${
+                      selectedRateId === rate.id
+                        ? "border-zinc-950 bg-zinc-50 dark:border-zinc-50 dark:bg-zinc-900"
+                        : "border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900/40"
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-zinc-950 dark:text-zinc-50">{rate.name}</p>
+                    <p className="mt-1 text-[10px] text-zinc-500">${rate.price}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <CheckoutPaymentSelector
             paymentMethod={paymentMethod}
