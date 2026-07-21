@@ -187,7 +187,7 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
                     <td className="whitespace-nowrap px-4 py-2 text-xs font-bold text-zinc-950 dark:text-zinc-50 font-mono">
                       {wh.triggerEvent}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs font-mono text-zinc-500">
+                    <td className="whitespace-nowrap px-4 py-2 text-xs font-mono text-zinc-505">
                       {wh.url}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-right text-xs space-x-3">

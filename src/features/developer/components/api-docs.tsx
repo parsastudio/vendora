@@ -31,7 +31,7 @@ export function ApiDocs() {
           <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
             Headless Endpoint Reference
           </h3>
-          <p className="text-[10px] text-zinc-500">
+          <p className="text-[10px] text-zinc-505">
             Quickly implement storefront templates using standard copyable code snippets.
           </p>
         </div>

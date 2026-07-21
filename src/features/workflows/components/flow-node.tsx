@@ -18,7 +18,7 @@ export function FlowNode({ data }: { data: FlowNodeData }) {
     >
       <span
         className={`text-[9px] font-bold uppercase tracking-wider ${
-          isTrigger ? "text-zinc-400 dark:text-zinc-500" : "text-zinc-500"
+          isTrigger ? "text-zinc-400 dark:text-zinc-505" : "text-zinc-500"
         }`}
       >
         {data.type} Node

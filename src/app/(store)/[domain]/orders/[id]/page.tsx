@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
 import { eq } from "drizzle-orm";
-import { formatCurrency, formatDateTime } from "@/features/shared/utils/format";
+import { formatCurrency } from "@/features/shared/utils/format";
 import { CustomerOrderActions } from "@/features/orders/components/customer-order-actions";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
 import Image from "next/image";

@@ -47,7 +47,7 @@ export function ApiSandbox({ apiKeysList }: ApiSandboxProps) {
     <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
       <div>
         <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">API Developer Sandbox</h3>
-        <p className="text-[10px] text-zinc-500">
+        <p className="text-[10px] text-zinc-550">
           Simulate frontend headless fetch triggers and inspect live REST API JSON payloads.
         </p>
       </div>

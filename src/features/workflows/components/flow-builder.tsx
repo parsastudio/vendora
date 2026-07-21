@@ -76,7 +76,7 @@ export function FlowBuilder() {
             <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
               Fluxio Diagram Canvas
             </h3>
-            <p className="text-[10px] text-zinc-500">
+            <p className="text-[10px] text-zinc-505">
               Visually model triggers and map background endpoints.
             </p>
           </div>
