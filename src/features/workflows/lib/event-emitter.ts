@@ -1,3 +1,4 @@
+import "server-only";
 import { EventEmitter } from "events";
 import { db } from "@/lib/db";
 import { workflowSettings, auditLogs } from "@/lib/db/schema/workflows";

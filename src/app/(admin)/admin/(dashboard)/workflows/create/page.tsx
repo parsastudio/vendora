@@ -1,14 +1,11 @@
-import { FlowBuilder } from "@/features/workflows/components/flow-builder";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/features/auth/lib/auth";
-import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const FlowBuilder = dynamic(
+  () => import("@/features/workflows/components/flow-builder").then((mod) => mod.FlowBuilder),
+  { ssr: false },
+);
 
 export default async function CreateWorkflowPage() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/admin/login");
-  }
-
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-8">
       <div>

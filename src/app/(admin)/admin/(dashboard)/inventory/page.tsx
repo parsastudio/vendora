@@ -4,7 +4,8 @@ import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
-import { createWarehouse, updateStock } from "@/features/inventory/actions/inventory";
+import { createWarehouse } from "@/features/inventory/actions/inventory";
+import { StockUpdater } from "@/features/inventory/components/stock-updater";
 
 export default async function InventoryPage() {
   const session = await getServerSession(authOptions);
@@ -122,27 +123,11 @@ export default async function InventoryPage() {
                           )?.quantity || 0;
                         return (
                           <td key={wh.id} className="px-4 py-2 text-xs">
-                            <form
-                              action={async (formData: FormData) => {
-                                "use server";
-                                const qty = parseInt((formData.get("qty") as string) || "0");
-                                await updateStock(v.id, wh.id, qty);
-                              }}
-                              className="flex items-center gap-1.5"
-                            >
-                              <input
-                                type="number"
-                                name="qty"
-                                defaultValue={currentStock}
-                                className="w-16 rounded border border-zinc-300 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 focus:outline-none"
-                              />
-                              <button
-                                type="submit"
-                                className="rounded bg-zinc-950 px-2 py-0.5 text-[10px] font-semibold text-white dark:bg-zinc-50 dark:text-zinc-950 hover:opacity-80"
-                              >
-                                Update
-                              </button>
-                            </form>
+                            <StockUpdater
+                              variantId={v.id}
+                              warehouseId={wh.id}
+                              initialQuantity={currentStock}
+                            />
                           </td>
                         );
                       })}
