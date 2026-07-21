@@ -73,7 +73,7 @@ export default function Home() {
             <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-2">
               <span className="text-lg">🤖</span>
               <h3 className="text-xs font-bold text-zinc-950 dark:text-zinc-50 uppercase tracking-wider">
-                Fluxio Pipelines
+                Vendora Pipelines
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
                 Trigger custom outbound webhooks and visual flowcharts on transaction events.

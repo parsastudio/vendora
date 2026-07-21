@@ -74,7 +74,7 @@ export function FlowBuilder() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
-              Fluxio Diagram Canvas
+              Vendora Diagram Canvas
             </h3>
             <p className="text-[10px] text-zinc-505">
               Visually model triggers and map background endpoints.
