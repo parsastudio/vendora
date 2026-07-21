@@ -117,7 +117,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
 
   if (!isClient) {
     return (
-      <div className="mt-12 flex h-40 items-center justify-center text-sm text-zinc-500">
+      <div className="mt-12 flex h-40 items-center justify-center text-xs text-zinc-400">
         Loading shopping details...
       </div>
     );
@@ -125,13 +125,14 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
 
   if (items.length === 0) {
     return (
-      <div className="mt-12 flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 py-16 dark:border-zinc-800 text-center">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+      <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 py-20 dark:border-zinc-800/80 text-center space-y-4">
+        <span className="text-4xl">🛒</span>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
           Your shopping cart is currently empty.
         </p>
         <Link
           href="/"
-          className="mt-4 rounded-full bg-zinc-950 px-5 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+          className="rounded-full bg-zinc-950 px-6 py-2.5 text-xs font-bold text-white shadow-sm transition-all duration-300 hover:bg-zinc-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           Return to Storefront
         </Link>
@@ -147,7 +148,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
       <section className="lg:col-span-7 space-y-6">
         {hasBogoActive && (
-          <div className="rounded-xl border border-emerald-100 bg-emerald-50/30 p-4 dark:border-emerald-950/20 dark:bg-emerald-950/5">
+          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/20 p-4 dark:border-emerald-950/10 dark:bg-emerald-950/5">
             <p className="text-xs font-bold text-emerald-800 dark:text-emerald-400">
               🎁 Multi-Buy Automatic Discount applied: Buy 1 Get 1 Free on all selected Black
               variants!

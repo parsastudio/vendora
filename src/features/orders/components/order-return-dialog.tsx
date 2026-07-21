@@ -48,7 +48,7 @@ export function OrderReturnDialog({ orderId, domain, items }: OrderReturnDialogP
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-full border border-red-200 px-5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 dark:border-red-950/20"
+        className="rounded-full border border-zinc-200 px-6 py-3 text-xs font-bold text-zinc-950 transition-all duration-300 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
       >
         File Return Claim
       </button>
@@ -59,7 +59,7 @@ export function OrderReturnDialog({ orderId, domain, items }: OrderReturnDialogP
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
-          <div className="relative w-full max-w-md rounded-xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="relative w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
             <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
               File Merchandise Return
             </h3>
@@ -69,17 +69,19 @@ export function OrderReturnDialog({ orderId, domain, items }: OrderReturnDialogP
 
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
               {error && (
-                <div className="rounded bg-red-50 p-2 text-[10px] text-red-600 dark:bg-red-950/25">
+                <div className="rounded-xl border border-red-200 bg-red-50/50 p-2 text-[10px] text-red-600 dark:border-red-950/25">
                   {error}
                 </div>
               )}
 
               <div>
-                <label className="block text-[10px] font-bold text-zinc-500">Select Item</label>
+                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                  Select Item
+                </label>
                 <select
                   value={variantId}
                   onChange={(e) => setVariantId(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+                  className="mt-1.5 block w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
                 >
                   {items.map((item) => (
                     <option key={item.variantId} value={item.variantId || ""}>
@@ -90,20 +92,24 @@ export function OrderReturnDialog({ orderId, domain, items }: OrderReturnDialogP
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-zinc-500">Detailed Reason</label>
+                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                  Detailed Reason
+                </label>
                 <textarea
                   required
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 min-h-[80px]"
+                  className="mt-1.5 block w-full rounded-xl border border-zinc-300 bg-zinc-50 px-3 py-2 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 min-h-[80px]"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-zinc-500">Defect Image</label>
-                <div className="mt-1">
+                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                  Defect Image
+                </label>
+                <div className="mt-1.5">
                   {imageUrl ? (
-                    <div className="relative h-24 w-24 overflow-hidden rounded-lg border border-zinc-200">
+                    <div className="relative h-24 w-24 overflow-hidden rounded-xl border border-zinc-200">
                       <Image
                         src={imageUrl}
                         alt="Defect proof upload"
@@ -119,20 +125,20 @@ export function OrderReturnDialog({ orderId, domain, items }: OrderReturnDialogP
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+                  className="rounded-full bg-zinc-100 px-5 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded bg-zinc-950 px-4 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950"
+                  className="rounded-full bg-zinc-950 px-6 py-2 text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950"
                 >
-                  {isPending ? "Submitting..." : "Submit Claim"}
+                  {isPending ? "Submitting Claim..." : "Submit Claim"}
                 </button>
               </div>
             </form>

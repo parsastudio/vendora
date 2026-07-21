@@ -23,13 +23,19 @@ export default async function StorefrontCheckoutPage({ params }: CheckoutPagePro
   const tenant = tenantResult[0];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="text-center pb-10 border-b border-zinc-200 dark:border-zinc-800">
-        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+    <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
+      <div className="border-b border-zinc-200/50 dark:border-zinc-900/30 pb-10 space-y-4">
+        <nav className="flex items-center space-x-2 text-xs text-zinc-400">
+          <span>{tenant.name}</span>
+          <span>/</span>
+          <span className="text-zinc-900 dark:text-zinc-50 font-semibold">Checkout</span>
+        </nav>
+        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
           Secure Checkout
         </h1>
-        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          Fill in your delivery options to complete your purchase with {tenant.name}.
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          Review your delivery details and choose a payment gateway to finalize your order with{" "}
+          {tenant.name}.
         </p>
       </div>
       <CheckoutForm tenantId={tenant.id} domain={tenant.subdomain} />

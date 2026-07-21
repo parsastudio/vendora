@@ -34,22 +34,22 @@ export function ProductVariantSelector({ productName, variants }: ProductVariant
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-3xl font-bold text-zinc-950 dark:text-zinc-50">
+      <div className="flex items-baseline space-x-3">
+        <p className="text-3xl font-extrabold text-zinc-950 dark:text-zinc-50">
           {formatCurrency(parseFloat(selectedVariant.price))}
         </p>
         {selectedVariant.compareAtPrice && (
-          <p className="text-sm text-zinc-400 line-through">
+          <p className="text-base text-zinc-400 line-through">
             {formatCurrency(parseFloat(selectedVariant.compareAtPrice))}
           </p>
         )}
       </div>
 
       <div className="space-y-3">
-        <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">
+        <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
           Available Variations
         </span>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {variants.map((v) => {
             const isSelected = selectedVariant.id === v.id;
             return (
@@ -57,18 +57,18 @@ export function ProductVariantSelector({ productName, variants }: ProductVariant
                 key={v.id}
                 type="button"
                 onClick={() => setSelectedVariant(v)}
-                className={`rounded-lg border p-3 text-left transition-all ${
+                className={`rounded-xl border p-4 text-left shadow-sm transition-all duration-300 ${
                   isSelected
-                    ? "border-zinc-950 bg-zinc-50 dark:border-zinc-50 dark:bg-zinc-900"
-                    : "border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900/40"
+                    ? "border-zinc-950 bg-zinc-50 dark:border-zinc-50 dark:bg-zinc-900/50 scale-[1.01] ring-1 ring-zinc-950 dark:ring-zinc-50"
+                    : "border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:border-zinc-600 dark:hover:bg-zinc-900/20"
                 }`}
               >
-                <p className="text-xs font-bold text-zinc-950 dark:text-zinc-50">
+                <p className="text-xs font-bold text-zinc-950 dark:text-zinc-50 uppercase">
                   {Object.entries(v.attributes)
                     .map(([key, val]) => `${key}: ${val}`)
                     .join(", ")}
                 </p>
-                <p className="mt-1 text-[10px] text-zinc-500">SKU: {v.sku}</p>
+                <p className="mt-1 text-[10px] text-zinc-400 font-mono">SKU: {v.sku}</p>
               </button>
             );
           })}
@@ -77,7 +77,7 @@ export function ProductVariantSelector({ productName, variants }: ProductVariant
 
       <button
         onClick={handleAddToCart}
-        className="w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white transition-all hover:bg-zinc-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+        className="w-full rounded-full bg-zinc-950 py-4 text-center text-xs font-bold text-white shadow-lg transition-all duration-300 hover:bg-zinc-800 hover:scale-[1.005] active:scale-[0.99] dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
       >
         Add to Shopping Cart
       </button>

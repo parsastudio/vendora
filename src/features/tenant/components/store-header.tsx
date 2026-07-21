@@ -24,15 +24,15 @@ export function StoreHeader({ tenantId, tenantName }: StoreHeaderProps) {
   const totalItems = items.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-zinc-200/80 bg-white/80 backdrop-blur-md dark:border-zinc-850 bg-white/90 dark:bg-black/90">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <span className="text-md font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 uppercase">
+    <header className="sticky top-0 z-40 w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-md dark:border-zinc-850 dark:bg-black/70 transition-all duration-300">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
+        <span className="text-sm font-extrabold tracking-widest text-zinc-950 dark:text-zinc-50 uppercase">
           {tenantName}
         </span>
 
         <button
           onClick={() => setIsOpen(true)}
-          className="relative flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-950 transition-all hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
+          className="relative flex items-center gap-2 rounded-full border border-zinc-200/80 bg-white/90 px-5 py-2 text-xs font-bold text-zinc-950 shadow-sm transition-all duration-300 hover:bg-zinc-50 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path

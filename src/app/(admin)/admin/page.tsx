@@ -83,27 +83,29 @@ export default async function AdminDashboardPage() {
     .limit(5);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
           Welcome back, {session?.user?.name || "User"}
         </h1>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-zinc-400 mt-1">
           Here is the live performance review of your tenant storefront.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"
+            className="rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-zinc-800/40 dark:bg-zinc-950 space-y-3"
           >
-            <span className="text-xs font-bold text-zinc-500">{stat.name}</span>
-            <p className="mt-2 text-3xl font-extrabold text-zinc-950 dark:text-zinc-50">
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+              {stat.name}
+            </span>
+            <p className="text-3xl font-extrabold text-zinc-950 dark:text-zinc-50 font-mono">
               {stat.value}
             </p>
-            <p className="mt-1 text-[10px] text-zinc-400">{stat.description}</p>
+            <p className="text-[10px] text-zinc-400 font-medium">{stat.description}</p>
           </div>
         ))}
       </div>

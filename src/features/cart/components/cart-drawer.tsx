@@ -69,107 +69,131 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
   );
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+    <div className="fixed inset-0 z-[100] overflow-hidden">
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-300"
+        onClick={onClose}
+      />
       <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
-        <div className="w-screen max-w-md bg-white p-6 shadow-xl dark:bg-zinc-950">
-          <div className="flex items-center justify-between border-b pb-4">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Your Cart</h2>
-            <button onClick={onClose} className="text-zinc-500 hover:text-zinc-700">
-              Close
-            </button>
-          </div>
+        <div className="w-screen max-w-md bg-white p-6 shadow-2xl dark:bg-zinc-950 flex flex-col justify-between border-l border-zinc-200 dark:border-zinc-800">
+          <div>
+            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-850 pb-4">
+              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Your Cart</h2>
+              <button
+                onClick={onClose}
+                className="rounded-full p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-500 hover:text-zinc-700"
+              >
+                Close
+              </button>
+            </div>
 
-          <div className="mt-6 flex-1 overflow-y-auto space-y-4 max-h-[45vh]">
-            {hasBogoActive && (
-              <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-3 text-[10px] text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900 dark:text-emerald-400">
-                🎁 Buy 1 Get 1 Free Promo Code applied automatically.
-              </div>
-            )}
-
-            {items.length === 0 ? (
-              <p className="text-center text-sm text-zinc-500 py-12">Your cart is empty.</p>
-            ) : (
-              items.map((item) => (
-                <div
-                  key={item.variantId}
-                  className="flex items-center justify-between border-b pb-4"
-                >
-                  <div>
-                    <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
-                      {item.name}
-                    </h3>
-                    <p className="text-xs text-zinc-500">
-                      {formatCurrency(parseFloat(item.price))}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                      className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-bold dark:bg-zinc-800"
-                    >
-                      -
-                    </button>
-                    <span className="text-xs font-medium">{item.quantity}</span>
-                    <button
-                      onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                      className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-bold dark:bg-zinc-800"
-                    >
-                      +
-                    </button>
-                    <button
-                      onClick={() => removeItem(item.variantId)}
-                      className="ml-2 text-xs text-red-500 hover:underline"
-                    >
-                      Remove
-                    </button>
-                  </div>
+            <div className="mt-6 overflow-y-auto space-y-4 max-h-[40vh] pr-1">
+              {hasBogoActive && (
+                <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-3.5 text-[10px] text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-400 font-semibold leading-relaxed">
+                  🎁 Multi-Buy Automatic Discount applied: Buy 1 Get 1 Free on all selected Black
+                  variants!
                 </div>
-              ))
-            )}
+              )}
+
+              {items.length === 0 ? (
+                <div className="text-center text-zinc-400 py-16">
+                  <span className="text-3xl">🛒</span>
+                  <p className="mt-3 text-xs">Your cart is empty.</p>
+                </div>
+              ) : (
+                items.map((item) => (
+                  <div
+                    key={item.variantId}
+                    className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-850 pb-4"
+                  >
+                    <div>
+                      <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-50">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-zinc-400 mt-0.5">
+                        {formatCurrency(parseFloat(item.price))}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center border border-zinc-200 rounded-lg dark:border-zinc-800 overflow-hidden bg-zinc-50 dark:bg-zinc-900/30">
+                        <button
+                          onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                          className="px-2.5 py-1 text-xs font-bold hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                        >
+                          -
+                        </button>
+                        <span className="px-1 text-xs font-semibold">{item.quantity}</span>
+                        <button
+                          onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                          className="px-2.5 py-1 text-xs font-bold hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => removeItem(item.variantId)}
+                        className="text-xs font-semibold text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
 
-          <div className="mt-6 border-t pt-4 space-y-4">
+          <div className="border-t border-zinc-100 dark:border-zinc-850 pt-4 space-y-4 bg-white dark:bg-zinc-950">
             <div>
-              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+              <label className="block text-xs font-bold text-zinc-400 uppercase tracking-widest">
                 Promo Code
               </label>
-              <div className="mt-1 flex gap-2">
+              <div className="mt-1.5 flex gap-2">
                 <input
                   type="text"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="block w-full rounded-md border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
-                  placeholder="Enter code"
+                  className="block w-full rounded-xl border border-zinc-300 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+                  placeholder="Enter coupon code"
                 />
                 <button
                   onClick={() => setCouponCode(couponInput || null)}
-                  className="rounded bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white dark:bg-zinc-50 dark:text-zinc-950"
+                  className="rounded-xl bg-zinc-950 px-4 py-2 text-xs font-bold text-white dark:bg-zinc-50 dark:text-zinc-950"
                 >
                   Apply
                 </button>
               </div>
-              {couponError && <p className="mt-1 text-[10px] text-red-500">{couponError}</p>}
+              {couponError && (
+                <p className="mt-1 text-[10px] text-red-500 font-semibold">{couponError}</p>
+              )}
             </div>
 
-            <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+            <div className="space-y-2 text-xs text-zinc-500 dark:text-zinc-400">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>{formatCurrency(parseFloat(totals.subtotal))}</span>
+                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                  {formatCurrency(parseFloat(totals.subtotal))}
+                </span>
               </div>
               <div className="flex justify-between text-emerald-600">
                 <span>Discount</span>
-                <span>-{formatCurrency(parseFloat(totals.discountAmount))}</span>
+                <span className="font-semibold">
+                  -{formatCurrency(parseFloat(totals.discountAmount))}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span>Tax</span>
-                <span>{formatCurrency(parseFloat(totals.taxAmount))}</span>
+                <span>Tax Estimate</span>
+                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                  {formatCurrency(parseFloat(totals.taxAmount))}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>{formatCurrency(parseFloat(totals.shippingAmount))}</span>
+                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                  {formatCurrency(parseFloat(totals.shippingAmount))}
+                </span>
               </div>
-              <div className="flex justify-between border-t pt-2 text-sm font-bold text-zinc-950 dark:text-zinc-50">
+              <div className="flex justify-between border-t border-zinc-100 dark:border-zinc-850 pt-3 text-sm font-extrabold text-zinc-950 dark:text-zinc-50">
                 <span>Total</span>
                 <span>{formatCurrency(parseFloat(totals.total))}</span>
               </div>
@@ -177,7 +201,7 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
 
             <button
               disabled={items.length === 0}
-              className="w-full rounded-md bg-zinc-950 py-2.5 text-center text-xs font-semibold text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950"
+              className="w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white disabled:opacity-50 transition-all hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950"
             >
               Checkout Now
             </button>
