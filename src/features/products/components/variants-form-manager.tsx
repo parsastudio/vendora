@@ -54,80 +54,88 @@ export function VariantsFormManager({
   };
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Product Variants</h2>
+    <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800/40 dark:bg-zinc-950 space-y-6">
+      <div className="flex items-center justify-between border-b pb-4 dark:border-zinc-900/40">
+        <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-50">Product Variants</h2>
         <button
           type="button"
           onClick={addVariant}
-          className="rounded-md bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+          className="rounded-xl bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           Add Variant
         </button>
       </div>
 
-      <div className="mt-6 space-y-4">
+      <div className="space-y-4">
         {variants.map((v, index) => (
           <div
             key={index}
-            className="grid grid-cols-1 gap-4 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800 sm:grid-cols-5"
+            className="grid grid-cols-1 gap-4 rounded-xl border border-zinc-200/60 p-5 dark:border-zinc-900 bg-zinc-50/20 dark:bg-zinc-900/10 sm:grid-cols-5 items-end"
           >
-            <div>
-              <label className="text-[10px] font-bold text-zinc-500">Color</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                Color
+              </label>
               <input
                 type="text"
                 value={v.color}
                 onChange={(e) => updateVariant(index, "color", e.target.value)}
-                className="block w-full rounded-md border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+                className="block w-full rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-950"
               />
             </div>
 
-            <div>
-              <label className="text-[10px] font-bold text-zinc-500">Size</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                Size
+              </label>
               <input
                 type="text"
                 value={v.size}
                 onChange={(e) => updateVariant(index, "size", e.target.value)}
-                className="block w-full rounded-md border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+                className="block w-full rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-950"
               />
             </div>
 
-            <div>
-              <label className="text-[10px] font-bold text-zinc-500">Price ($)</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                Price ($)
+              </label>
               <input
                 type="text"
                 required
                 value={v.price}
                 onChange={(e) => updateVariant(index, "price", e.target.value)}
-                className="block w-full rounded-md border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+                className="block w-full rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 font-mono"
               />
             </div>
 
-            <div>
-              <label className="text-[10px] font-bold text-zinc-500">SKU Code</label>
-              <div className="flex gap-1">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                SKU Code
+              </label>
+              <div className="flex gap-1.5">
                 <input
                   type="text"
                   required
                   value={v.sku}
                   onChange={(e) => updateVariant(index, "sku", e.target.value)}
-                  className="block w-full rounded-md border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+                  className="block w-full rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 font-mono"
                 />
                 <button
                   type="button"
                   onClick={() => handleAutoGenerateSKU(index)}
-                  className="rounded bg-zinc-100 px-1.5 py-1 text-[9px] font-bold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+                  className="rounded-xl bg-zinc-150 px-3 py-1.5 text-[10px] font-bold text-zinc-800 hover:bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
                 >
                   Auto
                 </button>
               </div>
             </div>
 
-            <div className="flex items-end justify-end">
+            <div className="flex justify-end">
               <button
                 type="button"
                 onClick={() => removeVariant(index)}
-                className="rounded bg-red-100 px-2 py-1 text-[10px] font-semibold text-red-600 hover:bg-red-200 dark:bg-red-950/20"
+                className="rounded-xl bg-rose-100 px-4 py-2 text-[10px] font-bold text-rose-600 hover:bg-rose-200 dark:bg-rose-950/20"
               >
                 Remove
               </button>

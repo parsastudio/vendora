@@ -117,7 +117,7 @@ export function EditProductForm({ categories, productId, initialData }: EditProd
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-md bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+          className="rounded-xl bg-zinc-950 px-6 py-3 text-xs font-bold text-white shadow-sm transition-all duration-300 hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           {isPending ? "Updating..." : "Update Product"}
         </button>
