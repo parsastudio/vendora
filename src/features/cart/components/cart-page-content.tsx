@@ -106,6 +106,11 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
           } else {
             setCouponError(null);
           }
+          if (result.data.stockIssues && result.data.stockIssues.length > 0) {
+            for (const issue of result.data.stockIssues) {
+              updateQuantity(issue.variantId, issue.available);
+            }
+          }
         }
       } catch (err) {
         console.error(err);
@@ -113,7 +118,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     };
 
     validateAndRecalculate();
-  }, [items, couponCode, tenantId, isClient]);
+  }, [items, couponCode, tenantId, isClient, updateQuantity]);
 
   if (!isClient) {
     return (

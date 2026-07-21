@@ -1,7 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/features/cart/store/use-cart-store";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { formatCurrency } from "@/features/shared/utils/format";
 import Link from "next/link";
@@ -16,7 +16,6 @@ interface CartDrawerProps {
 export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
   const { items, updateQuantity, removeItem, couponCode, setCouponCode } = useCartStore();
   const [couponInput, setCouponInput] = useState(couponCode || "");
-  const [mounted, setMounted] = useState(false);
   const [totals, setTotals] = useState({
     subtotal: "0.00",
     discountAmount: "0.00",
@@ -28,9 +27,11 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
   const params = useParams();
   const domain = (params?.domain as string) || "";
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     const validateAndRecalculate = async () => {
@@ -63,6 +64,11 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
           } else {
             setCouponError(null);
           }
+          if (result.data.stockIssues && result.data.stockIssues.length > 0) {
+            for (const issue of result.data.stockIssues) {
+              updateQuantity(issue.variantId, issue.available);
+            }
+          }
         }
       } catch (err) {
         console.error(err);
@@ -70,9 +76,9 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
     };
 
     validateAndRecalculate();
-  }, [items, couponCode, tenantId]);
+  }, [items, couponCode, tenantId, updateQuantity]);
 
-  if (!isOpen || !mounted) return null;
+  if (!isOpen || !isClient) return null;
 
   const hasBogoActive = items.some(
     (item) => item.attributes.color === "black" || item.attributes.bogo === "true",

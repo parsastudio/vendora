@@ -40,13 +40,19 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/admin/register"
-              className="w-full sm:w-auto rounded-full bg-zinc-950 px-8 py-4 text-xs font-bold text-white shadow-lg transition-all hover:bg-zinc-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="w-full sm:w-auto rounded-full bg-zinc-950 px-8 py-4 text-xs font-bold text-white shadow-lg transition-all hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
             >
               Create Your Merchant Instance
             </Link>
             <Link
+              href="/demo"
+              className="w-full sm:w-auto rounded-full bg-indigo-600 px-8 py-4 text-xs font-bold text-white shadow-md transition-all hover:bg-indigo-700 dark:bg-indigo-500 dark:text-zinc-950 dark:hover:bg-indigo-400"
+            >
+              Visit Demo Storefront
+            </Link>
+            <Link
               href="/admin/login"
-              className="w-full sm:w-auto rounded-full border border-zinc-250 bg-white px-8 py-4 text-xs font-bold text-zinc-950 shadow-sm transition-all hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-850"
+              className="w-full sm:w-auto rounded-full border border-zinc-200 bg-white px-8 py-4 text-xs font-bold text-zinc-950 shadow-sm transition-all hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
             >
               Explore Demo Sandbox
             </Link>
