@@ -1,6 +1,5 @@
 "use server";
 
-import "server-only";
 import { db } from "@/lib/db";
 import { warehouses, inventory } from "@/lib/db/schema/products";
 import { auditLogs } from "@/lib/db/schema/workflows";

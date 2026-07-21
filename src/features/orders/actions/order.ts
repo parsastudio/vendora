@@ -1,6 +1,5 @@
 "use server";
 
-import "server-only";
 import { db } from "@/lib/db";
 import { orders, orderItems } from "@/lib/db/schema/orders";
 import { inventory } from "@/lib/db/schema/products";

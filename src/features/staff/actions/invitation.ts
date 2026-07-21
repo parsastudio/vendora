@@ -1,6 +1,5 @@
 "use server";
 
-import "server-only";
 import { db } from "@/lib/db";
 import { users, usersToRoles } from "@/lib/db/schema/users";
 import { redis } from "@/lib/redis";

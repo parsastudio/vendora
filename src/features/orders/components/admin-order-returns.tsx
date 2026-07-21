@@ -1,3 +1,6 @@
+"use client";
+
+import { useTransition } from "react";
 import Image from "next/image";
 import { updateReturnRequestStatus } from "@/features/orders/actions/customer-order";
 
@@ -28,9 +31,16 @@ interface AdminOrderReturnsProps {
 }
 
 export function AdminOrderReturns({ orderId, returnClaims, itemsList }: AdminOrderReturnsProps) {
-  const handleReturnClaim = async (returnId: string, status: string) => {
-    "use server";
-    await updateReturnRequestStatus(returnId, status, orderId);
+  const [isPending, startTransition] = useTransition();
+
+  const handleReturnClaim = (returnId: string, status: string) => {
+    startTransition(async () => {
+      try {
+        await updateReturnRequestStatus(returnId, status, orderId);
+      } catch (err) {
+        console.error(err);
+      }
+    });
   };
 
   return (
@@ -64,22 +74,20 @@ export function AdminOrderReturns({ orderId, returnClaims, itemsList }: AdminOrd
               )}
               {claim.status === "pending" && (
                 <div className="flex gap-2">
-                  <form action={handleReturnClaim.bind(null, claim.id, "approved")}>
-                    <button
-                      type="submit"
-                      className="rounded-xl bg-emerald-600 px-4 py-2 font-bold text-white text-[10px]"
-                    >
-                      Approve Return
-                    </button>
-                  </form>
-                  <form action={handleReturnClaim.bind(null, claim.id, "rejected")}>
-                    <button
-                      type="submit"
-                      className="rounded-xl bg-red-600 px-4 py-2 font-bold text-white text-[10px]"
-                    >
-                      Reject Return
-                    </button>
-                  </form>
+                  <button
+                    onClick={() => handleReturnClaim(claim.id, "approved")}
+                    disabled={isPending}
+                    className="rounded-xl bg-emerald-600 px-4 py-2 font-bold text-white text-[10px] disabled:opacity-50"
+                  >
+                    {isPending ? "Processing..." : "Approve Return"}
+                  </button>
+                  <button
+                    onClick={() => handleReturnClaim(claim.id, "rejected")}
+                    disabled={isPending}
+                    className="rounded-xl bg-red-600 px-4 py-2 font-bold text-white text-[10px] disabled:opacity-50"
+                  >
+                    {isPending ? "Processing..." : "Reject Return"}
+                  </button>
                 </div>
               )}
             </div>

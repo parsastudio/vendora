@@ -1,6 +1,5 @@
 "use server";
 
-import "server-only";
 import { db } from "@/lib/db";
 import { apiKeys } from "@/lib/db/schema/api-keys";
 import { getServerSession } from "next-auth";
