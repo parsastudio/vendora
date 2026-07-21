@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { orders, orderItems } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, desc } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";
 import { formatCurrency } from "@/features/shared/utils/format";
@@ -45,16 +45,23 @@ export default async function AdminDashboardPage() {
     })
     .from(orders)
     .where(eq(orders.tenantId, tenantId))
-    .limit(30);
+    .orderBy(desc(orders.createdAt))
+    .limit(100);
 
-  const chartMap: Record<string, { revenue: number; orders: number }> = {};
+  const chartMap: Record<string, { revenue: number; orders: number; timestamp: number }> = {};
   recentOrders.forEach((o) => {
-    const day = new Date(o.createdAt).toLocaleDateString("en-US", {
+    const dateObj = new Date(o.createdAt);
+    const day = dateObj.toLocaleDateString("en-US", {
       month: "2-digit",
       day: "2-digit",
     });
+    const startOfDay = new Date(
+      dateObj.getFullYear(),
+      dateObj.getMonth(),
+      dateObj.getDate(),
+    ).getTime();
     if (!chartMap[day]) {
-      chartMap[day] = { revenue: 0, orders: 0 };
+      chartMap[day] = { revenue: 0, orders: 0, timestamp: startOfDay };
     }
     chartMap[day].revenue += parseFloat(o.totalAmount);
     chartMap[day].orders += 1;
@@ -63,9 +70,11 @@ export default async function AdminDashboardPage() {
   const chartData = Object.entries(chartMap)
     .map(([date, val]) => ({
       date,
-      revenue: val.revenue,
+      revenue: parseFloat(val.revenue.toFixed(2)),
       orders: val.orders,
+      timestamp: val.timestamp,
     }))
+    .sort((a, b) => a.timestamp - b.timestamp)
     .slice(-10);
 
   const topProductsList = await db

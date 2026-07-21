@@ -1,11 +1,6 @@
-import dynamic from "next/dynamic";
+import { FlowBuilderClient } from "@/features/workflows/components/flow-builder-client";
 
-const FlowBuilder = dynamic(
-  () => import("@/features/workflows/components/flow-builder").then((mod) => mod.FlowBuilder),
-  { ssr: false },
-);
-
-export default async function CreateWorkflowPage() {
+export default function CreateWorkflowPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-8">
       <div>
@@ -16,7 +11,7 @@ export default async function CreateWorkflowPage() {
           Model responsive, real-time trigger pipelines on an interactive canvas.
         </p>
       </div>
-      <FlowBuilder />
+      <FlowBuilderClient />
     </div>
   );
 }

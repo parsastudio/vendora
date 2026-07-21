@@ -5,8 +5,20 @@ import { users, roles, permissions, rolesToPermissions, usersToRoles } from "./s
 import { customers } from "./schema/customers";
 import { orders, orderItems, transactions, shippingRates } from "./schema/orders";
 import { generateDemoCustomers, generateDemoData } from "./demo-generator";
+import { sql } from "drizzle-orm";
 
 async function main() {
+  await db.execute(sql`
+    TRUNCATE TABLE 
+      "api_keys", "audit_logs", "workflow_settings", 
+      "transactions", "order_items", "order_returns", "orders", 
+      "shipping_rates", "discounts", "cart_items", "carts", 
+      "inventory", "product_variants", "products", "categories", "warehouses", 
+      "users_to_roles", "roles_to_permissions", "users", "roles", "permissions", 
+      "customers", "tenants" 
+    RESTART IDENTITY CASCADE;
+  `);
+
   await db.insert(tenants).values([
     {
       id: "tenant-nike",
@@ -199,16 +211,14 @@ async function main() {
     },
   ]);
 
-  await db
-    .insert(warehouses)
-    .values([
-      {
-        id: "wh-demo-1",
-        tenantId: "tenant-demo",
-        name: "Silicon Valley Hub",
-        location: "San Jose, CA",
-      },
-    ]);
+  await db.insert(warehouses).values([
+    {
+      id: "wh-demo-1",
+      tenantId: "tenant-demo",
+      name: "Silicon Valley Hub",
+      location: "San Jose, CA",
+    },
+  ]);
 
   await db.insert(inventory).values([
     { id: "inv-demo-1", variantId: "var-demo-1-acoustic", warehouseId: "wh-demo-1", quantity: 8 },

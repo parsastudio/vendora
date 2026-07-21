@@ -8,6 +8,7 @@ import { verifyTOTPToken } from "./totp";
 import { redis } from "@/lib/redis";
 import { headers } from "next/headers";
 import { logger } from "@/lib/logger";
+import { randomUUID } from "crypto";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -87,10 +88,15 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      const sessionToken = token as typeof token & { sessionId?: string };
+
       if (user) {
-        token.id = user.id;
-        token.tenantId = user.tenantId;
-        token.permissions = user.permissions;
+        sessionToken.id = user.id;
+        sessionToken.tenantId = user.tenantId;
+        sessionToken.permissions = user.permissions;
+
+        const sessionId = randomUUID();
+        sessionToken.sessionId = sessionId;
 
         try {
           const headersList = await headers();
@@ -98,9 +104,9 @@ export const authOptions: NextAuthOptions = {
           const ip = headersList.get("x-forwarded-for") || "127.0.0.1";
 
           await redis.set(
-            `active_session:${user.id}:${token.jti}`,
+            `active_session:${user.id}:${sessionId}`,
             JSON.stringify({
-              jti: token.jti,
+              jti: sessionId,
               userAgent,
               ip,
               createdAt: new Date().toISOString(),
@@ -111,18 +117,28 @@ export const authOptions: NextAuthOptions = {
         } catch (error) {
           logger.error({ error, userId: user.id }, "Failed to persist active session in Redis");
         }
-      } else if (token.id && token.jti) {
-        const sessionActive = await redis.get(`active_session:${token.id}:${token.jti}`);
-        if (!sessionActive) {
-          return {
-            ...token,
-            id: "",
-            tenantId: "",
-            permissions: [],
-          };
+      } else if (sessionToken.id && sessionToken.sessionId) {
+        try {
+          const sessionActive = await redis.get(
+            `active_session:${sessionToken.id}:${sessionToken.sessionId}`,
+          );
+
+          if (!sessionActive) {
+            return {
+              ...sessionToken,
+              id: "",
+              tenantId: "",
+              permissions: [],
+            };
+          }
+        } catch (error) {
+          logger.error(
+            { error, userId: sessionToken.id },
+            "Failed to validate active session from Redis",
+          );
         }
       }
-      return token;
+      return sessionToken;
     },
     async session({ session, token }) {
       if (!token.id) {
