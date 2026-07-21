@@ -18,11 +18,21 @@ export async function proxy(request: NextRequest) {
     tenantDomain = currentHost;
   }
 
-  if (pathname.startsWith("/admin")) {
-    return NextResponse.next();
+  if (pathname.startsWith("/api")) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-tenant-domain", tenantDomain);
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   if (tenantDomain === "default") {
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith("/admin")) {
     return NextResponse.next();
   }
 
@@ -46,3 +56,7 @@ export async function proxy(request: NextRequest) {
     },
   });
 }
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
+};
