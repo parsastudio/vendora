@@ -2,7 +2,10 @@
 
 import { useCartStore } from "@/features/cart/store/use-cart-store";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { formatCurrency } from "@/features/shared/utils/format";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 interface CartDrawerProps {
   tenantId: string;
@@ -13,6 +16,7 @@ interface CartDrawerProps {
 export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
   const { items, updateQuantity, removeItem, couponCode, setCouponCode } = useCartStore();
   const [couponInput, setCouponInput] = useState(couponCode || "");
+  const [mounted, setMounted] = useState(false);
   const [totals, setTotals] = useState({
     subtotal: "0.00",
     discountAmount: "0.00",
@@ -21,6 +25,12 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
     total: "0.00",
   });
   const [couponError, setCouponError] = useState<string | null>(null);
+  const params = useParams();
+  const domain = (params?.domain as string) || "";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const validateAndRecalculate = async () => {
@@ -62,21 +72,18 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
     validateAndRecalculate();
   }, [items, couponCode, tenantId]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const hasBogoActive = items.some(
     (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
   );
 
-  return (
-    <div className="fixed inset-0 z-[100] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-300"
-        onClick={onClose}
-      />
+  const drawerContent = (
+    <div className="fixed inset-0 z-[100] overflow-hidden animate-in fade-in duration-200">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-md" onClick={onClose} />
       <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
-        <div className="w-screen max-w-md bg-white p-6 shadow-2xl dark:bg-zinc-950 flex flex-col justify-between border-l border-zinc-200 dark:border-zinc-800">
-          <div>
+        <div className="w-screen max-w-md bg-white p-6 shadow-2xl dark:bg-zinc-950 flex flex-col justify-between border-l border-zinc-200 dark:border-zinc-800 animate-in slide-in-from-right duration-300">
+          <div className="flex flex-col flex-1 min-h-0">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-850 pb-4">
               <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Your Cart</h2>
               <button
@@ -87,7 +94,7 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
               </button>
             </div>
 
-            <div className="mt-6 overflow-y-auto space-y-4 max-h-[40vh] pr-1">
+            <div className="mt-6 flex-1 overflow-y-auto space-y-4 pr-1 min-h-0">
               {hasBogoActive && (
                 <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-3.5 text-[10px] text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-400 font-semibold leading-relaxed">
                   🎁 Multi-Buy Automatic Discount applied: Buy 1 Get 1 Free on all selected Black
@@ -153,7 +160,7 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
                   type="text"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="block w-full rounded-xl border border-zinc-300 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+                  className="block w-full rounded-xl border border-zinc-300 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
                   placeholder="Enter coupon code"
                 />
                 <button
@@ -199,15 +206,27 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
               </div>
             </div>
 
-            <button
-              disabled={items.length === 0}
-              className="w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white disabled:opacity-50 transition-all hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950"
-            >
-              Checkout Now
-            </button>
+            {items.length > 0 ? (
+              <Link
+                href={`/${domain}/checkout`}
+                onClick={onClose}
+                className="block w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white shadow-lg transition-all duration-300 hover:bg-zinc-800 hover:scale-[1.005] active:scale-[0.99] dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              >
+                Checkout Now
+              </Link>
+            ) : (
+              <button
+                disabled
+                className="w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white disabled:opacity-50 transition-all dark:bg-zinc-50 dark:text-zinc-950"
+              >
+                Checkout Now
+              </button>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
+
+  return createPortal(drawerContent, document.body);
 }

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/features/cart/store/use-cart-store";
 import { CartDrawer } from "@/features/cart/components/cart-drawer";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 
 interface StoreHeaderProps {
   tenantId: string;
@@ -13,6 +15,8 @@ export function StoreHeader({ tenantId, tenantName }: StoreHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const items = useCartStore((state) => state.items);
+  const params = useParams();
+  const domain = (params?.domain as string) || "";
 
   useEffect(() => {
     const handle = setTimeout(() => {
@@ -26,9 +30,12 @@ export function StoreHeader({ tenantId, tenantName }: StoreHeaderProps) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-md dark:border-zinc-850 dark:bg-black/70 transition-all duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
-        <span className="text-sm font-extrabold tracking-widest text-zinc-950 dark:text-zinc-50 uppercase">
+        <Link
+          href={`/${domain}`}
+          className="text-sm font-extrabold tracking-widest text-zinc-950 dark:text-zinc-50 uppercase hover:opacity-80"
+        >
           {tenantName}
-        </span>
+        </Link>
 
         <button
           onClick={() => setIsOpen(true)}

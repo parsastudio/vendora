@@ -131,7 +131,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
           Your shopping cart is currently empty.
         </p>
         <Link
-          href="/"
+          href={`/${domain}`}
           className="rounded-full bg-zinc-950 px-6 py-2.5 text-xs font-bold text-white shadow-sm transition-all duration-300 hover:bg-zinc-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           Return to Storefront

@@ -1,29 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { rateLimit } from "@/features/shared/lib/rate-limit";
 
 export async function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   const { pathname } = url;
 
   if (pathname.startsWith("/_next") || pathname.startsWith("/api/auth") || pathname.includes(".")) {
-    return NextResponse.next();
-  }
-
-  if (pathname.startsWith("/api")) {
-    const ip = request.headers.get("x-forwarded-for") || "127.0.0.1";
-    const rate = await rateLimit(`rate_limit:${ip}`, 60, 60);
-    if (!rate.success) {
-      return new NextResponse(JSON.stringify({ error: "Too many requests" }), {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-          "X-RateLimit-Limit": rate.limit.toString(),
-          "X-RateLimit-Remaining": rate.remaining.toString(),
-          "X-RateLimit-Reset": rate.reset.toString(),
-        },
-      });
-    }
     return NextResponse.next();
   }
 
@@ -38,6 +20,20 @@ export async function proxy(request: NextRequest) {
 
   if (pathname.startsWith("/admin")) {
     return NextResponse.next();
+  }
+
+  if (tenantDomain === "default") {
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith(`/${tenantDomain}/`) || pathname === `/${tenantDomain}`) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-tenant-domain", tenantDomain);
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   url.pathname = `/${tenantDomain}${pathname}`;
