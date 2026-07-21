@@ -61,16 +61,18 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 font-mono">
               Order {order.id}
             </h1>
             <OrderStatusBadge type="status" value={order.status} />
             <OrderStatusBadge type="payment" value={order.paymentStatus} />
           </div>
-          <p className="text-xs text-zinc-500">Received on {formatDateTime(order.createdAt)}</p>
+          <p className="text-xs text-zinc-400 font-medium">
+            Received on {formatDateTime(order.createdAt)}
+          </p>
         </div>
         <div className="flex gap-2">
           <OrderReceiptButton orderId={order.id} />
@@ -79,21 +81,21 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
+          <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800/40 dark:bg-zinc-950 space-y-6">
             <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
               Ordered Catalog Items
             </h3>
-            <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <div className="divide-y divide-zinc-150 dark:divide-zinc-850">
               {itemsList.map((item) => (
                 <div
                   key={item.id}
-                  className="flex justify-between py-4 text-xs first:pt-0 last:pb-0"
+                  className="flex justify-between py-4 first:pt-0 last:pb-0 text-xs font-semibold"
                 >
-                  <div>
-                    <p className="font-semibold text-zinc-950 dark:text-zinc-50">
+                  <div className="space-y-1">
+                    <p className="font-bold text-zinc-950 dark:text-zinc-50">
                       {item.productName || "Product Catalog Item"}
                     </p>
-                    <p className="text-zinc-400">SKU: {item.sku || "N/A"}</p>
+                    <p className="text-[10px] text-zinc-400 font-mono">SKU: {item.sku || "N/A"}</p>
                     {item.attributes && (
                       <p className="text-[10px] text-zinc-400">
                         {Object.entries(item.attributes as Record<string, string>)
@@ -102,8 +104,8 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
                       </p>
                     )}
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-zinc-950 dark:text-zinc-50">
+                  <div className="text-right space-y-1">
+                    <p className="font-bold text-zinc-950 dark:text-zinc-50 font-mono">
                       {formatCurrency(parseFloat(item.price))}
                     </p>
                     <p className="text-zinc-400">Qty: {item.quantity}</p>
@@ -132,10 +134,10 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
             trackingCode={order.trackingCode}
           />
 
-          <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-3">
+          <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800/40 dark:bg-zinc-950 space-y-4">
             <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Delivery Address</h3>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400 space-y-1">
-              <p className="font-bold text-zinc-950 dark:text-zinc-50">
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 space-y-1 leading-relaxed">
+              <p className="font-bold text-zinc-950 dark:text-zinc-50 mb-2">
                 {order.shippingAddress.name}
               </p>
               <p>{order.shippingAddress.line1}</p>
@@ -144,7 +146,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
                 {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
                 {order.shippingAddress.postalCode}
               </p>
-              <p className="font-semibold text-[10px] uppercase tracking-wider">
+              <p className="font-bold text-[9px] uppercase tracking-widest text-zinc-900 dark:text-zinc-100 mt-2">
                 {order.shippingAddress.country}
               </p>
             </div>
