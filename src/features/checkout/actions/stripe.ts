@@ -14,10 +14,11 @@ export async function createStripeSession(orderId: string, domain: string) {
   const order = orderResult[0];
 
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  const isLocalhost = baseUrl.includes("localhost");
+  const isLocalhost = baseUrl.includes("localhost:3000");
+
   const tenantUrl = isLocalhost
-    ? `http://${domain}.localhost:3000`
-    : `https://${domain}.vendora.com`;
+    ? `${baseUrl}/${domain}`
+    : `${baseUrl.replace("://", `://${domain}.`)}`;
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],

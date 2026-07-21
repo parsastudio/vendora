@@ -5,6 +5,7 @@ import { tenants } from "@/lib/db/schema/tenants";
 import { eq, and } from "drizzle-orm";
 import { ProductVariantSelector } from "@/features/products/components/product-variant-selector";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProductPageProps {
   params: Promise<{ domain: string; slug: string }>;
@@ -78,9 +79,19 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         <div className="flex flex-col justify-between lg:col-span-5">
           <div className="space-y-6">
             <nav className="flex items-center space-x-2 text-xs text-zinc-400">
-              <span>Catalog</span>
+              <Link
+                href={`/${domain}`}
+                className="hover:text-zinc-950 dark:hover:text-zinc-55 mt-0.5"
+              >
+                Catalog
+              </Link>
               <span>/</span>
-              <span>{tenant.name}</span>
+              <Link
+                href={`/${domain}`}
+                className="hover:text-zinc-950 dark:hover:text-zinc-55 mt-0.5"
+              >
+                {tenant.name}
+              </Link>
               <span>/</span>
               <span className="text-zinc-900 dark:text-zinc-50 font-semibold">{product.name}</span>
             </nav>
