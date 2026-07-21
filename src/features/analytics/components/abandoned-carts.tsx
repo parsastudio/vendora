@@ -55,7 +55,7 @@ export function AbandonedCarts({
           <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
             Estimated Conversion Leak
           </span>
-          <p className="text-2xl font-black text-zinc-800 dark:text-zinc-200 font-mono">
+          <p className="text-2xl font-black text-zinc-800 dark:text-rose-400 font-mono">
             {leakRate}%
           </p>
         </div>
