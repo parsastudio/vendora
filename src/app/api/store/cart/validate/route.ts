@@ -139,7 +139,8 @@ export async function POST(request: Request) {
         },
       },
     });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Validation process failed" }, { status: 500 });
   }
 }

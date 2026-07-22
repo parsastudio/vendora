@@ -28,7 +28,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
       .from(productVariants)
       .where(eq(productVariants.productId, id));
     return NextResponse.json({ success: true, data: { ...product, variants } });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -100,7 +101,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     });
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Invalid input or database error" }, { status: 400 });
   }
 }

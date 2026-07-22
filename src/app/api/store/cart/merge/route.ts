@@ -6,6 +6,7 @@ import { carts, cartItems } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { randomUUID } from "crypto";
 
 const guestItemValidator = z.object({
   variantId: z.string(),
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
 
     let cartId = "";
     if (cartResult.length === 0) {
-      cartId = `cart-${Date.now()}`;
+      cartId = `cart-${randomUUID()}`;
       await db.insert(carts).values({
         id: cartId,
         tenantId,
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
           .where(eq(cartItems.id, matched.id));
       } else {
         await db.insert(cartItems).values({
-          id: `ci-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          id: `ci-${randomUUID()}`,
           cartId,
           variantId: guestItem.variantId,
           quantity: guestItem.quantity,
@@ -93,7 +94,8 @@ export async function POST(request: Request) {
       .where(eq(cartItems.cartId, cartId));
 
     return NextResponse.json({ success: true, data: finalDbItems });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Cart merging process failed" }, { status: 500 });
   }
 }

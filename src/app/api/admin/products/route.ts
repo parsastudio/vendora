@@ -57,7 +57,8 @@ export async function GET(request: Request) {
         },
       },
     });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -100,7 +101,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, data: { productId } });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Invalid product input data" }, { status: 400 });
   }
 }

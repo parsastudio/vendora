@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { carts, cartItems } from "@/lib/db/schema/orders";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { randomUUID } from "crypto";
 
 const syncItemValidator = z.object({
   variantId: z.string(),
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
 
     let cartId = "";
     if (cartResult.length === 0) {
-      cartId = `cart-${Date.now()}`;
+      cartId = `cart-${randomUUID()}`;
       await db.insert(carts).values({
         id: cartId,
         tenantId,
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
 
     if (items.length > 0) {
       const itemsToInsert = items.map((item) => ({
-        id: `ci-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        id: `ci-${randomUUID()}`,
         cartId,
         variantId: item.variantId,
         quantity: item.quantity,
@@ -64,7 +65,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Cart sync failed" }, { status: 500 });
   }
 }
