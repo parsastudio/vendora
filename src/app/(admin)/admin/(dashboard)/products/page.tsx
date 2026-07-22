@@ -52,92 +52,94 @@ export default function AdminProductsPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-12">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
-            Products Catalog
+          <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+            Products Catalogue
           </h1>
-          <p className="text-xs text-zinc-400 font-medium">
-            Manage your e-commerce catalog, price variations, and stock.
+          <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+            Manage your store variants, catalog prices, and metadata definitions.
           </p>
         </div>
         <Link
           href="/admin/products/create"
-          className="rounded-xl bg-zinc-950 px-5 py-3 text-xs font-bold text-white shadow-sm transition-all duration-300 hover:bg-zinc-800 hover:scale-[1.005] dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+          className="rounded-xl bg-stone-950 px-6 py-3.5 text-xs font-bold text-white shadow-sm hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955 dark:hover:bg-zinc-200"
         >
           Create Product
         </Link>
       </div>
 
-      <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800/40 dark:bg-zinc-950">
+      <div className="rounded-3xl border border-stone-200/40 bg-white p-4 dark:border-zinc-900/50 dark:bg-zinc-950 max-w-md">
         <input
           type="text"
-          placeholder="Search catalog items..."
+          placeholder="Search items by keyword..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="block w-full max-w-md rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-2.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+          className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 font-medium"
         />
       </div>
 
       {loading ? (
-        <div className="flex h-48 items-center justify-center text-xs text-zinc-400 font-medium">
-          Fetching products from server...
+        <div className="flex h-56 items-center justify-center text-xs text-stone-400 dark:text-zinc-500 font-semibold font-mono">
+          Querying remote database...
         </div>
       ) : products.length === 0 ? (
-        <div className="flex h-56 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 text-center space-y-3 dark:border-zinc-850/40">
-          <p className="text-xs text-zinc-455 font-medium">No products found in catalog.</p>
+        <div className="flex h-64 flex-col items-center justify-center rounded-3xl border border-dashed border-stone-200 text-center space-y-4 dark:border-zinc-800">
+          <p className="text-xs text-stone-400 dark:text-zinc-500 font-semibold">
+            No active products resolved.
+          </p>
           <Link
             href="/admin/products/create"
-            className="text-xs font-bold text-zinc-950 underline dark:text-zinc-50"
+            className="text-xs font-black uppercase tracking-widest text-stone-950 underline dark:text-zinc-50"
           >
-            Create the first product
+            Create first variant
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800/40 dark:bg-zinc-950">
-          <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-            <thead className="bg-zinc-50 dark:bg-zinc-900">
+        <div className="overflow-hidden rounded-3xl border border-stone-200/40 bg-white dark:border-zinc-900/50 dark:bg-zinc-950">
+          <table className="min-w-full divide-y divide-stone-150 dark:divide-zinc-900">
+            <thead className="bg-stone-50 dark:bg-zinc-900">
               <tr>
-                <th className="px-6 py-3.5 text-left text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
-                  Product Name
+                <th className="px-6 py-4.5 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                  Variant Product
                 </th>
-                <th className="px-6 py-3.5 text-left text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
-                  Slug
+                <th className="px-6 py-4.5 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                  SEO Slug
                 </th>
-                <th className="px-6 py-3.5 text-left text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
+                <th className="px-6 py-4.5 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                   Status
                 </th>
-                <th className="px-6 py-3.5 text-right text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
+                <th className="px-6 py-4.5 text-right text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-150 dark:divide-zinc-850 font-semibold text-xs">
+            <tbody className="divide-y divide-stone-100 dark:divide-zinc-900/50 font-semibold text-xs">
               {products.map((p) => (
                 <tr key={p.id}>
-                  <td className="whitespace-nowrap px-6 py-4.5 text-zinc-950 dark:text-zinc-50 font-bold">
+                  <td className="whitespace-nowrap px-6 py-5 text-stone-950 dark:text-zinc-50 font-black">
                     {p.name}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4.5 text-zinc-400 font-mono">
+                  <td className="whitespace-nowrap px-6 py-5 text-stone-400 dark:text-zinc-500 font-mono">
                     {p.slug}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4.5">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50/50 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400">
+                  <td className="whitespace-nowrap px-6 py-5">
+                    <span className="inline-flex items-center rounded-full bg-emerald-500/[0.06] border border-emerald-500/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
                       {p.status}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4.5 text-right space-x-4">
+                  <td className="whitespace-nowrap px-6 py-5 text-right space-x-6">
                     <Link
                       href={`/admin/products/edit/${p.id}`}
-                      className="text-zinc-900 hover:underline dark:text-zinc-100"
+                      className="text-stone-900 hover:text-stone-750 dark:text-zinc-100 dark:hover:text-zinc-300 font-bold"
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => handleDelete(p.id)}
                       disabled={isPending}
-                      className="text-rose-600 hover:underline disabled:opacity-50"
+                      className="text-rose-600 hover:text-rose-700 font-bold disabled:opacity-50"
                     >
                       Delete
                     </button>

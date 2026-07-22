@@ -14,30 +14,36 @@ interface CategoryCreationFormProps {
 
 export function CategoryCreationForm({ flatCategories }: CategoryCreationFormProps) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 md:col-span-1">
-      <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Add New Category</h3>
+    <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 md:col-span-1 space-y-6">
+      <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100">
+        Register Category
+      </h3>
       <form
         action={async (formData: FormData) => {
           const name = formData.get("name") as string;
           const parentId = formData.get("parentId") as string;
           await createCategory(name, parentId || null);
         }}
-        className="mt-4 space-y-4"
+        className="space-y-5"
       >
-        <div>
-          <label className="block text-[10px] font-bold text-zinc-500">Name</label>
+        <div className="space-y-1.5">
+          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+            Name
+          </label>
           <input
             type="text"
             name="name"
             required
-            className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-955 dark:text-zinc-50"
           />
         </div>
-        <div>
-          <label className="block text-[10px] font-bold text-zinc-500">Parent Category</label>
+        <div className="space-y-1.5">
+          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+            Parent Category
+          </label>
           <select
             name="parentId"
-            className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-955 dark:text-zinc-50"
           >
             <option value="">None (Top Level)</option>
             {flatCategories.map((c) => (
@@ -49,7 +55,7 @@ export function CategoryCreationForm({ flatCategories }: CategoryCreationFormPro
         </div>
         <button
           type="submit"
-          className="w-full rounded bg-zinc-950 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+          className="w-full rounded-xl bg-stone-950 py-3.5 text-xs font-semibold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955 h-11"
         >
           Save Category
         </button>
