@@ -25,19 +25,19 @@ export function StockUpdater({ variantId, warehouseId, initialQuantity }: StockU
   };
 
   return (
-    <form onSubmit={handleUpdate} className="flex items-center gap-1.5">
+    <form onSubmit={handleUpdate} className="flex items-center gap-2">
       <input
         type="number"
         value={quantity}
         onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-        className="w-16 rounded border border-zinc-300 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 focus:outline-none"
+        className="w-16 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 focus:outline-none font-mono font-bold text-center"
       />
       <button
         type="submit"
         disabled={isPending}
-        className="rounded bg-zinc-950 px-2.5 py-1 text-[10px] font-semibold text-white dark:bg-zinc-50 dark:text-zinc-950 hover:opacity-80 disabled:opacity-50 transition-all font-mono"
+        className="rounded-xl bg-stone-950 px-3.5 py-1.5 text-[9px] font-black uppercase text-white dark:bg-zinc-50 dark:text-zinc-950 disabled:opacity-50 transition-all font-mono"
       >
-        {isPending ? "..." : "Update"}
+        {isPending ? "..." : "Save"}
       </button>
     </form>
   );

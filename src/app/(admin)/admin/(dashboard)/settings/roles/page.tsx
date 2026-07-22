@@ -39,36 +39,44 @@ export default async function RolesAccessPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+    <div className="space-y-12">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-55">
           Roles &amp; Privileges
         </h1>
-        <p className="text-xs text-zinc-500">View authorized organizational access mappings.</p>
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          View and audit assigned organizational role-based access control mappings.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {rolesWithPermissions.map((role) => (
           <div
             key={role.id}
-            className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950"
+            className="rounded-3xl border border-stone-200/40 bg-white p-8 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6"
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">{role.name}</h3>
-              <span className="text-[10px] text-zinc-400">ID: {role.id}</span>
-            </div>
-            <div className="mt-4">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                Assigned Actions
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-zinc-900/50 pb-4">
+              <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-50">
+                {role.name}
+              </h3>
+              <span className="text-[9px] font-mono font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                ID: {role.id}
               </span>
-              <div className="mt-2 flex flex-wrap gap-1.5">
+            </div>
+            <div className="space-y-3">
+              <span className="text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                Assigned Permissions
+              </span>
+              <div className="flex flex-wrap gap-2">
                 {role.permissions.length === 0 ? (
-                  <span className="text-xs text-zinc-400">No explicit actions assigned.</span>
+                  <span className="text-xs text-stone-400 font-semibold py-1">
+                    No explicit permissions mapped.
+                  </span>
                 ) : (
                   role.permissions.map((action) => (
                     <span
                       key={action}
-                      className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+                      className="rounded-lg bg-stone-50 border border-stone-150 px-3 py-1.5 text-[10px] font-bold text-stone-800 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800"
                     >
                       {action}
                     </span>
