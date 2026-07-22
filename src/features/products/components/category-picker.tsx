@@ -48,13 +48,13 @@ export function CategoryPicker({ categories, value, onChange }: CategoryPickerPr
 
   return (
     <div>
-      <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+      <label className="text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
         Product Category
       </label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+        className="mt-1.5 block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:border-stone-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-955 dark:text-zinc-50 font-bold"
       >
         <option value="">Uncategorized</option>
         {renderOptions(tree)}
