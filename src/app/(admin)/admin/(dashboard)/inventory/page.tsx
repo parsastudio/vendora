@@ -34,19 +34,21 @@ export default async function InventoryPage() {
   const stockLevels = await db.select().from(inventory);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+    <div className="space-y-12">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
           Inventory &amp; Warehouses
         </h1>
-        <p className="text-xs text-zinc-500">
-          Monitor and adjust variant stock levels across your storage hubs.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Deploy warehousing hubs and modify variant inventory levels seamlessly.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 lg:col-span-1">
-          <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Add Warehouse Hub</h3>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="rounded-3xl border border-stone-200 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 lg:col-span-1 space-y-6">
+          <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100 font-mono">
+            Register Hub
+          </h3>
           <form
             action={async (formData: FormData) => {
               "use server";
@@ -54,66 +56,74 @@ export default async function InventoryPage() {
               const location = formData.get("location") as string;
               await createWarehouse(name, location || null);
             }}
-            className="mt-4 space-y-4"
+            className="space-y-5"
           >
-            <div>
-              <label className="block text-[10px] font-bold text-zinc-500">Hub Name</label>
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                Hub Name
+              </label>
               <input
                 type="text"
                 name="name"
                 required
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+                className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 text-stone-950"
               />
             </div>
-            <div>
-              <label className="block text-[10px] font-bold text-zinc-500">Location Address</label>
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                Location address
+              </label>
               <input
                 type="text"
                 name="location"
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+                className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 text-stone-950"
               />
             </div>
             <button
               type="submit"
-              className="w-full rounded bg-zinc-950 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="w-full rounded-xl bg-stone-950 py-3.5 text-xs font-semibold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955 h-11"
             >
-              Save Warehouse
+              Save Hub
             </button>
           </form>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 lg:col-span-2 space-y-4">
-          <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Stock Allocations</h3>
+        <div className="rounded-3xl border border-stone-200 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 lg:col-span-2 space-y-6">
+          <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100 font-mono">
+            Ledger Allocations
+          </h3>
           {warehousesList.length === 0 ? (
-            <p className="text-xs text-zinc-400">Please register a warehouse hub first.</p>
+            <p className="text-xs text-stone-400 dark:text-zinc-500 font-semibold py-4">
+              Please register a warehouse hub to oversee stock.
+            </p>
           ) : (
-            <div className="overflow-x-auto rounded-lg border border-zinc-100 dark:border-zinc-900">
-              <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-                <thead className="bg-zinc-50 dark:bg-zinc-900">
+            <div className="overflow-x-auto rounded-2xl border border-stone-100 dark:border-zinc-900">
+              <table className="min-w-full divide-y divide-stone-150 dark:divide-zinc-900">
+                <thead className="bg-stone-50 dark:bg-zinc-900">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
-                      Variant SKU
+                    <th className="px-5 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                      SKU Code
                     </th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
-                      Product Name
+                    <th className="px-5 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest font-sans">
+                      Product
                     </th>
                     {warehousesList.map((wh) => (
                       <th
                         key={wh.id}
-                        className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase"
+                        className="px-5 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
                       >
                         {wh.name}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                <tbody className="divide-y divide-stone-100 dark:divide-zinc-900/50 font-semibold text-xs">
                   {variantsList.map((v) => (
                     <tr key={v.id}>
-                      <td className="whitespace-nowrap px-4 py-2 text-xs font-semibold text-zinc-950 dark:text-zinc-50">
+                      <td className="whitespace-nowrap px-5 py-4 font-mono text-stone-950 dark:text-zinc-55 font-black">
                         {v.sku}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-xs text-zinc-500">
+                      <td className="whitespace-nowrap px-5 py-4 text-stone-400 dark:text-zinc-500 font-medium">
                         {v.productName}
                       </td>
                       {warehousesList.map((wh) => {
@@ -122,7 +132,7 @@ export default async function InventoryPage() {
                             (sl) => sl.variantId === v.id && sl.warehouseId === wh.id,
                           )?.quantity || 0;
                         return (
-                          <td key={wh.id} className="px-4 py-2 text-xs">
+                          <td key={wh.id} className="px-5 py-4 text-xs">
                             <StockUpdater
                               variantId={v.id}
                               warehouseId={wh.id}
