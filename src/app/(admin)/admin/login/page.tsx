@@ -29,9 +29,9 @@ export default function AdminLoginPage() {
         if (result.error === "2FA_REQUIRED") {
           setRequire2FA(true);
         } else if (result.error === "INVALID_OTP") {
-          setError("The authenticator code is incorrect.");
+          setError("The verification code is incorrect.");
         } else {
-          setError("Invalid email or password combination.");
+          setError("Invalid account credentials.");
         }
       } else {
         router.push("/admin");
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
       });
 
       if (result?.error) {
-        setError("Failed to connect to demo gateway.");
+        setError("Unable to dispatch connection request.");
       } else {
         router.push("/admin");
       }
@@ -58,29 +58,29 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="text-center">
-          <span className="text-xs font-semibold tracking-widest text-zinc-400 uppercase dark:text-zinc-600">
-            Secure Portal
+    <div className="flex min-h-screen items-center justify-center bg-stone-50 dark:bg-[#09090b] px-6 py-12">
+      <div className="w-full max-w-md space-y-8 rounded-3xl border border-stone-200/50 bg-white p-8 dark:border-zinc-800/40 dark:bg-zinc-950 shadow-sm">
+        <div className="text-center space-y-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500">
+            Console Gate
           </span>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Sign in to Vendora Admin
+          <h2 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+            Log in to Vendora
           </h2>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-xs text-red-600 dark:bg-red-950/20 dark:text-red-400">
+            <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-4 text-xs font-bold text-rose-700">
               {error}
             </div>
           )}
 
-          <div className="space-y-4 rounded-md">
+          <div className="space-y-4">
             {!require2FA ? (
               <>
-                <div>
-                  <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                     Email Address
                   </label>
                   <input
@@ -88,12 +88,12 @@ export default function AdminLoginPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                    className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                     Password
                   </label>
                   <input
@@ -101,54 +101,54 @@ export default function AdminLoginPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                    className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50"
                   />
                 </div>
               </>
             ) : (
-              <div>
-                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                  Two-Factor Verification Token
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                  Two-factor Verification Code
                 </label>
                 <input
                   type="text"
                   required
                   maxLength={6}
-                  placeholder="Enter 6-digit authenticator code"
+                  placeholder="Enter 6-digit TOTP code"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 tracking-widest text-center focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+                  className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none tracking-[0.25em] text-center font-mono dark:border-zinc-800 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50"
                 />
               </div>
             )}
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <button
               type="submit"
               disabled={isPending}
-              className="group relative flex w-full justify-center rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 cursor-pointer"
+              className="w-full rounded-full bg-stone-950 py-3.5 text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
             >
-              {isPending ? "Authenticating..." : require2FA ? "Verify Code" : "Sign In"}
+              {isPending ? "Connecting..." : require2FA ? "Verify Identity" : "Log In"}
             </button>
 
             {!require2FA && (
               <>
                 <div className="relative flex py-2 items-center">
-                  <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
-                  <span className="flex-shrink mx-4 text-zinc-400 text-[10px] font-bold uppercase tracking-wider">
-                    Or explore first
+                  <div className="flex-grow border-t border-stone-150 dark:border-zinc-900"></div>
+                  <span className="flex-shrink mx-4 text-stone-400 dark:text-zinc-500 text-[9px] font-black uppercase tracking-widest">
+                    Sandbox exploration
                   </span>
-                  <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+                  <div className="flex-grow border-t border-stone-150 dark:border-zinc-900"></div>
                 </div>
 
                 <button
                   type="button"
                   onClick={handleDemoLogin}
                   disabled={isPending}
-                  className="flex w-full justify-center rounded-md border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 focus:outline-none disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-880 cursor-pointer"
+                  className="w-full rounded-full border border-stone-200 bg-white py-3 text-xs font-bold text-stone-700 hover:bg-stone-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
-                  {isPending ? "Connecting Sandbox..." : "Explore Demo Dashboard"}
+                  {isPending ? "Connecting..." : "Access Demo Dashboard"}
                 </button>
               </>
             )}

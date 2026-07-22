@@ -51,47 +51,49 @@ export function ApiKeysManager({ initialKeys }: ApiKeysManagerProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
-        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Create New API Key</h3>
-        <form onSubmit={handleGenerate} className="flex gap-4 items-end">
-          <div className="flex-1">
-            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-              Key Identifier Name
+    <div className="space-y-8">
+      <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
+        <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100">
+          Create Private API Key
+        </h3>
+        <form onSubmit={handleGenerate} className="flex flex-col sm:flex-row gap-4 items-end">
+          <div className="flex-1 w-full space-y-1.5">
+            <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+              Key Description
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Next.js Headless Frontend"
+              placeholder="e.g. Next.js storefront gateway"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+              className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
             />
           </div>
           <button
             type="submit"
             disabled={isPending}
-            className="rounded-md bg-zinc-950 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 h-9"
+            className="w-full sm:w-auto rounded-xl bg-stone-950 px-6 py-3 text-xs font-semibold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 h-11"
           >
-            Generate Token
+            Generate Key
           </button>
         </form>
 
         {newSecret && (
-          <div className="rounded-lg bg-emerald-50 p-4 border border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800 space-y-2">
-            <p className="text-xs font-bold text-emerald-800 dark:text-emerald-400">
-              Copy your key now! It will not be shown again for security reasons.
+          <div className="rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20 p-5 space-y-3">
+            <p className="text-[10px] font-black text-emerald-800 dark:text-emerald-400 uppercase tracking-widest">
+              Securely store this secret key. It will not be revealed again.
             </p>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2.5 items-center">
               <input
                 type="text"
                 readOnly
                 value={newSecret}
-                className="block w-full rounded border border-emerald-300 bg-white px-3 py-1.5 text-xs font-mono select-all focus:outline-none dark:bg-zinc-900 dark:border-zinc-850"
+                className="block flex-1 rounded-xl border border-emerald-300/30 bg-white px-4 py-3 text-xs font-mono select-all focus:outline-none dark:bg-zinc-900 dark:border-zinc-850 dark:text-zinc-50"
               />
               <button
                 onClick={() => navigator.clipboard.writeText(newSecret)}
-                className="rounded bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700"
+                className="rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold text-white hover:bg-emerald-700"
               >
                 Copy
               </button>
@@ -100,47 +102,49 @@ export function ApiKeysManager({ initialKeys }: ApiKeysManagerProps) {
         )}
       </div>
 
-      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
-        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Active Developer Keys</h3>
+      <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
+        <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100">
+          Live API Keys
+        </h3>
         {keys.length === 0 ? (
-          <p className="text-xs text-zinc-400">
-            No API keys registered yet. Generate one above to access headless APIs.
+          <p className="text-xs text-stone-400 dark:text-zinc-500 font-semibold py-2">
+            No active API keys mapped to this environment.
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-lg border border-zinc-100 dark:border-zinc-900">
-            <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-              <thead className="bg-zinc-50 dark:bg-zinc-900">
+          <div className="overflow-x-auto rounded-2xl border border-stone-100 dark:border-zinc-900">
+            <table className="min-w-full divide-y divide-stone-150 dark:divide-zinc-900">
+              <thead className="bg-stone-50 dark:bg-zinc-900">
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
+                  <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                     Name
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
-                    Preview Prefix
+                  <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                    Preview
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
+                  <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                     Created
                   </th>
-                  <th className="px-4 py-2 text-right text-xs font-semibold text-zinc-500 uppercase">
+                  <th className="px-6 py-4 text-right text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className="divide-y divide-stone-100 dark:divide-zinc-900/50 font-semibold text-xs">
                 {keys.map((key) => (
                   <tr key={key.id}>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs font-semibold text-zinc-950 dark:text-zinc-50">
+                    <td className="whitespace-nowrap px-6 py-4 text-stone-950 dark:text-zinc-50">
                       {key.name}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs font-mono text-zinc-505">
+                    <td className="whitespace-nowrap px-6 py-4 font-mono text-stone-450 dark:text-zinc-400">
                       {key.preview}...
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs text-zinc-400">
+                    <td className="whitespace-nowrap px-6 py-4 text-stone-400 dark:text-zinc-500 font-mono">
                       {formatDateTime(key.createdAt)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-right text-xs">
+                    <td className="whitespace-nowrap px-6 py-4 text-right font-black">
                       <button
                         onClick={() => handleRevoke(key.id)}
-                        className="text-red-600 hover:underline font-bold"
+                        className="text-rose-600 hover:text-rose-700 font-bold"
                       >
                         Revoke
                       </button>

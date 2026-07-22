@@ -44,74 +44,78 @@ export function ApiSandbox({ apiKeysList }: ApiSandboxProps) {
   };
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
-      <div>
-        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">API Developer Sandbox</h3>
-        <p className="text-[10px] text-zinc-550">
-          Simulate frontend headless fetch triggers and inspect live REST API JSON payloads.
+    <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
+      <div className="space-y-1">
+        <h3 className="text-sm font-black uppercase tracking-widest text-stone-950 dark:text-zinc-50">
+          API Terminal Sandbox
+        </h3>
+        <p className="text-[10px] text-stone-400 dark:text-zinc-500 font-semibold">
+          Simulate queries and review output payloads inside an isolated environment.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div>
-          <label className="block text-[10px] font-bold text-zinc-500">
-            1. Select Target Endpoint
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="space-y-1.5">
+          <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+            Select Endpoint
           </label>
           <select
             value={selectedPath}
             onChange={(e) => setSelectedPath(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
           >
-            <option value="/api/v1/products">GET /api/v1/products (Products List)</option>
-            <option value="/api/v1/categories">GET /api/v1/categories (Categories Tree)</option>
-            <option value="/api/tenant">GET /api/tenant (Active Tenant Data)</option>
+            <option value="/api/v1/products">GET /api/v1/products</option>
+            <option value="/api/v1/categories">GET /api/v1/categories</option>
+            <option value="/api/tenant">GET /api/tenant</option>
           </select>
           {apiKeysList.length > 0 && (
-            <span className="text-[9px] text-zinc-400 mt-1 block">
-              Reference Active Keys: {apiKeysList.map((k) => k.name).join(", ")}
+            <span className="text-[9px] text-stone-400 mt-1.5 block font-semibold leading-relaxed">
+              Mappable Keys: {apiKeysList.map((k) => k.name).join(", ")}
             </span>
           )}
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-[10px] font-bold text-zinc-500">
-            2. Input Live Token (vk_live_...)
+        <div className="md:col-span-2 space-y-1.5">
+          <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+            Active Token Reference (vk_live_...)
           </label>
-          <div className="mt-1 flex gap-2">
+          <div className="flex gap-2.5">
             <input
               type="password"
-              placeholder="Paste your generated API key secret"
+              placeholder="Paste generated secret key"
               value={typedKey}
               onChange={(e) => setTypedKey(e.target.value)}
-              className="block flex-1 rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 font-mono"
+              className="block flex-1 rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 font-mono"
             />
             <button
               onClick={handleExecute}
               disabled={loading || !typedKey}
-              className="rounded bg-zinc-950 px-4 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 h-8"
+              className="rounded-xl bg-stone-950 px-6 py-3 text-xs font-semibold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950"
             >
-              {loading ? "Sending..." : "Execute Request"}
+              {loading ? "Sending..." : "Execute Query"}
             </button>
           </div>
         </div>
       </div>
 
       {responseStatus !== null && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-zinc-500 uppercase">Response Status:</span>
+        <div className="space-y-3 pt-4 border-t border-stone-100 dark:border-zinc-900/50">
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
+              Status Code:
+            </span>
             <span
-              className={`rounded px-1.5 py-0.5 text-[10px] font-mono font-bold ${
+              className={`rounded-lg px-2 py-0.5 text-[10px] font-mono font-bold ${
                 responseStatus >= 200 && responseStatus < 300
-                  ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400"
-                  : "bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400"
+                  ? "bg-emerald-500/[0.06] text-emerald-600 border border-emerald-500/10"
+                  : "bg-rose-500/[0.06] text-rose-600 border border-rose-500/10"
               }`}
             >
               {responseStatus}
             </span>
           </div>
 
-          <pre className="max-h-72 overflow-y-auto rounded-lg bg-zinc-950 p-4 text-[10px] text-zinc-300 font-mono select-all">
+          <pre className="max-h-72 overflow-y-auto rounded-2xl bg-[#09090b] border border-zinc-800/40 p-5 text-[10px] text-[#a1a1aa] font-mono select-all">
             {responseBody}
           </pre>
         </div>

@@ -27,14 +27,13 @@ export default async function AdminDeveloperSettingsPage() {
     .where(eq(apiKeys.tenantId, tenantId));
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Headless Engine &amp; Developer Hub
+    <div className="space-y-12">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+          Developer Hub
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Control developer keys, review real-time REST endpoint definitions, and run tests in
-          Sandbox.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Control developer keys, review restful definitions, and execute active sandbox procedures.
         </p>
       </div>
 

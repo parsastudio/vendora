@@ -30,13 +30,13 @@ export default async function WebhooksSettingsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Webhooks &amp; Real-time Events
+    <div className="space-y-12">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+          Webhooks Configuration
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Configure and test outbound HTTPS webhooks triggered by platform lifecycle events.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Configure and validate secure outbound payloads triggered by system execution metrics.
         </p>
       </div>
       <WebhookManager initialWebhooks={mappedWebhooks} />

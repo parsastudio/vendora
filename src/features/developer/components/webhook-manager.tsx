@@ -61,64 +61,64 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
   };
 
   const handleTest = (url: string, event: string) => {
-    setTestResult("Connecting and dispatching simulated JSON payload...");
+    setTestResult("Dispatching authenticated JSON payload metadata to target url...");
     startTransition(async () => {
       try {
         const result = await triggerMockWebhook(url, event);
         if (result.success) {
-          setTestResult(`SUCCESS: Webhook successfully accepted (Status: ${result.status})`);
+          setTestResult(
+            `PING SUCCESS: Payload correctly acknowledged by host (Status: ${result.status})`,
+          );
         } else {
-          setTestResult(`FAILURE: ${result.error || `Server responded with ${result.status}`}`);
+          setTestResult(
+            `PING FAILURE: Remote host resolved with error (Status: ${result.error || result.status})`,
+          );
         }
       } catch {
-        setTestResult("CONNECTION FAILURE: Webhook target URL unreachable");
+        setTestResult("NETWORK FAILURE: Unable to establish handshake with host path");
       }
     });
   };
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
-        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
-          Configure Outbound Webhook
+    <div className="space-y-8">
+      <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
+        <h3 className="text-sm font-black uppercase tracking-widest text-stone-950 dark:text-zinc-50">
+          Outbound Rules
         </h3>
 
         {secret && (
-          <div className="rounded-lg bg-zinc-50 border p-4 text-xs dark:bg-zinc-900 dark:border-zinc-850 space-y-2">
-            <span className="font-bold text-zinc-700 dark:text-zinc-300">
-              Your Webhook Signing Secret Key:
+          <div className="rounded-2xl bg-stone-50 border border-stone-150 p-5 dark:bg-zinc-900 dark:border-zinc-800 space-y-3">
+            <span className="text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+              Webhook HMAC Secret
             </span>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2.5 items-center">
               <input
                 type="text"
                 readOnly
                 value={secret}
-                className="block flex-1 rounded border border-zinc-300 bg-white px-3 py-1.5 text-xs font-mono select-all focus:outline-none dark:bg-zinc-950 dark:border-zinc-800 dark:text-zinc-50"
+                className="block flex-1 rounded-xl border border-stone-200 bg-white px-4 py-3 text-xs font-mono select-all focus:outline-none dark:bg-zinc-950 dark:border-zinc-800 dark:text-zinc-50"
               />
               <button
                 type="button"
                 onClick={() => navigator.clipboard.writeText(secret)}
-                className="rounded bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950 px-3 py-1.5 text-xs font-bold"
+                className="rounded-xl bg-stone-950 text-white dark:bg-zinc-50 dark:text-zinc-950 px-5 py-3 text-xs font-semibold"
               >
                 Copy
               </button>
             </div>
-            <p className="text-[10px] text-zinc-400">
-              Each payload includes an X-Vendora-Signature header calculated with this HMAC-SHA256
-              key.
-            </p>
           </div>
         )}
 
-        <form onSubmit={handleSave} className="grid grid-cols-1 gap-4 sm:grid-cols-3 items-end">
-          <div>
-            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-              Trigger Event Type
+        <form onSubmit={handleSave} className="grid grid-cols-1 gap-6 sm:grid-cols-3 items-end">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+              Event Trigger
             </label>
             <select
               value={triggerEvent}
               onChange={(e) => setTriggerEvent(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
             >
               <option value="order.created">order.created</option>
               <option value="order.paid">order.paid</option>
@@ -126,80 +126,80 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
             </select>
           </div>
 
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-              HTTPS Target Payload URL
+          <div className="sm:col-span-2 space-y-1.5">
+            <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+              Destination endpoint
             </label>
-            <div className="mt-1 flex gap-2">
+            <div className="flex gap-2.5">
               <input
                 type="url"
                 required
-                placeholder="https://your-server.com/webhooks/vendora"
+                placeholder="https://your-server.com/hooks/vendora"
                 value={targetUrl}
                 onChange={(e) => setTargetUrl(e.target.value)}
-                className="block flex-1 rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 font-mono"
+                className="block flex-1 rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 font-mono"
               />
               <button
                 type="submit"
                 disabled={isPending}
-                className="rounded bg-zinc-950 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 h-9"
+                className="rounded-xl bg-stone-950 px-6 py-3 text-xs font-semibold text-white hover:bg-stone-850"
               >
-                Register
+                Save
               </button>
             </div>
           </div>
         </form>
 
         {testResult && (
-          <div className="rounded-lg bg-zinc-50 border p-4 text-xs font-mono text-zinc-800 dark:bg-zinc-900 dark:border-zinc-850 dark:text-zinc-300">
+          <div className="rounded-2xl bg-[#09090b] border border-zinc-800/40 p-5 text-[10px] font-mono text-[#a1a1aa] leading-relaxed">
             {testResult}
           </div>
         )}
       </div>
 
-      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
-        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
-          Active Webhook Listeners
+      <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
+        <h3 className="text-sm font-black uppercase tracking-widest text-stone-950 dark:text-zinc-50">
+          Configured Listeners
         </h3>
         {webhooks.length === 0 ? (
-          <p className="text-xs text-zinc-400">
-            No outbound webhook endpoints registered. Define one above.
+          <p className="text-xs text-stone-400 dark:text-zinc-500 font-semibold py-2">
+            No outbound listeners registered to this environment.
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-lg border border-zinc-100 dark:border-zinc-900">
-            <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-              <thead className="bg-zinc-50 dark:bg-zinc-900">
+          <div className="overflow-x-auto rounded-2xl border border-stone-100 dark:border-zinc-900">
+            <table className="min-w-full divide-y divide-stone-150 dark:divide-zinc-900">
+              <thead className="bg-stone-50 dark:bg-zinc-900">
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
-                    Event Trigger
+                  <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                    Event trigger
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold text-zinc-500 uppercase">
-                    Target endpoint URL
+                  <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                    Destination url
                   </th>
-                  <th className="px-4 py-2 text-right text-xs font-semibold text-zinc-500 uppercase">
+                  <th className="px-6 py-4 text-right text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className="divide-y divide-stone-100 dark:divide-zinc-900/50 font-semibold text-xs">
                 {webhooks.map((wh) => (
                   <tr key={wh.id}>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs font-bold text-zinc-950 dark:text-zinc-50 font-mono">
+                    <td className="whitespace-nowrap px-6 py-4 font-mono font-black text-stone-950 dark:text-zinc-50">
                       {wh.triggerEvent}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs font-mono text-zinc-505">
+                    <td className="whitespace-nowrap px-6 py-4 font-mono text-stone-450 dark:text-zinc-400">
                       {wh.url}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-right text-xs space-x-3">
+                    <td className="whitespace-nowrap px-6 py-4 text-right font-black space-x-4">
                       <button
                         onClick={() => handleTest(wh.url, wh.triggerEvent)}
-                        className="text-emerald-600 hover:underline font-bold"
+                        className="text-emerald-600 hover:text-emerald-700"
                       >
-                        Send Test Ping
+                        Test
                       </button>
                       <button
                         onClick={() => handleDelete(wh.id)}
-                        className="text-red-600 hover:underline font-bold"
+                        className="text-rose-600 hover:text-rose-700 font-bold"
                       >
                         Remove
                       </button>
