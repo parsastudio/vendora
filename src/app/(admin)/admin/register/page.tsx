@@ -41,27 +41,27 @@ export default function AdminRegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
-      <div className="w-full max-w-lg space-y-8 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="text-center">
-          <span className="text-xs font-semibold tracking-widest text-zinc-400 uppercase dark:text-zinc-600">
+    <div className="flex min-h-screen items-center justify-center bg-stone-50 px-6 py-12 dark:bg-[#09090b]">
+      <div className="w-full max-w-xl space-y-8 rounded-3xl border border-stone-200 bg-white p-8 shadow-sm dark:border-zinc-800/40 dark:bg-zinc-950">
+        <div className="text-center space-y-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
             Onboarding Wizard
           </span>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Deploy Your Storefront
+          <h2 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+            Deploy Storefront
           </h2>
         </div>
 
-        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-xs text-red-600 dark:bg-red-950/20 dark:text-red-400">
+            <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-4 text-xs font-bold text-rose-700">
               {error}
             </div>
           )}
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="sm:col-span-2 space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Organization Name
               </label>
               <input
@@ -69,30 +69,30 @@ export default function AdminRegisterPage() {
                 required
                 value={tenantName}
                 onChange={(e) => setTenantName(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2.5 text-xs focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
               />
             </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <div className="sm:col-span-2 space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Subdomain
               </label>
-              <div className="flex rounded-md shadow-sm">
+              <div className="flex rounded-xl shadow-none overflow-hidden border border-stone-200 dark:border-zinc-800">
                 <input
                   type="text"
                   required
                   value={subdomain}
                   onChange={(e) => setSubdomain(e.target.value)}
-                  className="mt-1 block w-full rounded-l-md border border-r-0 border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                  className="block w-full border-0 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:bg-zinc-900 dark:text-zinc-50 font-mono"
                 />
-                <span className="mt-1 inline-flex items-center rounded-r-md border border-l-0 border-zinc-300 bg-zinc-100 px-3 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+                <span className="inline-flex items-center bg-stone-100 px-4 text-xs text-stone-400 font-bold border-l dark:bg-zinc-800 dark:border-zinc-700">
                   .vendora.com
                 </span>
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Owner Full Name
               </label>
               <input
@@ -100,12 +100,12 @@ export default function AdminRegisterPage() {
                 required
                 value={adminName}
                 onChange={(e) => setAdminName(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Email Address
               </label>
               <input
@@ -113,12 +113,12 @@ export default function AdminRegisterPage() {
                 required
                 value={adminEmail}
                 onChange={(e) => setAdminEmail(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
               />
             </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <div className="sm:col-span-2 space-y-1.5">
+              <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Secure Password
               </label>
               <input
@@ -126,7 +126,7 @@ export default function AdminRegisterPage() {
                 required
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+                className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50"
               />
             </div>
           </div>
@@ -135,9 +135,9 @@ export default function AdminRegisterPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="group relative flex w-full justify-center rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 focus:outline-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="w-full rounded-full bg-stone-950 py-4 text-center text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950"
             >
-              {isPending ? "Creating Storefront..." : "Complete Registration"}
+              {isPending ? "Deploying Architecture..." : "Complete Registration"}
             </button>
           </div>
         </form>

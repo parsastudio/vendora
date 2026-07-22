@@ -32,25 +32,27 @@ export function ForgotPasswordForm() {
 
   if (success) {
     return (
-      <div className="rounded-lg bg-zinc-50 p-6 text-center border border-zinc-200 dark:bg-zinc-950 dark:border-zinc-800">
-        <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Check Your Inbox</h3>
-        <p className="mt-2 text-xs text-zinc-500">
-          If an account with that email exists, we have generated a recovery link in our system
-          console logs.
+      <div className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-center dark:bg-zinc-950 dark:border-zinc-800 space-y-1">
+        <h3 className="text-xs font-black uppercase tracking-widest text-stone-950 dark:text-zinc-50">
+          Check Your Inbox
+        </h3>
+        <p className="text-[11px] text-stone-400 font-semibold leading-relaxed">
+          If an account exists with the provided address, a recovery URL has been generated in our
+          system logs.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
-        <div className="rounded bg-red-50 p-3 text-xs text-red-600 dark:bg-red-950/20 dark:text-red-400">
+        <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-4 text-xs font-bold text-rose-700">
           {error}
         </div>
       )}
-      <div>
-        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+      <div className="space-y-1.5">
+        <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
           Email Address
         </label>
         <input
@@ -58,15 +60,15 @@ export function ForgotPasswordForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+          className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
         />
       </div>
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-md bg-zinc-950 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+        className="w-full rounded-full bg-stone-950 py-3.5 text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950"
       >
-        {isPending ? "Sending link..." : "Send Reset Link"}
+        {isPending ? "Sending parameters..." : "Send Recovery Link"}
       </button>
     </form>
   );
