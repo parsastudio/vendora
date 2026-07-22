@@ -26,12 +26,12 @@ export default async function ApiKeysSettingsPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Developer Settings &amp; API Keys
+      <div className="space-y-1">
+        <h1 className="text-2xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+          Developer API Access
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Generate and manage secure secret keys to access your storefront headless commerce APIs.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Generate secure tokens to interface with your headless storefront.
         </p>
       </div>
       <ApiKeysManager initialKeys={keysList} />

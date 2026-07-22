@@ -21,12 +21,12 @@ export default async function CreateProductPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
           Create Product
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Deploy a new product with multiple catalog variations and variants.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Deploy a new product entry inside your centralized catalog inventory.
         </p>
       </div>
       <CreateProductForm categories={flatCategories} />

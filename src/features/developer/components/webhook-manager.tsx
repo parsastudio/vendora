@@ -70,9 +70,8 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
             `PING SUCCESS: Payload correctly acknowledged by host (Status: ${result.status})`,
           );
         } else {
-          setTestResult(
-            `PING FAILURE: Remote host resolved with error (Status: ${result.error || result.status})`,
-          );
+          const errorDetail = result.error ? `Error: ${result.error}` : `Status: ${result.status}`;
+          setTestResult(`PING FAILURE: Remote host resolved with error (${errorDetail})`);
         }
       } catch {
         setTestResult("NETWORK FAILURE: Unable to establish handshake with host path");
@@ -83,7 +82,7 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
   return (
     <div className="space-y-8">
       <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
-        <h3 className="text-sm font-black uppercase tracking-widest text-stone-950 dark:text-zinc-50">
+        <h3 className="text-sm font-black uppercase tracking-widest text-stone-955 dark:text-zinc-50">
           Outbound Rules
         </h3>
 
@@ -102,7 +101,7 @@ export function WebhookManager({ initialWebhooks }: WebhookManagerProps) {
               <button
                 type="button"
                 onClick={() => navigator.clipboard.writeText(secret)}
-                className="rounded-xl bg-stone-950 text-white dark:bg-zinc-50 dark:text-zinc-950 px-5 py-3 text-xs font-semibold"
+                className="rounded-xl bg-stone-950 text-white dark:bg-zinc-50 dark:text-zinc-955 px-5 py-3 text-xs font-semibold"
               >
                 Copy
               </button>

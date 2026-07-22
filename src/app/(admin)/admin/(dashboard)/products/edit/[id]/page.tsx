@@ -50,12 +50,12 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
           Edit Product
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Modify product metadata, pricing tiers, attributes, and stock variations.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Modify attributes, variants, pricing, and SEO parameters.
         </p>
       </div>
       <EditProductForm categories={flatCategories} productId={id} initialData={initialData} />

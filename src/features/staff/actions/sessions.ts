@@ -1,4 +1,5 @@
-import "server-only";
+"use server";
+
 import { redis } from "@/lib/redis";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";

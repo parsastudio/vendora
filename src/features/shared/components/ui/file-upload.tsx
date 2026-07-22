@@ -55,7 +55,7 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
 
       await fetch(data.uploadUrl, {
         method: "PUT",
-        headers: { "Content-Type": "optimizedFile.type" },
+        headers: { "Content-Type": optimizedFile.type },
         body: optimizedFile,
       });
 
