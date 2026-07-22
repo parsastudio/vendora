@@ -40,10 +40,10 @@ export function CustomerOrderActions({
   const isReturnable = status === "delivered";
 
   return (
-    <div className="pt-6 border-t border-zinc-100 dark:border-zinc-900 space-y-4">
+    <div className="pt-8 border-t border-stone-100 dark:border-zinc-900/50 space-y-4">
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50/50 p-3.5 text-xs font-semibold text-red-600 dark:border-red-950/20 dark:bg-red-950/10">
-          ⚠️ {error}
+        <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-4 text-xs font-bold text-rose-700">
+          {error}
         </div>
       )}
 
@@ -52,9 +52,9 @@ export function CustomerOrderActions({
           <button
             onClick={handleCancel}
             disabled={isPending}
-            className="rounded-full bg-rose-600 px-6 py-3 text-xs font-bold text-white shadow-lg transition-all duration-300 hover:bg-rose-700 disabled:opacity-50"
+            className="rounded-full bg-rose-600 px-8 py-3.5 text-xs font-bold text-white hover:bg-rose-700"
           >
-            {isPending ? "Cancelling Order..." : "Cancel Order Request"}
+            {isPending ? "Cancelling..." : "Cancel Order Request"}
           </button>
         )}
 

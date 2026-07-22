@@ -19,17 +19,17 @@ export default async function AdminDashboardPage() {
     {
       name: "Total Products",
       value: statsData.productsCount,
-      description: "Active items in your inventory",
+      description: "Active catalog items",
     },
     {
       name: "Staff Members",
       value: statsData.staffCount,
-      description: "Teammates with active accounts",
+      description: "Teammates on console",
     },
     {
       name: "Total Orders",
       value: statsData.ordersCount,
-      description: "All-time customer sales transactions",
+      description: "All-time client transactions",
     },
     {
       name: "Gross Revenue",
@@ -92,13 +92,14 @@ export default async function AdminDashboardPage() {
     .limit(5);
 
   return (
-    <div className="space-y-10">
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Welcome back, {session?.user?.name || "User"}
+    <div className="space-y-12">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+          Console Overview
         </h1>
-        <p className="text-xs text-zinc-400 mt-1">
-          Here is the live performance review of your tenant storefront.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Welcome back, {session?.user?.name || "User"}. Review the live operational parameters of
+          your instance.
         </p>
       </div>
 
@@ -106,15 +107,17 @@ export default async function AdminDashboardPage() {
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-zinc-800/40 dark:bg-zinc-950 space-y-3"
+            className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900 dark:bg-zinc-950 space-y-4"
           >
-            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            <span className="text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
               {stat.name}
             </span>
-            <p className="text-3xl font-extrabold text-zinc-950 dark:text-zinc-50 font-mono">
+            <p className="text-3xl font-extrabold text-stone-955 dark:text-zinc-50 font-mono tracking-tight">
               {stat.value}
             </p>
-            <p className="text-[10px] text-zinc-400 font-medium">{stat.description}</p>
+            <p className="text-[10px] text-stone-400 dark:text-zinc-500 font-semibold">
+              {stat.description}
+            </p>
           </div>
         ))}
       </div>
