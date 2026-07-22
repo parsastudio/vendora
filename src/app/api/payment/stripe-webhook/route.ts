@@ -37,6 +37,19 @@ export async function POST(request: Request) {
     const { orderId, tenantId } = session.metadata;
 
     if (orderId && tenantId) {
+      const existingTx = await db
+        .select()
+        .from(transactions)
+        .where(eq(transactions.referenceId, session.id))
+        .limit(1);
+
+      if (existingTx.length > 0) {
+        return new NextResponse(JSON.stringify({ received: true, duplicate: true }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
       const orderResult = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1);
 
       if (orderResult.length > 0) {

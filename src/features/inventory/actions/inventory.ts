@@ -42,6 +42,10 @@ export const updateStock = withWriteProtection(async function (
     throw new Error("Unauthorized");
   }
 
+  if (isNaN(quantity) || quantity < 0) {
+    throw new Error("Quantity must be a valid non-negative number");
+  }
+
   const tenantId = session.user.tenantId;
 
   await db.transaction(async (tx) => {
