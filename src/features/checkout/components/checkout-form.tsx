@@ -147,12 +147,12 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
   };
 
   return (
-    <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16 items-start">
+    <div className="mt-16 lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16 items-start">
       <div className="lg:col-span-7">
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
-            <div className="rounded-2xl border border-red-200 bg-red-50/50 p-4 text-xs font-semibold text-red-700 dark:border-red-950/20 dark:bg-red-950/10">
-              ⚠️ {error}
+            <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-4 text-xs font-bold text-rose-700">
+              {error}
             </div>
           )}
 
@@ -194,13 +194,13 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full bg-zinc-950 py-4 text-center text-xs font-bold text-white shadow-xl transition-all duration-300 hover:bg-zinc-800 hover:scale-[1.005] active:scale-[0.99] disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+            className="w-full rounded-full bg-stone-950 py-4.5 text-center text-xs font-bold text-white hover:bg-stone-850 active:scale-[0.99] disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
           >
             {isPending
-              ? "Securing Transaction..."
+              ? "Configuring Transaction..."
               : paymentMethod === "stripe"
-                ? "Proceed to Stripe Payment"
-                : "Confirm & Pay (Cash on Delivery)"}
+                ? "Proceed to Stripe Portal"
+                : "Confirm Cash on Delivery"}
           </button>
         </form>
       </div>

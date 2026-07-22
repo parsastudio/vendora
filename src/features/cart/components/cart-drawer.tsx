@@ -85,67 +85,73 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
   );
 
   const drawerContent = (
-    <div className="fixed inset-0 z-[100] overflow-hidden animate-in fade-in duration-200">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-md" onClick={onClose} />
+    <div className="fixed inset-0 z-[100] overflow-hidden animate-in fade-in duration-300">
+      <div className="absolute inset-0 bg-stone-950/40 backdrop-blur-sm" onClick={onClose} />
       <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
-        <div className="w-screen max-w-md bg-white p-6 shadow-2xl dark:bg-zinc-950 flex flex-col justify-between border-l border-zinc-200 dark:border-zinc-800 animate-in slide-in-from-right duration-300">
+        <div className="w-screen max-w-md bg-white p-8 shadow-2xl dark:bg-zinc-950 flex flex-col justify-between border-l border-stone-200/40 dark:border-zinc-900/30 animate-in slide-in-from-right duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
           <div className="flex flex-col flex-1 min-h-0">
-            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-850 pb-4">
-              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Your Cart</h2>
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-zinc-900/50 pb-6">
+              <h2 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-50">
+                Catalogue Cart
+              </h2>
               <button
                 onClick={onClose}
-                className="rounded-full p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-500 hover:text-zinc-700"
+                className="rounded-full p-2.5 hover:bg-stone-50 dark:hover:bg-zinc-900 text-stone-400 hover:text-stone-950 dark:hover:text-zinc-100"
               >
                 Close
               </button>
             </div>
 
-            <div className="mt-6 flex-1 overflow-y-auto space-y-4 pr-1 min-h-0">
+            <div className="mt-8 flex-1 overflow-y-auto space-y-6 pr-1 min-h-0">
               {hasBogoActive && (
-                <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-3.5 text-[10px] text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-400 font-semibold leading-relaxed">
+                <div className="rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20 p-4 text-[10px] text-emerald-800 dark:text-emerald-400 font-bold leading-relaxed">
                   🎁 Multi-Buy Automatic Discount applied: Buy 1 Get 1 Free on all selected Black
                   variants!
                 </div>
               )}
 
               {items.length === 0 ? (
-                <div className="text-center text-zinc-400 py-16">
+                <div className="text-center text-stone-400 dark:text-zinc-500 py-24 space-y-3">
                   <span className="text-3xl">🛒</span>
-                  <p className="mt-3 text-xs">Your cart is empty.</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider">
+                    Your cart is currently empty
+                  </p>
                 </div>
               ) : (
                 items.map((item) => (
                   <div
                     key={item.variantId}
-                    className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-850 pb-4"
+                    className="flex items-center justify-between border-b border-stone-100 dark:border-zinc-900/50 pb-6"
                   >
-                    <div>
-                      <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-50">
+                    <div className="space-y-1">
+                      <h3 className="text-xs font-bold text-stone-900 dark:text-zinc-50">
                         {item.name}
                       </h3>
-                      <p className="text-xs text-zinc-400 mt-0.5">
+                      <p className="text-xs text-stone-400 font-mono">
                         {formatCurrency(parseFloat(item.price))}
                       </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center border border-zinc-200 rounded-lg dark:border-zinc-800 overflow-hidden bg-zinc-50 dark:bg-zinc-900/30">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center border border-stone-200 rounded-xl dark:border-zinc-800 overflow-hidden bg-stone-50 dark:bg-zinc-900/20">
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          className="px-2.5 py-1 text-xs font-bold hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                          className="px-3 py-1.5 text-xs font-bold hover:bg-stone-200 dark:hover:bg-zinc-800"
                         >
                           -
                         </button>
-                        <span className="px-1 text-xs font-semibold">{item.quantity}</span>
+                        <span className="px-2 text-xs font-extrabold font-mono">
+                          {item.quantity}
+                        </span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          className="px-2.5 py-1 text-xs font-bold hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                          className="px-3 py-1.5 text-xs font-bold hover:bg-stone-200 dark:hover:bg-zinc-800"
                         >
                           +
                         </button>
                       </div>
                       <button
                         onClick={() => removeItem(item.variantId)}
-                        className="text-xs font-semibold text-red-500 hover:text-red-700"
+                        className="text-xs font-bold text-rose-600 hover:text-rose-700"
                       >
                         Remove
                       </button>
@@ -156,35 +162,33 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
             </div>
           </div>
 
-          <div className="border-t border-zinc-100 dark:border-zinc-850 pt-4 space-y-4 bg-white dark:bg-zinc-950">
-            <div>
-              <label className="block text-xs font-bold text-zinc-400 uppercase tracking-widest">
+          <div className="border-t border-stone-100 dark:border-zinc-900/50 pt-6 space-y-6 bg-white dark:bg-zinc-950">
+            <div className="space-y-2">
+              <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
                 Promo Code
               </label>
-              <div className="mt-1.5 flex gap-2">
+              <div className="flex gap-2.5">
                 <input
                   type="text"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="block w-full rounded-xl border border-zinc-300 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-zinc-955 dark:text-zinc-50"
-                  placeholder="Enter coupon code"
+                  className="block w-full rounded-xl border border-stone-200 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50 font-mono"
+                  placeholder="Enter code"
                 />
                 <button
                   onClick={() => setCouponCode(couponInput || null)}
-                  className="rounded-xl bg-zinc-950 px-4 py-2 text-xs font-bold text-white dark:bg-zinc-50 dark:text-zinc-950"
+                  className="rounded-xl bg-stone-950 px-5 py-3 text-xs font-semibold text-white dark:bg-zinc-50 dark:text-zinc-950"
                 >
                   Apply
                 </button>
               </div>
-              {couponError && (
-                <p className="mt-1 text-[10px] text-red-500 font-semibold">{couponError}</p>
-              )}
+              {couponError && <p className="text-[10px] text-rose-500 font-bold">{couponError}</p>}
             </div>
 
-            <div className="space-y-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="space-y-2.5 text-xs text-stone-500 dark:text-zinc-400 border-t border-b border-stone-100 dark:border-zinc-900/50 py-4">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                <span className="font-semibold text-stone-900 dark:text-zinc-50">
                   {formatCurrency(parseFloat(totals.subtotal))}
                 </span>
               </div>
@@ -196,19 +200,19 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
               </div>
               <div className="flex justify-between">
                 <span>Tax Estimate</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                <span className="font-semibold text-stone-900 dark:text-zinc-50">
                   {formatCurrency(parseFloat(totals.taxAmount))}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Shipping</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                <span>Shipping Logistics</span>
+                <span className="font-semibold text-stone-900 dark:text-zinc-50">
                   {formatCurrency(parseFloat(totals.shippingAmount))}
                 </span>
               </div>
-              <div className="flex justify-between border-t border-zinc-100 dark:border-zinc-850 pt-3 text-sm font-extrabold text-zinc-950 dark:text-zinc-50">
-                <span>Total</span>
-                <span>{formatCurrency(parseFloat(totals.total))}</span>
+              <div className="flex justify-between border-t border-stone-100 dark:border-zinc-900/50 pt-3.5 text-sm font-extrabold text-stone-950 dark:text-zinc-50">
+                <span>Grand Total</span>
+                <span className="font-mono">{formatCurrency(parseFloat(totals.total))}</span>
               </div>
             </div>
 
@@ -216,16 +220,16 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
               <Link
                 href={`/${domain}/checkout`}
                 onClick={onClose}
-                className="block w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white shadow-lg transition-all duration-300 hover:bg-zinc-800 hover:scale-[1.005] active:scale-[0.99] dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+                className="block w-full rounded-full bg-stone-950 py-4 text-center text-xs font-bold text-white shadow-xl hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
               >
-                Checkout Now
+                Proceed to Checkout
               </Link>
             ) : (
               <button
                 disabled
-                className="w-full rounded-full bg-zinc-950 py-3.5 text-center text-xs font-bold text-white disabled:opacity-50 transition-all dark:bg-zinc-50 dark:text-zinc-950"
+                className="w-full rounded-full bg-stone-950 py-4 text-center text-xs font-bold text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950"
               >
-                Checkout Now
+                Proceed to Checkout
               </button>
             )}
           </div>
