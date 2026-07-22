@@ -55,7 +55,7 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
 
       await fetch(data.uploadUrl, {
         method: "PUT",
-        headers: { "Content-Type": optimizedFile.type },
+        headers: { "Content-Type": "optimizedFile.type" },
         body: optimizedFile,
       });
 
@@ -73,10 +73,10 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={() => fileInputRef.current?.click()}
-      className={`flex min-h-[150px] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-6 text-center transition-colors ${
+      className={`flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-all duration-300 ${
         isDragging
-          ? "border-zinc-500 bg-zinc-100 dark:border-zinc-400 dark:bg-zinc-900"
-          : "border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+          ? "border-stone-950 bg-stone-50 dark:border-zinc-300 dark:bg-zinc-900"
+          : "border-stone-200 bg-stone-50/50 hover:bg-stone-50 dark:border-zinc-800 dark:hover:bg-zinc-900/50"
       }`}
     >
       <input
@@ -86,9 +86,14 @@ export function FileUpload({ onUploadSuccess }: FileUploadProps) {
         className="hidden"
         accept="image/*"
       />
-      <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-        {isUploading ? "Uploading file..." : "Drag and drop or click to upload asset"}
-      </span>
+      <div className="space-y-1">
+        <span className="text-xs font-black uppercase tracking-widest text-stone-900 dark:text-zinc-50 block">
+          {isUploading ? "Uploading payload..." : "Transfer Asset"}
+        </span>
+        <span className="text-[10px] font-semibold text-stone-400 dark:text-zinc-500 block leading-normal">
+          Drag &amp; drop reference or click coordinates to browse file system
+        </span>
+      </div>
     </div>
   );
 }

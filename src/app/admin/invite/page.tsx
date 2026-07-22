@@ -54,19 +54,21 @@ function AcceptInviteContent() {
 
   if (!token) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black px-4">
-        <div className="text-center text-sm text-zinc-500">No invitation token provided.</div>
+      <div className="flex min-h-screen items-center justify-center bg-stone-50 dark:bg-black px-6">
+        <div className="text-center text-xs font-black uppercase tracking-widest text-stone-400">
+          No invitation token mapped
+        </div>
       </div>
     );
   }
 
   if (success) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black px-4">
-        <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 text-center space-y-4">
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Welcome Aboard!</h2>
-          <p className="text-xs text-zinc-500">
-            Your account was successfully registered. Redirecting to login portal...
+      <div className="flex min-h-screen items-center justify-center bg-stone-50 dark:bg-black px-6">
+        <div className="w-full max-w-md rounded-3xl border border-stone-200/50 bg-white p-8 text-center space-y-4">
+          <h2 className="text-2xl font-black tracking-tight text-stone-900">Welcome Aboard</h2>
+          <p className="text-xs text-stone-400 font-semibold leading-relaxed">
+            Your staff account has been successfully configured. Redirecting to login...
           </p>
         </div>
       </div>
@@ -74,43 +76,43 @@ function AcceptInviteContent() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black px-4">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 space-y-6">
-        <div className="text-center">
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Invitation Acceptance
+    <div className="flex min-h-screen items-center justify-center bg-stone-50 dark:bg-black px-6">
+      <div className="w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 space-y-8">
+        <div className="text-center space-y-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+            Console Invitation
           </span>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Complete Your Registration
+          <h2 className="text-2xl font-black tracking-tight text-stone-900 dark:text-zinc-50">
+            Complete Registration
           </h2>
           {name && (
-            <p className="mt-1 text-xs text-zinc-500">
-              Hi {name}, choose a password to join your organization workspace.
+            <p className="text-xs text-stone-400 font-semibold leading-relaxed">
+              Hello {name}, establish a secure password to activate your access.
             </p>
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="rounded bg-red-50 p-3 text-xs text-red-600 dark:bg-red-950/20 dark:text-red-400">
+            <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-4 text-xs font-bold text-rose-700">
               {error}
             </div>
           )}
 
-          <div>
-            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
               Email Address
             </label>
             <input
               type="email"
               disabled
               value={email}
-              className="mt-1 block w-full rounded-md border border-zinc-200 bg-zinc-100 px-3 py-2 text-sm text-zinc-500 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-900"
+              className="block w-full rounded-xl border border-stone-200 bg-stone-100 px-4 py-3 text-xs text-stone-400 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-900/50"
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
               Secure Password
             </label>
             <input
@@ -118,12 +120,12 @@ function AcceptInviteContent() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
               Confirm Password
             </label>
             <input
@@ -131,16 +133,16 @@ function AcceptInviteContent() {
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
             />
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-md bg-zinc-950 py-2.5 text-center text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+            className="w-full rounded-full bg-stone-950 py-3.5 text-center text-xs font-bold text-white hover:bg-stone-850 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950"
           >
-            {isPending ? "Configuring Account..." : "Accept Invitation"}
+            {isPending ? "Configuring Access..." : "Accept Invitation"}
           </button>
         </form>
       </div>
@@ -152,8 +154,10 @@ export default function AcceptInvitePage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black px-4">
-          <div className="text-center text-sm text-zinc-500">Loading invitation...</div>
+        <div className="flex min-h-screen items-center justify-center bg-stone-50 dark:bg-black px-6">
+          <div className="text-center text-xs font-black uppercase tracking-widest text-stone-400 animate-pulse">
+            Resolving invitation metadata...
+          </div>
         </div>
       }
     >

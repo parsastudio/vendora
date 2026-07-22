@@ -2,23 +2,24 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center bg-zinc-50 px-6 py-24 text-center dark:bg-black">
-      <div className="max-w-md">
-        <span className="text-sm font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
-          404 Page Not Found
+    <div className="flex flex-1 flex-col items-center justify-center bg-stone-50 px-6 py-32 text-center dark:bg-black min-h-screen">
+      <div className="max-w-md space-y-6">
+        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-stone-400">
+          Error Index 404
         </span>
-        <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-4xl font-black tracking-tight text-stone-950 dark:text-zinc-50 sm:text-5xl">
           Lost in Space
         </h1>
-        <p className="mt-4 text-base text-zinc-600 dark:text-zinc-400">
-          The resource or storefront domain you are looking for does not exist or has been moved.
+        <p className="text-xs text-stone-450 dark:text-zinc-500 leading-relaxed font-semibold max-w-sm mx-auto">
+          The requested storefront subdirectory or system path does not exist or has been relocated
+          under a different tenant domain.
         </p>
-        <div className="mt-8">
+        <div className="pt-4">
           <Link
             href="/"
-            className="rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-medium text-zinc-50 hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+            className="rounded-full bg-stone-950 px-8 py-3.5 text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955"
           >
-            Go Home
+            Go Back Home
           </Link>
         </div>
       </div>

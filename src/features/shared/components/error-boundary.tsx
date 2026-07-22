@@ -32,18 +32,19 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
       return (
-        <div className="flex min-h-[200px] w-full flex-col items-center justify-center rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-950/40 dark:bg-red-950/10">
-          <h3 className="text-sm font-semibold text-red-900 dark:text-red-400">
-            Something went wrong
+        <div className="flex min-h-[220px] w-full flex-col items-center justify-center rounded-3xl border border-rose-200 bg-rose-500/[0.02] p-8 text-center dark:border-rose-950/40 dark:bg-rose-950/[0.04]">
+          <h3 className="text-sm font-black uppercase tracking-widest text-rose-700 dark:text-rose-400">
+            Component Failure
           </h3>
-          <p className="mt-1 text-xs text-red-700 dark:text-red-500">
-            An unexpected error occurred in this section of the page.
+          <p className="mt-2 text-xs text-rose-500/80 font-medium max-w-sm leading-relaxed">
+            An unexpected error occurred in this segment of the platform. The workspace remains
+            active.
           </p>
           <button
             onClick={() => this.setState({ hasError: false, error: null })}
-            className="mt-4 rounded-md bg-red-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-500"
+            className="mt-6 rounded-full bg-rose-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-rose-700 shadow-md"
           >
-            Try again
+            Restart Context
           </button>
         </div>
       );
