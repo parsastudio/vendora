@@ -9,7 +9,12 @@ export async function compressAndOptimizeImage(
     reader.readAsDataURL(file);
     reader.onload = (event) => {
       const img = new Image();
-      img.src = event.target?.result as string;
+      const result = event.target?.result;
+      if (typeof result !== "string") {
+        reject(new Error("File result format invalid"));
+        return;
+      }
+      img.src = result;
       img.onload = () => {
         const canvas = document.createElement("canvas");
         let width = img.width;
