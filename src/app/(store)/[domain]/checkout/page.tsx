@@ -36,7 +36,7 @@ export default async function StorefrontCheckoutPage({ params }: CheckoutPagePro
           <span>/</span>
           <span className="text-zinc-900 dark:text-zinc-50 font-semibold">Checkout</span>
         </nav>
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-955 dark:text-zinc-50">
           Secure Checkout
         </h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">

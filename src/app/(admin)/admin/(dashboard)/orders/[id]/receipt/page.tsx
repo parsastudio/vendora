@@ -47,7 +47,7 @@ export default async function AdminOrderReceiptPage({ params }: ReceiptPageProps
     .where(eq(orderItems.orderId, order.id));
 
   return (
-    <div className="min-h-screen bg-white p-8 text-zinc-950 font-sans antialiased">
+    <div className="min-h-screen bg-white p-8 text-zinc-955 font-sans antialiased">
       <div className="max-w-2xl mx-auto space-y-8 border border-zinc-200 p-8 rounded-lg shadow-sm">
         <div className="flex justify-between items-start border-b pb-6">
           <div>

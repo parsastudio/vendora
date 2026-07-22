@@ -69,7 +69,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 className="h-full w-full object-cover transition-all duration-500 hover:scale-105"
               />
             ) : (
-              <div className="flex h-[500px] w-full items-center justify-center text-zinc-400 dark:text-zinc-500">
+              <div className="flex h-[500px] w-full items-center justify-center text-zinc-400 dark:text-zinc-505">
                 Premium Catalog Asset
               </div>
             )}
@@ -97,7 +97,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </nav>
 
             <div className="space-y-3">
-              <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50">
+              <h1 className="text-4xl font-extrabold tracking-tight text-zinc-955 dark:text-zinc-50">
                 {product.name}
               </h1>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
