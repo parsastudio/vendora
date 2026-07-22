@@ -103,7 +103,7 @@ export function InviteStaffDialog({ roles }: InviteStaffDialogProps) {
                 <select
                   value={roleId}
                   onChange={(e) => setRoleId(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-955 dark:text-zinc-50"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>

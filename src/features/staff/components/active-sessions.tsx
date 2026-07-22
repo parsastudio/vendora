@@ -62,7 +62,7 @@ export function ActiveSessionsList({ initialSessions }: ActiveSessionsListProps)
                   <td className="px-4 py-2.5 font-medium text-zinc-950 dark:text-zinc-50 max-w-xs truncate">
                     {s.userAgent}
                   </td>
-                  <td className="px-4 py-2.5 font-mono text-zinc-500">{s.ip}</td>
+                  <td className="px-4 py-2.5 font-mono text-zinc-505">{s.ip}</td>
                   <td className="px-4 py-2.5 text-zinc-400">{formatDateTime(s.createdAt)}</td>
                   <td className="px-4 py-2.5 text-right">
                     <button

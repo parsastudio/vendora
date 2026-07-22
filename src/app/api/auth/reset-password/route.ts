@@ -14,6 +14,7 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
+
     const userId = await redis.get(`reset_token:${token}`);
     if (!userId) {
       return NextResponse.json(
@@ -21,15 +22,20 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
     await db
       .update(users)
       .set({ passwordHash: hashedPassword, updatedAt: new Date() })
       .where(eq(users.id, userId));
+
     await redis.del(`reset_token:${token}`);
+
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
   }
 }

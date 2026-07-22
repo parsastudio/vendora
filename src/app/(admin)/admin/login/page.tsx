@@ -146,7 +146,7 @@ export default function AdminLoginPage() {
                   type="button"
                   onClick={handleDemoLogin}
                   disabled={isPending}
-                  className="flex w-full justify-center rounded-md border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 focus:outline-none disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 cursor-pointer"
+                  className="flex w-full justify-center rounded-md border border-zinc-300 bg-white px-4 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 focus:outline-none disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-880 cursor-pointer"
                 >
                   {isPending ? "Connecting Sandbox..." : "Explore Demo Dashboard"}
                 </button>

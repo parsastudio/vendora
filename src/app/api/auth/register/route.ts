@@ -14,9 +14,26 @@ import { orders, orderItems, transactions, shippingRates } from "@/lib/db/schema
 import { generateDemoCustomers, generateDemoData } from "@/lib/db/demo-generator";
 import { hashPassword } from "@/features/auth/lib/auth-utils";
 import { randomUUID } from "crypto";
+import { rateLimit } from "@/features/shared/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || "127.0.0.1";
+    const limiter = await rateLimit(`rate_limit:register:${ip}`, 3, 86400);
+
+    if (!limiter.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "RATE_LIMITED",
+            message: "Onboarding quota exceeded. Max 3 registries per day.",
+          },
+        },
+        { status: 429 },
+      );
+    }
+
     const body = await request.json();
     const { tenantName, subdomain, adminName, adminEmail, adminPassword } = body;
 
@@ -211,7 +228,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, data: { tenantId, userId } });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
       { success: false, error: { code: "SERVER_ERROR", message: "Onboarding transaction failed" } },
