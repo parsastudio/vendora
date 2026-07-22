@@ -1,49 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fcfcfd;
-  --foreground: #09090b;
+  --background: #fafaf9;
+  --foreground: #0c0a09;
   --card: #ffffff;
-  --card-foreground: #09090b;
+  --card-foreground: #0c0a09;
   --popover: #ffffff;
-  --popover-foreground: #09090b;
-  --primary: #121214;
-  --primary-foreground: #f8fafc;
-  --secondary: #f4f4f7;
-  --secondary-foreground: #121214;
-  --muted: #f8f8fa;
-  --muted-foreground: #6b7280;
-  --accent: #f4f4f7;
-  --accent-foreground: #121214;
+  --popover-foreground: #0c0a09;
+  --primary: #1c1917;
+  --primary-foreground: #f7f6f5;
+  --secondary: #f5f5f4;
+  --secondary-foreground: #1c1917;
+  --muted: #f5f5f4;
+  --muted-foreground: #78716c;
+  --accent: #f5f5f4;
+  --accent-foreground: #1c1917;
   --destructive: #dc2626;
-  --destructive-foreground: #f8fafc;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #121214;
-  --radius: 0.75rem;
+  --destructive-foreground: #fef2f2;
+  --border: #e7e5e4;
+  --input: #e7e5e4;
+  --ring: #1c1917;
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #09090b;
-    --foreground: #f8fafc;
+    --foreground: #f4f4f5;
     --card: #121214;
-    --card-foreground: #f8fafc;
+    --card-foreground: #f4f4f5;
     --popover: #121214;
-    --popover-foreground: #f8fafc;
-    --primary: #f8fafc;
+    --popover-foreground: #f4f4f5;
+    --primary: #f4f4f5;
     --primary-foreground: #09090b;
-    --secondary: #1a1a1e;
-    --secondary-foreground: #f8fafc;
-    --muted: #161619;
-    --muted-foreground: #9ca3af;
-    --accent: #1a1a1e;
-    --accent-foreground: #f8fafc;
+    --secondary: #1c1c1e;
+    --secondary-foreground: #f4f4f5;
+    --muted: #161618;
+    --muted-foreground: #a1a1aa;
+    --accent: #1c1c1e;
+    --accent-foreground: #f4f4f5;
     --destructive: #ef4444;
-    --destructive-foreground: #fafafa;
+    --destructive-foreground: #fef2f2;
     --border: #222227;
     --input: #222227;
-    --ring: #a1a1aa;
+    --ring: #71717a;
   }
 }
 
@@ -68,31 +68,28 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 3px);
-  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
 button,
-a,
-select,
-input[type="button"],
-input[type="submit"],
-summary,
-[role="button"] {
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-a:hover {
-  opacity: 0.85;
+a {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input:focus,
@@ -100,4 +97,5 @@ select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--ring);
+  box-shadow: 0 0 0 1px var(--ring);
 }

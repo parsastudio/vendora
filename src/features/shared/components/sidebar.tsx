@@ -182,22 +182,22 @@ export function AdminSidebar() {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-zinc-200/60 bg-white transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] dark:border-zinc-800/40 dark:bg-zinc-950 ${
+      className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-stone-200/50 bg-white transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] dark:border-zinc-800/40 dark:bg-zinc-950 ${
         isSidebarOpen ? "w-64" : "w-16"
       }`}
     >
-      <div className="flex h-16 items-center justify-between px-4 border-b border-zinc-200/50 dark:border-zinc-850/40">
+      <div className="flex h-20 items-center justify-between px-4 border-b border-stone-200/30 dark:border-zinc-900/30">
         {isSidebarOpen && (
-          <span className="text-xs font-black tracking-widest text-zinc-950 dark:text-zinc-50 uppercase pl-2">
-            VENDORA CORE
+          <span className="text-[10px] font-black tracking-[0.2em] text-stone-950 dark:text-zinc-50 uppercase pl-2">
+            VENDORA
           </span>
         )}
         <button
           onClick={toggleSidebar}
-          className="rounded-lg p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 mx-auto transition-colors"
+          className="rounded-xl p-2 hover:bg-stone-50 dark:hover:bg-zinc-900 mx-auto transition-colors"
         >
           <svg
-            className="h-4 w-4 text-zinc-600 dark:text-zinc-400"
+            className="h-4 w-4 text-stone-600 dark:text-zinc-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -211,22 +211,20 @@ export function AdminSidebar() {
           </svg>
         </button>
       </div>
-      <nav className="flex-1 space-y-1.5 px-2.5 py-5 overflow-y-auto">
+      <nav className="flex-1 space-y-1 px-3 py-6 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3.5 py-3 text-xs font-bold transition-all duration-300 ${
+              className={`flex items-center gap-3.5 rounded-xl px-3.5 py-3 text-xs font-bold ${
                 isActive
-                  ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950 shadow-sm"
-                  : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
+                  ? "bg-stone-950 text-white dark:bg-zinc-50 dark:text-zinc-950 shadow-sm"
+                  : "text-stone-500 hover:bg-stone-50 hover:text-stone-950 dark:text-zinc-400 dark:hover:bg-zinc-900/50 dark:hover:text-zinc-50"
               }`}
             >
-              <span className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                {item.icon}
-              </span>
+              <span className="flex-shrink-0">{item.icon}</span>
               {isSidebarOpen && <span className="tracking-wide">{item.name}</span>}
             </Link>
           );

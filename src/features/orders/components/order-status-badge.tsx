@@ -10,20 +10,20 @@ export function OrderStatusBadge({ type, value }: OrderStatusBadgeProps) {
 
   const styles: Record<string, string> = {
     pending:
-      "bg-amber-50/50 text-amber-700 border-amber-200/60 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/40",
+      "bg-amber-500/[0.06] text-amber-700 border-amber-500/20 dark:bg-amber-500/[0.1] dark:text-amber-400",
     processing:
-      "bg-blue-50/50 text-blue-700 border-blue-200/60 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900/40",
+      "bg-sky-500/[0.06] text-sky-700 border-sky-500/20 dark:bg-sky-500/[0.1] dark:text-sky-400",
     shipped:
-      "bg-indigo-50/50 text-indigo-700 border-indigo-200/60 dark:bg-indigo-950/20 dark:text-indigo-400 dark:border-indigo-900/40",
+      "bg-violet-500/[0.06] text-violet-700 border-violet-500/20 dark:bg-violet-500/[0.1] dark:text-violet-400",
     delivered:
-      "bg-emerald-50/50 text-emerald-700 border-emerald-200/60 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/40",
+      "bg-emerald-500/[0.06] text-emerald-700 border-emerald-500/20 dark:bg-emerald-500/[0.1] dark:text-emerald-400",
     cancelled:
-      "bg-rose-50/50 text-rose-700 border-rose-200/60 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/40",
+      "bg-rose-500/[0.06] text-rose-700 border-rose-500/20 dark:bg-rose-500/[0.1] dark:text-rose-400",
     unpaid:
-      "bg-rose-50/50 text-rose-700 border-rose-200/60 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/40",
-    paid: "bg-teal-50/50 text-teal-700 border-teal-200/60 dark:bg-teal-950/20 dark:text-teal-400 dark:border-teal-900/40",
+      "bg-rose-500/[0.06] text-rose-700 border-rose-500/20 dark:bg-rose-500/[0.1] dark:text-rose-400",
+    paid: "bg-teal-500/[0.06] text-teal-700 border-teal-500/20 dark:bg-teal-500/[0.1] dark:text-teal-400",
     refunded:
-      "bg-zinc-100/50 text-zinc-700 border-zinc-200 dark:bg-zinc-800/40 dark:text-zinc-300 dark:border-zinc-700",
+      "bg-stone-500/[0.06] text-stone-700 border-stone-500/20 dark:bg-zinc-500/[0.1] dark:text-zinc-400",
   };
 
   const formattedLabel: Record<string, string> = {
@@ -43,7 +43,7 @@ export function OrderStatusBadge({ type, value }: OrderStatusBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1 text-[9px] font-bold uppercase tracking-widest shadow-sm",
+        "inline-flex items-center rounded-full border px-3 py-1.5 text-[9px] font-black uppercase tracking-widest shadow-none",
         resolvedClass,
       )}
     >

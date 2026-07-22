@@ -18,7 +18,7 @@ export function AdminLayoutWrapper({ children, user }: AdminLayoutWrapperProps) 
   const isDemo = user.email === "demo@vendora.com";
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen bg-[#fafaf9] font-sans dark:bg-[#09090b]">
       <AdminSidebar />
       <div
         className={`flex flex-1 flex-col transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -26,21 +26,20 @@ export function AdminLayoutWrapper({ children, user }: AdminLayoutWrapperProps) 
         }`}
       >
         {isDemo && (
-          <div className="bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-center border-b border-zinc-200 flex items-center justify-center gap-2">
-            <span>🛡️ Demo Sandbox Mode:</span>
-            <span className="font-medium normal-case text-zinc-400 dark:text-zinc-505">
-              You are exploring as Guest Admin. Write actions are sandboxed to preserve shared demo
-              metrics.
+          <div className="bg-stone-950 text-white dark:bg-white dark:text-stone-950 px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.2em] text-center border-b border-stone-200/30 flex items-center justify-center gap-2">
+            <span>🛡️ Sandbox Instance:</span>
+            <span className="font-semibold normal-case tracking-normal text-stone-400 dark:text-zinc-500">
+              You are exploring as a Guest Admin. Structural mutations are sandboxed.
             </span>
           </div>
         )}
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-zinc-200/50 bg-white/80 backdrop-blur-md px-6 dark:border-zinc-800/40 dark:bg-black/80">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
-            Portal Management
+        <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-stone-200/40 bg-white/70 backdrop-blur-md px-8 dark:border-zinc-800/40 dark:bg-black/70">
+          <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 dark:text-zinc-500">
+            Console Panel
           </span>
           <UserNav user={user} />
         </header>
-        <main className="flex-1 p-6 sm:p-8 lg:p-10">{children}</main>
+        <main className="flex-1 p-8 sm:p-10 lg:p-12 max-w-7xl w-full mx-auto">{children}</main>
       </div>
     </div>
   );

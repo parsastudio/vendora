@@ -62,85 +62,91 @@ export default async function StorefrontPage({ params }: StorefrontProps) {
   });
 
   return (
-    <div className="space-y-20 pb-24">
-      <div className="relative overflow-hidden bg-zinc-50 py-24 dark:bg-zinc-950/40 border-b border-zinc-200/50 dark:border-zinc-900/30">
-        <div className="mx-auto max-w-7xl px-6 text-center sm:px-8 lg:px-12 space-y-6">
-          <span className="inline-flex items-center rounded-full bg-zinc-900 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white dark:bg-white dark:text-zinc-950">
-            Exclusive Collection
+    <div className="space-y-24 pb-32">
+      <div className="relative overflow-hidden bg-stone-50/50 py-32 dark:bg-zinc-950/20 border-b border-stone-200/30 dark:border-zinc-900/30">
+        <div className="mx-auto max-w-5xl px-6 text-center space-y-6">
+          <span className="inline-flex items-center rounded-full bg-stone-950 px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-white dark:bg-white dark:text-zinc-950">
+            Selected Collection
           </span>
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-6xl">
-            The Art of Refined Essentials
+          <h1 className="text-4xl font-black tracking-tight text-stone-950 dark:text-zinc-50 sm:text-6xl max-w-3xl mx-auto leading-none">
+            The Art of Fine Living
           </h1>
-          <p className="mx-auto max-w-xl text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-            Discover a curated selection of premium catalog items crafted specifically with highest
-            quality materials for {tenant.name}.
+          <p className="mx-auto max-w-lg text-sm text-stone-500 dark:text-zinc-400 leading-relaxed font-medium">
+            Discover carefully curated and beautifully constructed catalog items engineered with
+            outstanding craftsmanship for {tenant.name}.
           </p>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        <div className="flex items-center justify-between border-b border-zinc-200/50 pb-5 dark:border-zinc-900/30">
-          <h2 className="text-lg font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-            Featured Catalog
+      <div className="mx-auto max-w-7xl px-6 sm:px-8">
+        <div className="flex items-center justify-between border-b border-stone-200/50 pb-6 dark:border-zinc-900/30">
+          <h2 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100">
+            Featured Catalogue
           </h2>
-          <span className="text-xs text-zinc-400 font-medium">
-            Showing {productsWithPricing.length} items
+          <span className="text-xs text-stone-400 dark:text-zinc-500 font-semibold font-mono">
+            {productsWithPricing.length} items
           </span>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-y-12 gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 gap-y-16 gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
           {productsWithPricing.map((product) => (
             <div
               key={product.id}
-              className="group relative flex flex-col rounded-2xl border border-zinc-200/60 bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md hover:border-zinc-300 dark:border-zinc-800/60 dark:bg-zinc-950"
+              className="group flex flex-col rounded-3xl border border-stone-200/40 bg-white p-4 hover:border-stone-300 dark:border-zinc-900 dark:bg-zinc-950 transition-colors"
             >
-              <div className="aspect-square w-full overflow-hidden rounded-xl bg-zinc-50 dark:bg-zinc-900/40">
+              <div className="aspect-square w-full overflow-hidden rounded-2xl bg-stone-50 dark:bg-zinc-900/30">
                 {product.imageUrl ? (
                   <Image
                     src={product.imageUrl}
                     alt={product.name}
-                    width={350}
-                    height={350}
+                    width={400}
+                    height={400}
                     unoptimized
-                    className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-zinc-50 text-zinc-400 dark:bg-zinc-900/30">
-                    No Image Available
+                  <div className="flex h-full w-full items-center justify-center bg-stone-50 text-[10px] uppercase tracking-widest font-black text-stone-400 dark:bg-zinc-900/10">
+                    No Asset Available
                   </div>
                 )}
               </div>
 
-              <div className="mt-6 flex flex-1 flex-col justify-between space-y-4">
-                <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50 group-hover:text-zinc-800 dark:group-hover:text-zinc-200">
+              <div className="mt-6 flex flex-1 flex-col justify-between space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-sm font-black text-stone-950 dark:text-zinc-50 tracking-tight">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-zinc-400 line-clamp-2">{product.description}</p>
+                  <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium line-clamp-2 leading-relaxed">
+                    {product.description}
+                  </p>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-baseline space-x-2">
+                  <div className="flex items-baseline space-x-1.5">
                     {product.startingPrice !== null ? (
                       <>
-                        <span className="text-xs text-zinc-400 font-medium">From</span>
-                        <span className="text-sm font-extrabold text-zinc-950 dark:text-zinc-50">
+                        <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">
+                          From
+                        </span>
+                        <span className="text-sm font-extrabold text-stone-950 dark:text-zinc-50 font-mono">
                           {formatCurrency(product.startingPrice)}
                         </span>
                         {product.compareAtPrice && (
-                          <span className="text-xs text-zinc-400 line-through">
+                          <span className="text-xs text-stone-400 line-through font-mono ml-2">
                             {formatCurrency(product.compareAtPrice)}
                           </span>
                         )}
                       </>
                     ) : (
-                      <span className="text-xs text-red-500 font-medium">Out of Stock</span>
+                      <span className="text-[10px] text-red-500 font-black uppercase tracking-widest">
+                        Out of Stock
+                      </span>
                     )}
                   </div>
 
                   <Link
                     href={`/${tenantDomain}/product/${product.slug}`}
-                    className="block w-full rounded-full bg-zinc-950 py-2.5 text-center text-xs font-bold text-white shadow-sm transition-all duration-300 hover:bg-zinc-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+                    className="block w-full rounded-full bg-stone-950 py-3 text-center text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
                   >
                     View Details
                   </Link>

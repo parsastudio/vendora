@@ -6,16 +6,18 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Vendora Multi-Tenant Platform",
-  description: "High performance headless commerce platform.",
+  title: "Vendora Commerce Engine",
+  description: "Next-generation multi-tenant headless retail architecture.",
 };
 
 export default function RootLayout({
@@ -24,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-950 dark:bg-black dark:text-zinc-50">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth`}>
+      <body className="min-h-full flex flex-col bg-stone-50 text-stone-900 selection:bg-stone-900 selection:text-white dark:bg-zinc-950 dark:text-zinc-50 font-sans antialiased">
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

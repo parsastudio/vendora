@@ -2,100 +2,103 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 bg-zinc-50 dark:bg-black">
-      <header className="border-b border-zinc-200/50 bg-white/80 backdrop-blur-md dark:border-zinc-900/50 dark:bg-black/80 sticky top-0 z-50">
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <span className="text-xs font-black tracking-widest text-zinc-950 dark:text-zinc-50 uppercase">
-            VENDORA ENGINE
+    <div className="flex flex-col min-h-screen bg-[#fafaf9] dark:bg-[#09090b]">
+      <header className="border-b border-stone-200/40 bg-white/70 backdrop-blur-lg dark:border-zinc-800/40 dark:bg-black/70 sticky top-0 z-50">
+        <div className="mx-auto max-w-7xl px-6 h-20 flex items-center justify-between">
+          <span className="text-xs font-black tracking-[0.25em] text-stone-950 dark:text-zinc-50 uppercase">
+            VENDORA
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8">
             <Link
               href="/admin/login"
-              className="text-xs font-bold text-zinc-500 hover:text-zinc-955 dark:text-zinc-400 dark:hover:text-zinc-50"
+              className="text-xs font-semibold text-stone-500 hover:text-stone-950 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors"
             >
-              Sign In
+              Console Login
             </Link>
             <Link
               href="/admin/register"
-              className="rounded-full bg-zinc-950 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="rounded-full bg-stone-950 px-6 py-2.5 text-xs font-semibold text-white hover:bg-stone-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 shadow-sm"
             >
-              Deploy Storefront
+              Deploy Instance
             </Link>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center sm:py-32">
-        <div className="max-w-3xl space-y-8">
-          <span className="inline-flex items-center rounded-full bg-zinc-900/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-600 dark:bg-zinc-50/10 dark:text-zinc-400">
-            Next-Gen Headless Engine
-          </span>
-          <h1 className="text-5xl font-black tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-7xl leading-none">
-            The Multi-Tenant Commerce Architecture
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-24 sm:py-32">
+        <div className="max-w-4xl text-center space-y-12">
+          <div className="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-4 py-1.5 dark:border-zinc-800 dark:bg-zinc-900/50">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-stone-600 dark:text-zinc-400">
+              V16 Enterprise Core
+            </span>
+          </div>
+
+          <h1 className="text-5xl font-extrabold tracking-tight text-stone-950 dark:text-zinc-50 sm:text-7xl leading-[1.05] max-w-3xl mx-auto">
+            The multi-tenant headless engine.
           </h1>
-          <p className="mx-auto max-w-xl text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
-            Orchestrate stunning storefronts, real-time inventory allocation, and automated event
-            pipelines under a single unified database core.
+
+          <p className="mx-auto max-w-xl text-sm sm:text-base text-stone-500 dark:text-zinc-400 leading-relaxed font-medium">
+            Architected with offline-first atomic stock allocations and visual automated webhook
+            pipelines under a unified PostgreSQL database.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href="/admin/register"
-              className="w-full sm:w-auto rounded-full bg-zinc-950 px-8 py-4 text-xs font-bold text-white shadow-lg transition-all hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="w-full sm:w-auto rounded-full bg-stone-950 px-8 py-4 text-xs font-bold text-white shadow-xl hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
             >
-              Create Your Merchant Instance
+              Create Merchant Account
             </Link>
             <Link
               href="/demo"
-              className="w-full sm:w-auto rounded-full bg-indigo-600 px-8 py-4 text-xs font-bold text-white shadow-md transition-all hover:bg-indigo-700 dark:bg-indigo-500 dark:text-zinc-955 dark:hover:bg-indigo-400"
+              className="w-full sm:w-auto rounded-full bg-stone-100 px-8 py-4 text-xs font-bold text-stone-900 hover:bg-stone-200 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
             >
-              Visit Demo Storefront
-            </Link>
-            <Link
-              href="/admin/login"
-              className="w-full sm:w-auto rounded-full border border-zinc-200 bg-white px-8 py-4 text-xs font-bold text-zinc-950 shadow-sm transition-all hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
-            >
-              Explore Demo Sandbox
+              Explore Sandbox Storefront
             </Link>
           </div>
         </div>
 
-        <section className="mx-auto max-w-7xl px-6 mt-32">
+        <section className="mx-auto max-w-7xl px-6 mt-36">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-2">
-              <span className="text-lg">⚡</span>
-              <h3 className="text-xs font-bold text-zinc-950 dark:text-zinc-50 uppercase tracking-wider">
+            <div className="rounded-3xl border border-stone-200/50 bg-white p-8 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-4 shadow-sm hover:border-stone-300 dark:hover:border-zinc-800 transition-colors">
+              <span className="text-xl">⚡</span>
+              <h3 className="text-xs font-bold text-stone-950 dark:text-zinc-50 uppercase tracking-widest">
                 Symphony Router
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Dynamic subdomain rewrites and subdirectory fallbacks for local-first testing.
+              <p className="text-xs text-stone-500 dark:text-zinc-400 leading-relaxed">
+                Clean isolated routing via subdomains or subdirectories with unified tenant context
+                resolving.
               </p>
             </div>
-            <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-2">
-              <span className="text-lg">🤖</span>
-              <h3 className="text-xs font-bold text-zinc-950 dark:text-zinc-50 uppercase tracking-wider">
-                Vendora Pipelines
+            <div className="rounded-3xl border border-stone-200/50 bg-white p-8 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-4 shadow-sm hover:border-stone-300 dark:hover:border-zinc-800 transition-colors">
+              <span className="text-xl">🤖</span>
+              <h3 className="text-xs font-bold text-stone-950 dark:text-zinc-50 uppercase tracking-widest">
+                Fluxio Automation
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Trigger custom outbound webhooks and visual flowcharts on transaction events.
+              <p className="text-xs text-stone-500 dark:text-zinc-400 leading-relaxed">
+                Visually model custom transactional event pipelines with cryptographic signature
+                authentication.
               </p>
             </div>
-            <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-2">
-              <span className="text-lg">📦</span>
-              <h3 className="text-xs font-bold text-zinc-950 dark:text-zinc-50 uppercase tracking-wider">
-                Atomic Allocation
+            <div className="rounded-3xl border border-stone-200/50 bg-white p-8 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-4 shadow-sm hover:border-stone-300 dark:hover:border-zinc-800 transition-colors">
+              <span className="text-xl">📦</span>
+              <h3 className="text-xs font-bold text-stone-950 dark:text-zinc-50 uppercase tracking-widest">
+                Atomic Stock
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Safe and race-condition free stock deduction across multiple global warehouse hubs.
+              <p className="text-xs text-stone-500 dark:text-zinc-400 leading-relaxed">
+                Prevent race conditions on flash sales with row-level database locking during
+                checkouts.
               </p>
             </div>
-            <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-2">
-              <span className="text-lg">🛡️</span>
-              <h3 className="text-xs font-bold text-zinc-950 dark:text-zinc-50 uppercase tracking-wider">
-                Account Security
+            <div className="rounded-3xl border border-stone-200/50 bg-white p-8 text-left dark:border-zinc-900 dark:bg-zinc-950 space-y-4 shadow-sm hover:border-stone-300 dark:hover:border-zinc-800 transition-colors">
+              <span className="text-xl">🛡️</span>
+              <h3 className="text-xs font-bold text-stone-950 dark:text-zinc-50 uppercase tracking-widest">
+                Hardened Security
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Enforce industry standard security settings with multi-factor TOTP authorization
-                keys.
+              <p className="text-xs text-stone-500 dark:text-zinc-400 leading-relaxed">
+                Protect administrator privileges with hardware-ready TOTP two-factor configuration
+                panels.
               </p>
             </div>
           </div>
