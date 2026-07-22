@@ -19,7 +19,7 @@ export function CouponPromoForm({ initialCouponCode, onApply, couponError }: Cou
   return (
     <div className="space-y-3">
       <form onSubmit={handleSubmit}>
-        <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+        <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
           Promo Code
         </label>
         <div className="mt-1.5 flex gap-2">
@@ -27,19 +27,17 @@ export function CouponPromoForm({ initialCouponCode, onApply, couponError }: Cou
             type="text"
             value={couponInput}
             onChange={(e) => setCouponInput(e.target.value)}
-            className="block w-full rounded-xl border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
-            placeholder="SUMMER15"
+            className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50"
+            placeholder="Enter code"
           />
           <button
             type="submit"
-            className="rounded-xl bg-zinc-950 px-4 py-1.5 text-xs font-bold text-white dark:bg-zinc-50 dark:text-zinc-950"
+            className="rounded-xl bg-stone-950 px-4 py-2 text-xs font-bold text-white dark:bg-zinc-50 dark:text-zinc-955"
           >
             Apply
           </button>
         </div>
-        {couponError && (
-          <p className="mt-1 text-[10px] text-red-500 font-semibold">{couponError}</p>
-        )}
+        {couponError && <p className="mt-1.5 text-[10px] text-rose-500 font-bold">{couponError}</p>}
       </form>
     </div>
   );
