@@ -17,7 +17,8 @@ export async function GET(request: Request) {
       .where(and(eq(products.tenantId, tenantId), eq(products.status, "active")));
 
     return NextResponse.json({ success: true, data: items });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

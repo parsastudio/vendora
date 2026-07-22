@@ -14,7 +14,8 @@ export async function GET(request: Request) {
     const items = await db.select().from(categories).where(eq(categories.tenantId, tenantId));
 
     return NextResponse.json({ success: true, data: items });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

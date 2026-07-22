@@ -27,7 +27,8 @@ export async function POST(request: Request) {
     await workflowEmitter.emitEvent(triggerEvent, session.user.tenantId, mockPayload);
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Workflow test emission failed" }, { status: 500 });
   }
 }

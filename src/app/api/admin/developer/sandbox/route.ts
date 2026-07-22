@@ -16,6 +16,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
+    if (
+      !path.startsWith("/") ||
+      path.startsWith("//") ||
+      path.toLowerCase().includes("http:") ||
+      path.toLowerCase().includes("https:")
+    ) {
+      return NextResponse.json({ error: "Invalid local path format" }, { status: 400 });
+    }
+
     const origin = new URL(request.url).origin;
     const res = await fetch(`${origin}${path}`, {
       headers: {
@@ -25,7 +34,8 @@ export async function POST(request: Request) {
 
     const data = (await res.json()) as Record<string, unknown>;
     return NextResponse.json({ status: res.status, data });
-  } catch {
+  } catch (error: unknown) {
+    console.error(error);
     return NextResponse.json({ error: "Sandbox execution failed" }, { status: 500 });
   }
 }

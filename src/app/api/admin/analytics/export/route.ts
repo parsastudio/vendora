@@ -5,6 +5,19 @@ import { db } from "@/lib/db";
 import { orders } from "@/lib/db/schema/orders";
 import { eq } from "drizzle-orm";
 
+function escapeCsvField(val: string): string {
+  let escaped = val.replace(/"/g, '""');
+  if (
+    escaped.startsWith("=") ||
+    escaped.startsWith("+") ||
+    escaped.startsWith("-") ||
+    escaped.startsWith("@")
+  ) {
+    escaped = `'${escaped}`;
+  }
+  return `"${escaped}"`;
+}
+
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -18,8 +31,17 @@ export async function GET() {
     "Order ID,Customer Name,Subtotal,Discount,Tax,Total,Order Status,Payment Status,Created Date\n";
 
   for (const o of orderList) {
-    const clientName = o.shippingAddress.name.replace(/"/g, '""');
-    csvContent += `"${o.id}","${clientName}",${o.subtotalAmount},${o.discountAmount},${o.taxAmount},${o.totalAmount},"${o.status}","${o.paymentStatus}","${o.createdAt.toISOString()}"\n`;
+    const escapedId = escapeCsvField(o.id);
+    const escapedName = escapeCsvField(o.shippingAddress.name);
+    const escapedSubtotal = escapeCsvField(o.subtotalAmount);
+    const escapedDiscount = escapeCsvField(o.discountAmount);
+    const escapedTax = escapeCsvField(o.taxAmount);
+    const escapedTotal = escapeCsvField(o.totalAmount);
+    const escapedStatus = escapeCsvField(o.status);
+    const escapedPayment = escapeCsvField(o.paymentStatus);
+    const escapedDate = escapeCsvField(o.createdAt.toISOString());
+
+    csvContent += `${escapedId},${escapedName},${escapedSubtotal},${escapedDiscount},${escapedTax},${escapedTotal},${escapedStatus},${escapedPayment},${escapedDate}\n`;
   }
 
   return new NextResponse(csvContent, {
