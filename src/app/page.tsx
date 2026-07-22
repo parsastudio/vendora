@@ -11,7 +11,7 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <Link
               href="/admin/login"
-              className="text-xs font-bold text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
+              className="text-xs font-bold text-zinc-500 hover:text-zinc-955 dark:text-zinc-400 dark:hover:text-zinc-50"
             >
               Sign In
             </Link>
@@ -46,7 +46,7 @@ export default function Home() {
             </Link>
             <Link
               href="/demo"
-              className="w-full sm:w-auto rounded-full bg-indigo-600 px-8 py-4 text-xs font-bold text-white shadow-md transition-all hover:bg-indigo-700 dark:bg-indigo-500 dark:text-zinc-950 dark:hover:bg-indigo-400"
+              className="w-full sm:w-auto rounded-full bg-indigo-600 px-8 py-4 text-xs font-bold text-white shadow-md transition-all hover:bg-indigo-700 dark:bg-indigo-500 dark:text-zinc-955 dark:hover:bg-indigo-400"
             >
               Visit Demo Storefront
             </Link>

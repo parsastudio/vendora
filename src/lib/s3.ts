@@ -26,7 +26,7 @@ export async function generatePresignedUrl(key: string, contentType: string): Pr
 
   try {
     return await getSignedUrl(s3Client, command, { expiresIn: 3600 });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error({ error, key }, "Failed to generate presigned S3 URL");
     throw new Error("Failed to sign upload request");
   }
