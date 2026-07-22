@@ -2,7 +2,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { apiKeys } from "@/lib/db/schema/api-keys";
 import { eq } from "drizzle-orm";
-import { createHash } from "crypto";
+import { createHash, timingSafeEqual } from "crypto";
 
 export async function validateApiKey(request: Request) {
   const authHeader = request.headers.get("authorization") || request.headers.get("x-api-key");
@@ -20,7 +20,12 @@ export async function validateApiKey(request: Request) {
 
   const apiKey = keys[0];
 
-  if (apiKey.keyHash !== hash) return null;
+  const hashBuffer = Buffer.from(hash, "hex");
+  const dbHashBuffer = Buffer.from(apiKey.keyHash, "hex");
+
+  if (hashBuffer.length !== dbHashBuffer.length || !timingSafeEqual(hashBuffer, dbHashBuffer)) {
+    return null;
+  }
 
   if (apiKey.expiresAt && new Date(apiKey.expiresAt) < new Date()) {
     return null;

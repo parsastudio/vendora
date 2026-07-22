@@ -32,8 +32,8 @@ class WorkflowEventEmitter extends EventEmitter {
       const bodyString = JSON.stringify({ event: triggerEvent, payload });
       const signature = createHmac("sha256", secret).update(bodyString).digest("hex");
 
-      for (const flow of activeFlows) {
-        for (const action of flow.actions) {
+      const webhookTasks = activeFlows.flatMap((flow) =>
+        flow.actions.map(async (action) => {
           if (action.type === "webhook") {
             try {
               const res = await fetch(action.config.url, {
@@ -72,8 +72,10 @@ class WorkflowEventEmitter extends EventEmitter {
               });
             }
           }
-        }
-      }
+        }),
+      );
+
+      await Promise.allSettled(webhookTasks);
     } catch {}
   }
 }

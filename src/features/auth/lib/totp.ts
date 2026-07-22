@@ -26,7 +26,14 @@ export function verifyTOTPToken(secretHex: string, token: string): boolean {
       (digest[offset + 3] & 0xff);
 
     const code = (binary % 1000000).toString().padStart(6, "0");
-    if (code === token) {
+
+    const codeBuffer = Buffer.from(code);
+    const tokenBuffer = Buffer.from(token);
+
+    if (
+      codeBuffer.length === tokenBuffer.length &&
+      crypto.timingSafeEqual(codeBuffer, tokenBuffer)
+    ) {
       return true;
     }
   }

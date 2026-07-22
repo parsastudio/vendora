@@ -5,7 +5,7 @@ import { allocateInventory } from "@/features/inventory/services/allocation";
 import { checkoutSchema } from "@/features/checkout/validation/checkout";
 import { calculateCartTotals } from "@/features/cart/utils/cart-math";
 import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
@@ -108,16 +108,9 @@ export async function POST(request: Request) {
       }
 
       if (couponId) {
-        const updatedCoupon = await tx
-          .select({ usageCount: discounts.usageCount })
-          .from(discounts)
-          .where(eq(discounts.id, couponId))
-          .limit(1);
-
-        const count = updatedCoupon[0]?.usageCount || 0;
         await tx
           .update(discounts)
-          .set({ usageCount: count + 1 })
+          .set({ usageCount: sql`${discounts.usageCount} + 1` })
           .where(eq(discounts.id, couponId));
       }
 
