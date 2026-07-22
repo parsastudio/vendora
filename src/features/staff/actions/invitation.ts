@@ -9,6 +9,7 @@ import { hashPassword } from "@/features/auth/lib/auth-utils";
 import crypto, { randomUUID } from "crypto";
 import { logger } from "@/lib/logger";
 import { withWriteProtection } from "@/features/shared/lib/write-protection";
+import { eq, and } from "drizzle-orm";
 
 export const createInvitation = withWriteProtection(async function (
   email: string,
@@ -63,11 +64,22 @@ export const acceptInvitation = withWriteProtection(async function (
     roleId: string;
     tenantId: string;
   };
+
   const hashedPassword = await hashPassword(password);
   const userId = `user-${randomUUID()}`;
 
   try {
     await db.transaction(async (tx) => {
+      const existingUser = await tx
+        .select()
+        .from(users)
+        .where(and(eq(users.email, email), eq(users.tenantId, tenantId)))
+        .limit(1);
+
+      if (existingUser.length > 0) {
+        throw new Error("A user already exists with this email address");
+      }
+
       await tx.insert(users).values({
         id: userId,
         tenantId,
@@ -83,7 +95,7 @@ export const acceptInvitation = withWriteProtection(async function (
     });
   } catch (error) {
     logger.error({ error, email }, "Database transaction failed during invitation acceptance");
-    throw new Error("Failed to process transaction");
+    throw new Error(error instanceof Error ? error.message : "Failed to process transaction");
   }
 
   try {

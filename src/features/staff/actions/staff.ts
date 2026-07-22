@@ -27,6 +27,16 @@ export const createStaffMember = withWriteProtection(async function (formData: {
   const userId = `user-${randomUUID()}`;
 
   await db.transaction(async (tx) => {
+    const existing = await tx
+      .select()
+      .from(users)
+      .where(and(eq(users.email, formData.email), eq(users.tenantId, tenantId)))
+      .limit(1);
+
+    if (existing.length > 0) {
+      throw new Error("A user with this email address already exists in your team");
+    }
+
     await tx.insert(users).values({
       id: userId,
       tenantId,
@@ -49,6 +59,10 @@ export const deleteStaffMember = withWriteProtection(async function (userId: str
   const session = await getServerSession(authOptions);
   if (!session || !session.user.permissions.includes("settings:write")) {
     throw new Error("Unauthorized");
+  }
+
+  if (userId === session.user.id) {
+    throw new Error("You cannot remove your own administrative account from the staff list");
   }
 
   const tenantId = session.user.tenantId;

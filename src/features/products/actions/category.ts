@@ -20,6 +20,19 @@ export const createCategory = withWriteProtection(async function (
   }
 
   const tenantId = session.user.tenantId;
+
+  if (parentId) {
+    const parentCheck = await db
+      .select()
+      .from(categories)
+      .where(and(eq(categories.id, parentId), eq(categories.tenantId, tenantId)))
+      .limit(1);
+
+    if (parentCheck.length === 0) {
+      throw new Error("The specified parent category does not exist");
+    }
+  }
+
   const slug = name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")

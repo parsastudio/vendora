@@ -32,17 +32,33 @@ export const createDiscount = withWriteProtection(async function (
   }
 
   const tenantId = session.user.tenantId;
+  const sanitizedCode = code
+    .toUpperCase()
+    .trim()
+    .replace(/[^A-Z0-9]/g, "");
 
-  await db.insert(discounts).values({
-    id: `disc-${randomUUID()}`,
-    tenantId,
-    code: code.toUpperCase().trim(),
-    type,
-    value: parsedValue.toFixed(2),
-    minPurchaseAmount: minPurchaseAmount ? parseFloat(minPurchaseAmount).toFixed(2) : null,
-    usageLimit,
-    usageCount: 0,
-  });
+  if (!sanitizedCode) {
+    throw new Error("Discount code must contain alphanumeric characters only");
+  }
+
+  try {
+    await db.insert(discounts).values({
+      id: `disc-${randomUUID()}`,
+      tenantId,
+      code: sanitizedCode,
+      type,
+      value: parsedValue.toFixed(2),
+      minPurchaseAmount: minPurchaseAmount ? parseFloat(minPurchaseAmount).toFixed(2) : null,
+      usageLimit,
+      usageCount: 0,
+    });
+  } catch (error: unknown) {
+    const errorString = error instanceof Error ? error.message : "";
+    if (errorString.includes("unique") || errorString.includes("duplicate")) {
+      throw new Error("This discount promo code is already registered in the system");
+    }
+    throw new Error("Failed to configure coupon settings");
+  }
 
   revalidatePath("/admin/discounts");
   return { success: true };

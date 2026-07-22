@@ -111,10 +111,10 @@ export async function triggerMockWebhook(url: string, triggerEvent: string) {
       status: res.status,
       statusText: res.statusText,
     };
-  } catch (err) {
+  } catch (error: unknown) {
     return {
       success: false,
-      error: err instanceof Error ? err.message : "Network error",
+      error: error instanceof Error ? error.message : "Network error",
     };
   }
 }

@@ -1,5 +1,3 @@
-"use server";
-
 import "server-only";
 import { redis } from "@/lib/redis";
 import { getServerSession } from "next-auth";
@@ -14,7 +12,15 @@ export async function getActiveSessions() {
 
   const userId = session.user.id;
   const pattern = `active_session:${userId}:*`;
-  const keys = await redis.keys(pattern);
+
+  let cursor = "0";
+  const keys: string[] = [];
+
+  do {
+    const [nextCursor, foundKeys] = await redis.scan(cursor, "MATCH", pattern, "COUNT", 100);
+    cursor = nextCursor;
+    keys.push(...foundKeys);
+  } while (cursor !== "0");
 
   const list = [];
   for (const key of keys) {
