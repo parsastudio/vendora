@@ -2,13 +2,13 @@ import { FlowBuilderClient } from "@/features/workflows/components/flow-builder-
 
 export default function CreateWorkflowPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Visual Flowchart Builder
+    <div className="space-y-12">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+          Workflows Canvas Builder
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Model responsive, real-time trigger pipelines on an interactive canvas.
+        <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+          Model automated transactional pipelines visually on an interactive coordinate grid.
         </p>
       </div>
       <FlowBuilderClient />

@@ -48,7 +48,7 @@ export function InviteStaffDialog({ roles }: InviteStaffDialogProps) {
           setInviteLink(null);
           setError(null);
         }}
-        className="rounded-md bg-zinc-950 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+        className="rounded-xl bg-stone-950 px-6 py-3 text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955"
       >
         Invite Teammate
       </button>
@@ -56,54 +56,58 @@ export function InviteStaffDialog({ roles }: InviteStaffDialogProps) {
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-stone-950/40 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
-          <div className="relative w-full max-w-md rounded-xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-950">
-            <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
+          <div className="relative w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
+            <h3 className="text-sm font-black uppercase tracking-widest text-stone-950 dark:text-zinc-50">
               Invite Staff Member
             </h3>
-            <p className="text-[10px] text-zinc-400">
-              Generate a secure registration token to invite team members.
+            <p className="text-[10px] text-stone-400 mt-1 font-semibold">
+              Generate a temporary registration link to provision access.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               {error && (
-                <div className="rounded bg-red-50 p-2 text-[10px] text-red-600 dark:bg-red-950/25">
+                <div className="rounded-2xl border border-rose-200 bg-rose-500/[0.04] p-3 text-[10px] font-bold text-rose-700">
                   {error}
                 </div>
               )}
 
-              <div>
-                <label className="block text-[10px] font-bold text-zinc-500">Full Name</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+                  Full Name
+                </label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+                  className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
                 />
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-zinc-500">Email Address</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
+                  className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900"
                 />
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-zinc-500">
-                  Access Level Role
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">
+                  Privilege Role
                 </label>
                 <select
                   value={roleId}
                   onChange={(e) => setRoleId(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-955 dark:text-zinc-50"
+                  className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-stone-955 dark:text-zinc-50"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -114,40 +118,40 @@ export function InviteStaffDialog({ roles }: InviteStaffDialogProps) {
               </div>
 
               {inviteLink && (
-                <div className="rounded-lg bg-emerald-50 p-3 border border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-900 space-y-2">
-                  <p className="text-[10px] font-bold text-emerald-800 dark:text-emerald-400">
-                    Copy invitation link and send it to the teammate (expires in 24h):
+                <div className="rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20 p-4 space-y-2">
+                  <p className="text-[10px] font-black text-emerald-800 dark:text-emerald-400 uppercase tracking-widest">
+                    Temporary invitation link generated (expires in 24h):
                   </p>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-2.5 items-center">
                     <input
                       type="text"
                       readOnly
                       value={inviteLink}
-                      className="block w-full rounded border border-emerald-300 bg-white px-3 py-1 text-[10px] font-mono select-all focus:outline-none dark:bg-zinc-900 dark:border-zinc-850 dark:text-zinc-50"
+                      className="block w-full rounded-xl border border-emerald-300/30 bg-white px-4 py-2.5 text-[10px] font-mono select-all focus:outline-none dark:bg-zinc-900 dark:border-zinc-850 dark:text-zinc-50"
                     />
                     <button
                       type="button"
                       onClick={() => navigator.clipboard.writeText(inviteLink)}
-                      className="rounded bg-emerald-600 px-3 py-1 text-[10px] font-bold text-white hover:bg-emerald-700 whitespace-nowrap"
+                      className="rounded-xl bg-emerald-600 px-4 py-2.5 text-[10px] font-black text-white hover:bg-emerald-700 whitespace-nowrap"
                     >
-                      Copy Link
+                      Copy
                     </button>
                   </div>
                 </div>
               )}
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                  className="rounded-full bg-stone-100 px-6 py-2.5 text-xs font-bold text-stone-700"
                 >
                   Close
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded bg-zinc-950 px-4 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+                  className="rounded-full bg-stone-950 px-6 py-2.5 text-xs font-bold text-white hover:bg-stone-850"
                 >
                   {isPending ? "Generating..." : "Generate Invitation"}
                 </button>

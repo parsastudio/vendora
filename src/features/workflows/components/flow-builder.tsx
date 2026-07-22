@@ -70,20 +70,20 @@ export function FlowBuilder() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950 space-y-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
-              Vendora Diagram Canvas
+      <div className="rounded-3xl border border-stone-200/40 bg-white p-6 dark:border-zinc-900/50 dark:bg-zinc-950 space-y-6">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <h3 className="text-sm font-black uppercase tracking-widest text-stone-900 dark:text-zinc-100">
+              Interactive Blueprint
             </h3>
-            <p className="text-[10px] text-zinc-505">
-              Visually model triggers and map background endpoints.
+            <p className="text-[10px] text-stone-400 dark:text-zinc-505 font-semibold">
+              Drag endpoints, build pathways, and configure destination urls.
             </p>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center w-full sm:w-auto">
             <button
               onClick={handleReset}
-              className="rounded border border-zinc-300 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+              className="rounded-xl border border-stone-200 bg-white px-5 py-3 text-xs font-semibold text-stone-700 hover:bg-stone-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
             >
               Reset Canvas
             </button>
@@ -93,19 +93,19 @@ export function FlowBuilder() {
               placeholder="Webhook destination URL"
               value={webhookUrl}
               onChange={(e) => setTargetUrl(e.target.value)}
-              className="rounded border border-zinc-300 bg-zinc-50 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+              className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50 font-mono w-full sm:w-64"
             />
             <button
               onClick={handleSave}
               disabled={loading || !webhookUrl}
-              className="rounded bg-zinc-950 px-4 py-1.5 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950"
+              className="rounded-xl bg-stone-950 px-6 py-3 text-xs font-semibold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955"
             >
-              {loading ? "Saving..." : "Deploy Flowchart"}
+              {loading ? "Deploying..." : "Deploy Schematic"}
             </button>
           </div>
         </div>
 
-        <div className="h-96 w-full border border-zinc-200 rounded-lg overflow-hidden dark:border-zinc-800">
+        <div className="h-[450px] w-full border border-stone-200/40 rounded-2xl overflow-hidden dark:border-zinc-900">
           <ReactFlow
             nodes={nodes}
             edges={edges}

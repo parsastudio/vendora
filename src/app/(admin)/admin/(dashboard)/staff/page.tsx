@@ -43,66 +43,63 @@ export default async function StaffMembersPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-            Staff Members
+    <div className="space-y-12">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-black tracking-tight text-stone-950 dark:text-zinc-50">
+            Console Staff
           </h1>
-          <p className="text-xs text-zinc-500">
-            Configure roles and team permissions for administrative access.
+          <p className="text-xs text-stone-400 dark:text-zinc-500 font-medium">
+            Configure administrative permissions and monitor active console sessions.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <Link
             href="/admin/staff/sessions"
-            className="rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 h-9"
+            className="rounded-xl border border-stone-200 bg-white px-5 py-3 text-xs font-bold text-stone-700 shadow-sm hover:bg-stone-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 h-11"
           >
-            Manage Active Sessions
+            Manage Sessions
           </Link>
           <InviteStaffDialog roles={tenantRoles} />
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-        <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-          <thead className="bg-zinc-50 dark:bg-zinc-900">
+      <div className="overflow-hidden rounded-3xl border border-stone-200/40 bg-white dark:border-zinc-900/50 dark:bg-zinc-950">
+        <table className="min-w-full divide-y divide-stone-150 dark:divide-zinc-900">
+          <thead className="bg-stone-50 dark:bg-zinc-900">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-zinc-500 uppercase">
+              <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-zinc-500 uppercase">
-                Email
+              <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                Email Address
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-zinc-500 uppercase">
-                Role
+              <th className="px-6 py-4 text-left text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                Console Role
               </th>
-              <th className="px-6 py-3 text-right text-xs font-semibold text-zinc-500 uppercase">
+              <th className="px-6 py-4 text-right text-[9px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+          <tbody className="divide-y divide-stone-100 dark:divide-zinc-900/50 font-semibold text-xs">
             {staffList.map((member) => (
               <tr key={member.id}>
-                <td className="whitespace-nowrap px-6 py-4 text-xs font-semibold text-zinc-950 dark:text-zinc-50">
+                <td className="whitespace-nowrap px-6 py-5 text-stone-950 dark:text-zinc-50 font-black">
                   {member.name}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-xs text-zinc-500">
+                <td className="whitespace-nowrap px-6 py-5 text-stone-400 dark:text-zinc-500 font-mono">
                   {member.email}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-xs">
-                  <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+                <td className="whitespace-nowrap px-6 py-5">
+                  <span className="inline-flex items-center rounded-lg bg-stone-50 border border-stone-200 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-stone-850 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800">
                     {member.roleName || "No Role"}
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-right text-xs">
+                <td className="whitespace-nowrap px-6 py-5 text-right font-black">
                   {member.id !== session.user.id && (
                     <form action={handleDelete.bind(null, member.id)}>
-                      <button
-                        type="submit"
-                        className="text-xs font-semibold text-red-600 hover:underline"
-                      >
+                      <button type="submit" className="text-rose-600 hover:text-rose-700 font-bold">
                         Remove
                       </button>
                     </form>
