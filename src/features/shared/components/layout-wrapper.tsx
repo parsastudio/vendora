@@ -26,9 +26,9 @@ export function AdminLayoutWrapper({ children, user }: AdminLayoutWrapperProps) 
         }`}
       >
         {isDemo && (
-          <div className="bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-center border-b border-zinc-850 dark:border-zinc-200 flex items-center justify-center gap-2">
+          <div className="bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-center border-b border-zinc-200 flex items-center justify-center gap-2">
             <span>🛡️ Demo Sandbox Mode:</span>
-            <span className="font-medium normal-case text-zinc-400 dark:text-zinc-500">
+            <span className="font-medium normal-case text-zinc-400 dark:text-zinc-505">
               You are exploring as Guest Admin. Write actions are sandboxed to preserve shared demo
               metrics.
             </span>

@@ -43,7 +43,7 @@ export async function rateLimit(
       };
     }
 
-    const [, cardValue] = zcardResult;
+    const [, cardValue] = zcardResult as [unknown, unknown];
     const count = typeof cardValue === "number" ? cardValue : 0;
     const success = count < limit;
 
@@ -53,7 +53,7 @@ export async function rateLimit(
       remaining: Math.max(0, limit - count),
       reset: now + windowSeconds,
     };
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error({ error, key }, "Failed to execute rate limiter redis commands");
     return {
       success: true,
