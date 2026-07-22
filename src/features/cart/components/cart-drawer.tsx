@@ -166,7 +166,7 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
                   type="text"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="block w-full rounded-xl border border-zinc-300 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+                  className="block w-full rounded-xl border border-zinc-300 px-3 py-2 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-zinc-955 dark:text-zinc-50"
                   placeholder="Enter coupon code"
                 />
                 <button

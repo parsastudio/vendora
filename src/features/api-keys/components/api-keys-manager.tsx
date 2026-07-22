@@ -131,7 +131,7 @@ export function ApiKeysManager({ initialKeys }: ApiKeysManagerProps) {
                     <td className="whitespace-nowrap px-4 py-2 text-xs font-semibold text-zinc-950 dark:text-zinc-50">
                       {key.name}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-xs font-mono text-zinc-500">
+                    <td className="whitespace-nowrap px-4 py-2 text-xs font-mono text-zinc-505">
                       {key.preview}...
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-xs text-zinc-400">
