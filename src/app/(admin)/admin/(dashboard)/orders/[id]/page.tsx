@@ -82,7 +82,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800/40 dark:bg-zinc-950 space-y-6">
-            <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
+            <h3 className="text-sm font-bold text-zinc-955 dark:text-zinc-50">
               Ordered Catalog Items
             </h3>
             <div className="divide-y divide-zinc-150 dark:divide-zinc-850">
@@ -92,7 +92,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
                   className="flex justify-between py-4 first:pt-0 last:pb-0 text-xs font-semibold"
                 >
                   <div className="space-y-1">
-                    <p className="font-bold text-zinc-950 dark:text-zinc-50">
+                    <p className="font-bold text-zinc-955 dark:text-zinc-50">
                       {item.productName || "Product Catalog Item"}
                     </p>
                     <p className="text-[10px] text-zinc-400 font-mono">SKU: {item.sku || "N/A"}</p>
@@ -105,7 +105,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
                     )}
                   </div>
                   <div className="text-right space-y-1">
-                    <p className="font-bold text-zinc-950 dark:text-zinc-50 font-mono">
+                    <p className="font-bold text-zinc-955 dark:text-zinc-50 font-mono">
                       {formatCurrency(parseFloat(item.price))}
                     </p>
                     <p className="text-zinc-400">Qty: {item.quantity}</p>
@@ -135,9 +135,9 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
           />
 
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800/40 dark:bg-zinc-950 space-y-4">
-            <h3 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">Delivery Address</h3>
+            <h3 className="text-sm font-bold text-zinc-955 dark:text-zinc-50">Delivery Address</h3>
             <div className="text-xs text-zinc-500 dark:text-zinc-400 space-y-1 leading-relaxed">
-              <p className="font-bold text-zinc-950 dark:text-zinc-50 mb-2">
+              <p className="font-bold text-zinc-955 dark:text-zinc-50 mb-2">
                 {order.shippingAddress.name}
               </p>
               <p>{order.shippingAddress.line1}</p>

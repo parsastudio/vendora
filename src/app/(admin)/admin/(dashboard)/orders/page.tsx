@@ -72,7 +72,7 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
           <select
             name="status"
             defaultValue={status}
-            className="block w-full max-w-[160px] rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-2 text-xs focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50"
+            className="block w-full max-w-[160px] rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-2 text-xs focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 text-zinc-955 dark:text-zinc-50"
           >
             <option value="">All Statuses</option>
             <option value="pending">Pending</option>
@@ -176,9 +176,9 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
                 <div>
                   <p className="text-xs text-zinc-400">
                     Showing page{" "}
-                    <span className="font-extrabold text-zinc-950 dark:text-zinc-50">{page}</span>{" "}
+                    <span className="font-extrabold text-zinc-955 dark:text-zinc-50">{page}</span>{" "}
                     of{" "}
-                    <span className="font-extrabold text-zinc-950 dark:text-zinc-50">
+                    <span className="font-extrabold text-zinc-955 dark:text-zinc-50">
                       {totalPages}
                     </span>
                   </p>
