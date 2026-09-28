@@ -24,6 +24,7 @@ export async function allocateInventory(
   tenantId: string,
   orderId: string,
   items: AllocationItem[],
+  deduct: boolean = true,
 ): Promise<AllocationResult[]> {
   const variantIds = items.map((i) => i.variantId);
 
@@ -63,16 +64,22 @@ export async function allocateInventory(
     });
   }
 
+  if (!deduct) {
+    return validatedItems;
+  }
+
   for (const item of validatedItems) {
     let remainingDeduction = item.quantity;
     const matchedInvs = dbInventory.filter((inv) => inv.variantId === item.variantId);
 
     for (const inv of matchedInvs) {
       if (remainingDeduction <= 0) break;
-      const deduct = Math.min(inv.quantity, remainingDeduction);
+      const deductAmount = Math.min(inv.quantity, remainingDeduction);
+      inv.quantity -= deductAmount;
+
       await tx
         .update(inventory)
-        .set({ quantity: inv.quantity - deduct, updatedAt: new Date() })
+        .set({ quantity: inv.quantity, updatedAt: new Date() })
         .where(eq(inventory.id, inv.id));
 
       await tx.insert(auditLogs).values({
@@ -81,15 +88,15 @@ export async function allocateInventory(
         userId: null,
         action: "inventory.deduct",
         details: {
-          variantId: [item.variantId],
-          warehouseId: [inv.warehouseId],
-          deductedAmount: [deduct.toString()],
-          orderId: [orderId],
+          variantId: item.variantId,
+          warehouseId: inv.warehouseId,
+          deductedAmount: deductAmount,
+          orderId: orderId,
         },
         ipAddress: "127.0.0.1",
       });
 
-      remainingDeduction -= deduct;
+      remainingDeduction -= deductAmount;
     }
   }
 

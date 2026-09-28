@@ -6,7 +6,11 @@ import { db } from "@/lib/db";
 import { orders } from "@/lib/db/schema/orders";
 import { eq } from "drizzle-orm";
 
-export async function createStripeSession(orderId: string, domain: string) {
+export async function createStripeSession(
+  orderId: string,
+  domain: string,
+  couponId?: string | null,
+) {
   const orderResult = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1);
   if (orderResult.length === 0) {
     throw new Error("Order not found");
@@ -40,6 +44,7 @@ export async function createStripeSession(orderId: string, domain: string) {
     metadata: {
       orderId: order.id,
       tenantId: order.tenantId,
+      couponId: couponId || "",
     },
   });
 

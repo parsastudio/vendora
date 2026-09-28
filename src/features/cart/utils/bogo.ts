@@ -14,7 +14,9 @@ export function calculateBogoDiscount(items: CartItem[]): BogoDiscountResult {
     (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
   );
 
-  if (bogoEligible.length < 2) {
+  const totalQuantity = bogoEligible.reduce((acc, curr) => acc + curr.quantity, 0);
+
+  if (totalQuantity < 2) {
     return { discountAmount: "0.00", appliedSkus };
   }
 

@@ -1,32 +1,32 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
-import { orders, transactions } from "@/lib/db/schema/orders";
+import { orders, orderItems, transactions, discounts } from "@/lib/db/schema/orders";
 import { auditLogs } from "@/lib/db/schema/workflows";
 import { workflowEmitter } from "@/features/workflows/lib/event-emitter";
-import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
+import { allocateInventory } from "@/features/inventory/services/allocation";
+import { eq, sql } from "drizzle-orm";
 import Stripe from "stripe";
 import { StripePaymentSessionData } from "@/features/checkout/types/stripe";
 import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   const body = await request.text();
-  const headersList = await headers();
-  const signature = headersList.get("stripe-signature");
+  const signature = request.headers.get("stripe-signature");
 
   if (!signature) {
     return new NextResponse("Missing signature", { status: 400 });
   }
 
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    return new NextResponse("Webhook secret is not configured", { status: 500 });
+  }
+
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET || "",
-    );
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Webhook signature verification failed";
     return new NextResponse(message, { status: 400 });
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as unknown as StripePaymentSessionData;
-    const { orderId, tenantId } = session.metadata;
+    const { orderId, tenantId, couponId } = session.metadata;
 
     if (orderId && tenantId) {
       const existingTx = await db
@@ -56,6 +56,29 @@ export async function POST(request: Request) {
         const amount = session.amount_total ? (session.amount_total / 100).toFixed(2) : "0.00";
 
         await db.transaction(async (tx) => {
+          const items = await tx
+            .select({
+              variantId: orderItems.variantId,
+              quantity: orderItems.quantity,
+            })
+            .from(orderItems)
+            .where(eq(orderItems.orderId, orderId));
+
+          const validItems = items.filter(
+            (i): i is { variantId: string; quantity: number } => i.variantId !== null,
+          );
+
+          if (validItems.length > 0) {
+            await allocateInventory(tx, tenantId, orderId, validItems, true);
+          }
+
+          if (couponId) {
+            await tx
+              .update(discounts)
+              .set({ usageCount: sql`${discounts.usageCount} + 1` })
+              .where(eq(discounts.id, couponId));
+          }
+
           await tx
             .update(orders)
             .set({
@@ -81,9 +104,9 @@ export async function POST(request: Request) {
             userId: null,
             action: "payment.stripe_success",
             details: {
-              orderId: [orderId],
-              amount: [amount],
-              sessionId: [session.id],
+              orderId,
+              amount,
+              sessionId: session.id,
             },
             ipAddress: "127.0.0.1",
           });

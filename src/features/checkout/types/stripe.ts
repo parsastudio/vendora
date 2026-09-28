@@ -1,6 +1,7 @@
 export interface StripeWebhookMetadata {
   orderId: string;
   tenantId: string;
+  couponId?: string;
 }
 
 export interface StripePaymentSessionData {

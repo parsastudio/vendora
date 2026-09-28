@@ -107,7 +107,7 @@ export async function POST(request: Request) {
         });
       }
 
-      if (couponId) {
+      if (couponId && deductImmediately) {
         await tx
           .update(discounts)
           .set({ usageCount: sql`${discounts.usageCount} + 1` })
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
         status: validated.paymentMethod === "stripe" ? "pending" : "success",
       });
 
-      return { orderId, totalAmount: calculation.total };
+      return { orderId, totalAmount: calculation.total, couponId };
     });
 
     await workflowEmitter.emitEvent("order.created", validated.tenantId, {

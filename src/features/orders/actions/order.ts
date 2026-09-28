@@ -39,18 +39,26 @@ export const updateOrderStatus = withWriteProtection(async function (
       throw new Error("Cancelled orders cannot be altered");
     }
 
+    const txns = await tx
+      .select()
+      .from(transactions)
+      .where(and(eq(transactions.orderId, orderId), eq(transactions.tenantId, tenantId)));
+
+    const wasDeducted =
+      currentOrder.paymentStatus === "paid" || txns.some((t) => t.provider === "cash");
+
     await tx
       .update(orders)
       .set({ status, updatedAt: new Date() })
       .where(and(eq(orders.id, orderId), eq(orders.tenantId, tenantId)));
 
-    if (status === "cancelled") {
+    if (status === "cancelled" && wasDeducted) {
       const items = await tx.select().from(orderItems).where(eq(orderItems.orderId, orderId));
 
       for (const item of items) {
         if (item.variantId) {
           const invResult = await tx
-            .select()
+            .select({ id: inventory.id, quantity: inventory.quantity })
             .from(inventory)
             .where(eq(inventory.variantId, item.variantId))
             .limit(1)

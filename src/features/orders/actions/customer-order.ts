@@ -27,30 +27,40 @@ export async function cancelOrderByCustomer(orderId: string, domain: string) {
         throw new Error("Cannot cancel order at this stage");
       }
 
+      const txns = await tx
+        .select()
+        .from(transactions)
+        .where(eq(transactions.orderId, orderId));
+
+      const wasDeducted =
+        order.paymentStatus === "paid" || txns.some((t) => t.provider === "cash");
+
       await tx
         .update(orders)
         .set({ status: "cancelled", updatedAt: new Date() })
         .where(eq(orders.id, orderId));
 
-      const items = await tx.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+      if (wasDeducted) {
+        const items = await tx.select().from(orderItems).where(eq(orderItems.orderId, orderId));
 
-      for (const item of items) {
-        if (item.variantId) {
-          const invResult = await tx
-            .select()
-            .from(inventory)
-            .where(eq(inventory.variantId, item.variantId))
-            .limit(1)
-            .for("update");
+        for (const item of items) {
+          if (item.variantId) {
+            const invResult = await tx
+              .select({ id: inventory.id, quantity: inventory.quantity })
+              .from(inventory)
+              .where(eq(inventory.variantId, item.variantId))
+              .limit(1)
+              .for("update");
 
-          if (invResult.length > 0) {
-            await tx
-              .update(inventory)
-              .set({
-                quantity: invResult[0].quantity + item.quantity,
-                updatedAt: new Date(),
-              })
-              .where(eq(inventory.id, invResult[0].id));
+            if (invResult.length > 0) {
+              await tx
+                .update(inventory)
+                .set({
+                  quantity: invResult[0].quantity + item.quantity,
+                  updatedAt: new Date(),
+                })
+                .where(eq(inventory.id, invResult[0].id));
+            }
           }
         }
       }

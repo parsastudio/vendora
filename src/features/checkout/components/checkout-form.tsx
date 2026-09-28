@@ -126,7 +126,11 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
           const createdOrderId = result.data.orderId;
 
           if (paymentMethod === "stripe") {
-            const stripeSession = await createStripeSession(createdOrderId, domain);
+            const stripeSession = await createStripeSession(
+              createdOrderId,
+              domain,
+              result.data.couponId,
+            );
             if (stripeSession.url) {
               clearCart();
               window.location.href = stripeSession.url;
