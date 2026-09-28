@@ -6,34 +6,7 @@ import { authOptions } from "@/features/auth/lib/auth";
 import { redirect } from "next/navigation";
 import { CategoryCreationForm } from "@/features/products/components/category-creation-form";
 import { RecursiveCategoryTree } from "@/features/products/components/recursive-category-tree";
-
-interface DbCategory {
-  id: string;
-  tenantId: string;
-  parentId: string | null;
-  name: string;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface CategoryNode {
-  id: string;
-  name: string;
-  parentId: string | null;
-  children: CategoryNode[];
-}
-
-function buildCategoryTree(list: DbCategory[], parentId: string | null = null): CategoryNode[] {
-  return list
-    .filter((item) => item.parentId === parentId)
-    .map((item) => ({
-      id: item.id,
-      name: item.name,
-      parentId: item.parentId,
-      children: buildCategoryTree(list, item.id),
-    }));
-}
+import { buildCategoryTree } from "@/features/products/utils/taxonomy";
 
 export default async function CategoriesPage() {
   const session = await getServerSession(authOptions);

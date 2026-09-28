@@ -1,8 +1,5 @@
-import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { tenants } from "@/lib/db/schema/tenants";
-import { eq } from "drizzle-orm";
 import { CheckoutForm } from "@/features/checkout/components/checkout-form";
+import { getStorefrontTenant } from "@/features/tenant/lib/resolve-tenant";
 import Link from "next/link";
 
 interface CheckoutPageProps {
@@ -11,17 +8,7 @@ interface CheckoutPageProps {
 
 export default async function StorefrontCheckoutPage({ params }: CheckoutPageProps) {
   const resolvedParams = await params;
-  const tenantResult = await db
-    .select()
-    .from(tenants)
-    .where(eq(tenants.subdomain, resolvedParams.domain))
-    .limit(1);
-
-  if (tenantResult.length === 0) {
-    notFound();
-  }
-
-  const tenant = tenantResult[0];
+  const tenant = await getStorefrontTenant(resolvedParams.domain);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8">

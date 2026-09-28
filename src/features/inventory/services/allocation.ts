@@ -88,10 +88,10 @@ export async function allocateInventory(
         userId: null,
         action: "inventory.deduct",
         details: {
-          variantId: item.variantId,
-          warehouseId: inv.warehouseId,
-          deductedAmount: deductAmount,
-          orderId: orderId,
+          variantId: [item.variantId],
+          warehouseId: [inv.warehouseId],
+          deductedAmount: [deductAmount.toString()],
+          orderId: [orderId],
         },
         ipAddress: "127.0.0.1",
       });

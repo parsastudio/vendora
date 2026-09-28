@@ -18,10 +18,3 @@ export function formatDateTime(date: Date | string | number): string {
     timeZone: "UTC",
   }).format(targetDate);
 }
-
-export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return `${text.slice(0, maxLength)}...`;
-}

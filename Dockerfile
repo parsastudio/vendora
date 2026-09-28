@@ -1,0 +1,21 @@
+FROM node:22-slim
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# ساخت کاربر غیر روت در دبیان
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 -g nodejs nextjs
+
+# کپی استندالون شامل شارپ و تمام باینری‌های سازگار با glibc
+COPY --chown=nextjs:nodejs .next/standalone ./
+COPY --chown=nextjs:nodejs .next/static ./.next/static
+COPY --chown=nextjs:nodejs public ./public
+
+USER nextjs
+EXPOSE 3000
+
+CMD ["node", "server.js"]

@@ -2,10 +2,11 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
 import { productVariants, products } from "@/lib/db/schema/products";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { formatCurrency } from "@/features/shared/utils/format";
 import { CustomerOrderActions } from "@/features/orders/components/customer-order-actions";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
+import { getStorefrontTenant } from "@/features/tenant/lib/resolve-tenant";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,8 +17,13 @@ interface OrderSuccessPageProps {
 export default async function OrderSuccessPage({ params }: OrderSuccessPageProps) {
   const resolvedParams = await params;
   const { domain, id } = resolvedParams;
+  const tenant = await getStorefrontTenant(domain);
 
-  const orderResult = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
+  const orderResult = await db
+    .select()
+    .from(orders)
+    .where(and(eq(orders.id, id), eq(orders.tenantId, tenant.id)))
+    .limit(1);
 
   if (orderResult.length === 0) {
     notFound();
@@ -147,7 +153,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
               {order.trackingCode && (
                 <div className="flex items-center justify-between text-xs pt-3 border-t border-dashed border-stone-200 dark:border-zinc-800">
                   <span className="text-stone-400">Tracking Ref</span>
-                  <span className="font-mono font-bold text-stone-955 dark:text-zinc-50">
+                  <span className="font-mono font-bold text-stone-900 dark:text-zinc-50">
                     {order.trackingCode}
                   </span>
                 </div>
@@ -164,7 +170,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
             {itemsList.map((item) => (
               <div key={item.id} className="flex justify-between py-4 text-xs font-semibold">
                 <div className="space-y-1">
-                  <p className="font-bold text-stone-955 dark:text-zinc-50">
+                  <p className="font-bold text-stone-900 dark:text-zinc-50">
                     {item.productName || "Product Catalog Item"}
                   </p>
                   <p className="text-[9px] text-stone-400 font-mono">SKU: {item.sku || "N/A"}</p>
@@ -177,7 +183,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
                   )}
                 </div>
                 <div className="text-right space-y-1 font-semibold">
-                  <p className="font-bold text-stone-955 dark:text-zinc-50 font-mono">
+                  <p className="font-bold text-stone-900 dark:text-zinc-50 font-mono">
                     {formatCurrency(parseFloat(item.price))}
                   </p>
                   <p className="text-stone-400">Qty: {item.quantity}</p>
@@ -279,7 +285,7 @@ export default async function OrderSuccessPage({ params }: OrderSuccessPageProps
         <div className="pt-8 text-center">
           <Link
             href={`/${domain}`}
-            className="inline-block rounded-full bg-stone-950 px-10 py-4 text-xs font-bold text-white shadow-xl hover:bg-stone-850"
+            className="inline-block rounded-full bg-stone-950 px-10 py-4 text-xs font-bold text-white shadow-xl hover:bg-stone-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
           >
             Continue Shopping
           </Link>

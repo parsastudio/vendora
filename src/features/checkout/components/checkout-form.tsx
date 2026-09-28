@@ -198,7 +198,7 @@ export function CheckoutForm({ tenantId, domain }: CheckoutFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full bg-stone-950 py-4.5 text-center text-xs font-bold text-white hover:bg-stone-850 active:scale-[0.99] disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+            className="w-full rounded-full bg-stone-950 py-4.5 text-center text-xs font-bold text-white hover:bg-stone-900 active:scale-[0.99] disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
           >
             {isPending
               ? "Configuring Transaction..."

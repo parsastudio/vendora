@@ -6,13 +6,20 @@ export interface BogoDiscountResult {
   appliedSkus: string[];
 }
 
+export function isItemBogoEligible(item: { attributes?: Record<string, string> }): boolean {
+  if (!item.attributes) return false;
+  return item.attributes.color === "black" || item.attributes.bogo === "true";
+}
+
+export function hasBogoEligibleItems(items: Array<{ attributes?: Record<string, string> }>): boolean {
+  return items.some(isItemBogoEligible);
+}
+
 export function calculateBogoDiscount(items: CartItem[]): BogoDiscountResult {
   let discountDec = new Decimal("0.00");
   const appliedSkus: string[] = [];
 
-  const bogoEligible = items.filter(
-    (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
-  );
+  const bogoEligible = items.filter(isItemBogoEligible);
 
   const totalQuantity = bogoEligible.reduce((acc, curr) => acc + curr.quantity, 0);
 

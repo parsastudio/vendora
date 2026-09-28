@@ -242,26 +242,36 @@ async function main() {
     },
   ]);
 
-  const demoCusts = generateDemoCustomers("tenant-demo");
-  for (const c of demoCusts) {
-    await db.insert(customers).values(c);
-  }
+  console.log("🏢 Seeding customers, catalog, and 650 transactions via transactional batches...");
 
-  const { ordersList, itemsList, txnsList } = generateDemoData("tenant-demo", demoCusts, [
-    { id: "var-demo-1-acoustic", price: "299.00" },
-    { id: "var-demo-2-tactile", price: "149.00" },
-  ]);
+  await db.transaction(async (tx) => {
+    const demoCusts = generateDemoCustomers("tenant-demo");
+    if (demoCusts.length > 0) {
+      await tx.insert(customers).values(demoCusts);
+    }
 
-  for (const o of ordersList) {
-    await db.insert(orders).values(o);
-  }
-  for (const oi of itemsList) {
-    await db.insert(orderItems).values(oi);
-  }
-  for (const tx of txnsList) {
-    await db.insert(transactions).values(tx);
-  }
+    const { ordersList, itemsList, txnsList } = generateDemoData("tenant-demo", demoCusts, [
+      { id: "var-demo-1-acoustic", price: "299.00" },
+      { id: "var-demo-2-tactile", price: "149.00" },
+    ]);
 
+    // Batch insert orders in chunks of 100
+    for (let i = 0; i < ordersList.length; i += 100) {
+      await tx.insert(orders).values(ordersList.slice(i, i + 100));
+    }
+
+    // Batch insert items in chunks of 100
+    for (let i = 0; i < itemsList.length; i += 100) {
+      await tx.insert(orderItems).values(itemsList.slice(i, i + 100));
+    }
+
+    // Batch insert transactions in chunks of 100
+    for (let i = 0; i < txnsList.length; i += 100) {
+      await tx.insert(transactions).values(txnsList.slice(i, i + 100));
+    }
+  });
+
+  console.log("✅ Seed completed successfully! Populated 3 tenants, products, and 650 orders in seconds.");
   process.exit(0);
 }
 

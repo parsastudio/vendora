@@ -2,7 +2,7 @@
 
 import "server-only";
 import { db } from "@/lib/db";
-import { orders, orderItems, orderReturns } from "@/lib/db/schema/orders";
+import { orders, orderItems, orderReturns, transactions } from "@/lib/db/schema/orders";
 import { inventory } from "@/lib/db/schema/products";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";

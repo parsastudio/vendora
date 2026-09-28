@@ -1,11 +1,10 @@
-import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
-import { tenants } from "@/lib/db/schema/tenants";
 import { eq, and, inArray } from "drizzle-orm";
 import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency } from "@/features/shared/utils/format";
+import { getStorefrontTenant } from "@/features/tenant/lib/resolve-tenant";
 
 interface StorefrontProps {
   params: Promise<{ domain: string }>;
@@ -13,19 +12,8 @@ interface StorefrontProps {
 
 export default async function StorefrontPage({ params }: StorefrontProps) {
   const resolvedParams = await params;
-  const tenantDomain = resolvedParams.domain;
-
-  const tenantResult = await db
-    .select()
-    .from(tenants)
-    .where(eq(tenants.subdomain, tenantDomain))
-    .limit(1);
-
-  if (!tenantResult || tenantResult.length === 0) {
-    notFound();
-  }
-
-  const tenant = tenantResult[0];
+  const tenant = await getStorefrontTenant(resolvedParams.domain);
+  const tenantDomain = tenant.subdomain;
 
   const tenantProducts = await db
     .select({

@@ -104,9 +104,9 @@ export async function POST(request: Request) {
             userId: null,
             action: "payment.stripe_success",
             details: {
-              orderId,
-              amount,
-              sessionId: session.id,
+              orderId: [orderId],
+              amount: [amount],
+              sessionId: [session.id],
             },
             ipAddress: "127.0.0.1",
           });

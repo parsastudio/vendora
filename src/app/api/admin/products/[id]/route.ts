@@ -44,6 +44,16 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const body = await request.json();
     const validated = productSchema.parse(body);
 
+    const existingProduct = await db
+      .select({ id: products.id })
+      .from(products)
+      .where(and(eq(products.id, id), eq(products.tenantId, session.user.tenantId)))
+      .limit(1);
+
+    if (existingProduct.length === 0) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
     await db.transaction(async (tx) => {
       await tx
         .update(products)

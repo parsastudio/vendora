@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { products, productVariants } from "@/lib/db/schema/products";
-import { tenants } from "@/lib/db/schema/tenants";
 import { eq, and } from "drizzle-orm";
 import { ProductVariantSelector } from "@/features/products/components/product-variant-selector";
+import { getStorefrontTenant } from "@/features/tenant/lib/resolve-tenant";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,18 +14,7 @@ interface ProductPageProps {
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
   const { domain, slug } = resolvedParams;
-
-  const tenantResult = await db
-    .select()
-    .from(tenants)
-    .where(eq(tenants.subdomain, domain))
-    .limit(1);
-
-  if (tenantResult.length === 0) {
-    notFound();
-  }
-
-  const tenant = tenantResult[0];
+  const tenant = await getStorefrontTenant(domain);
 
   const productResult = await db
     .select({

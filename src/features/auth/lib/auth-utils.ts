@@ -8,13 +8,3 @@ export async function hashPassword(password: string): Promise<string> {
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
-
-export function hasPermission(
-  userPermissions: string[] | undefined,
-  requiredPermission: string,
-): boolean {
-  if (!userPermissions) {
-    return false;
-  }
-  return userPermissions.includes(requiredPermission);
-}

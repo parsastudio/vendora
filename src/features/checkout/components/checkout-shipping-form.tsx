@@ -34,72 +34,96 @@ export function CheckoutShippingForm({
       </h3>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="sm:col-span-2 space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="shipping-line1"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Address Line 1
           </label>
           <input
+            id="shipping-line1"
             type="text"
             required
             value={line1}
             onChange={(e) => setLine1(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="sm:col-span-2 space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="shipping-line2"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Address Line 2 (Optional)
           </label>
           <input
+            id="shipping-line2"
             type="text"
             value={line2}
             onChange={(e) => setLine2(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="shipping-city"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             City
           </label>
           <input
+            id="shipping-city"
             type="text"
             required
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="shipping-state"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             State / Region
           </label>
           <input
+            id="shipping-state"
             type="text"
             required
             value={state}
             onChange={(e) => setState(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="shipping-postal"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Postal / ZIP Code
           </label>
           <input
+            id="shipping-postal"
             type="text"
             required
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="shipping-country"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Country
           </label>
           <select
+            id="shipping-country"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-950 dark:text-zinc-50 font-bold"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100 font-bold"
           >
             <option value="US">United States</option>
             <option value="CA">Canada</option>

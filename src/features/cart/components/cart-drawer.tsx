@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { formatCurrency } from "@/features/shared/utils/format";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { hasBogoEligibleItems } from "@/features/cart/utils/bogo";
 
 interface CartDrawerProps {
   tenantId: string;
@@ -80,9 +81,7 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
 
   if (!isOpen || !isClient) return null;
 
-  const hasBogoActive = items.some(
-    (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
-  );
+  const hasBogoActive = hasBogoEligibleItems(items);
 
   const drawerContent = (
     <div className="fixed inset-0 z-[100] overflow-hidden animate-in fade-in duration-300">
@@ -220,7 +219,7 @@ export function CartDrawer({ tenantId, isOpen, onClose }: CartDrawerProps) {
               <Link
                 href={`/${domain}/checkout`}
                 onClick={onClose}
-                className="block w-full rounded-full bg-stone-950 py-4 text-center text-xs font-bold text-white shadow-xl hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+                className="block w-full rounded-full bg-stone-950 py-4 text-center text-xs font-bold text-white shadow-xl hover:bg-stone-900 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
               >
                 Proceed to Checkout
               </Link>
