@@ -8,34 +8,18 @@ interface DbCategory {
   parentId: string | null;
 }
 
+import { buildCategoryTree, type CategoryNode } from "@/features/products/utils/taxonomy";
+
 interface CategoryPickerProps {
   categories: DbCategory[];
   value: string;
   onChange: (val: string) => void;
 }
 
-interface PickerNode {
-  id: string;
-  name: string;
-  parentId: string | null;
-  children: PickerNode[];
-}
-
 export function CategoryPicker({ categories, value, onChange }: CategoryPickerProps) {
-  const buildTree = (list: DbCategory[], parentId: string | null = null): PickerNode[] => {
-    return list
-      .filter((item) => item.parentId === parentId)
-      .map((item) => ({
-        id: item.id,
-        name: item.name,
-        parentId: item.parentId,
-        children: buildTree(list, item.id),
-      }));
-  };
+  const tree = buildCategoryTree(categories);
 
-  const tree = buildTree(categories);
-
-  const renderOptions = (nodes: PickerNode[], depth = 0): ReactNode[] => {
+  const renderOptions = (nodes: CategoryNode[], depth = 0): ReactNode[] => {
     return nodes.flatMap((node) => [
       <option key={node.id} value={node.id}>
         {"\u00A0\u00A0".repeat(depth)}

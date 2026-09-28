@@ -13,7 +13,7 @@ export default function GlobalError({ reset }: GlobalErrorProps) {
           <span className="text-[10px] font-black uppercase tracking-[0.25em] text-rose-600">
             Runtime Aborted
           </span>
-          <h2 className="text-3xl font-black tracking-tight text-stone-955 dark:text-zinc-50">
+          <h2 className="text-3xl font-black tracking-tight text-stone-900 dark:text-zinc-50">
             Critical Failure Blocked
           </h2>
           <p className="text-xs text-stone-400 dark:text-zinc-500 leading-relaxed font-semibold">
@@ -23,7 +23,7 @@ export default function GlobalError({ reset }: GlobalErrorProps) {
           <div className="pt-4">
             <button
               onClick={() => reset()}
-              className="rounded-full bg-stone-950 px-8 py-3.5 text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-955"
+              className="rounded-full bg-stone-950 px-8 py-3.5 text-xs font-bold text-white hover:bg-stone-800 dark:bg-zinc-50 dark:text-zinc-900"
             >
               Restart Environment
             </button>

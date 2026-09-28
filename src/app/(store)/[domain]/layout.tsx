@@ -1,10 +1,7 @@
 import { type ReactNode, type CSSProperties } from "react";
-import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { tenants } from "@/lib/db/schema/tenants";
-import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 import { StoreHeader } from "@/features/tenant/components/store-header";
+import { getStorefrontTenant } from "@/features/tenant/lib/resolve-tenant";
 
 interface StorefrontLayoutProps {
   children: ReactNode;
@@ -17,21 +14,7 @@ export async function generateMetadata({
   params: Promise<{ domain: string }>;
 }): Promise<Metadata> {
   const resolvedParams = await params;
-  const tenantDomain = resolvedParams.domain;
-
-  const tenantResult = await db
-    .select()
-    .from(tenants)
-    .where(eq(tenants.subdomain, tenantDomain))
-    .limit(1);
-
-  if (!tenantResult || tenantResult.length === 0) {
-    return {
-      title: "Store Not Found",
-    };
-  }
-
-  const tenant = tenantResult[0];
+  const tenant = await getStorefrontTenant(resolvedParams.domain);
 
   return {
     title: `${tenant.name} - Vendora`,
@@ -41,19 +24,7 @@ export async function generateMetadata({
 
 export default async function StorefrontLayout({ children, params }: StorefrontLayoutProps) {
   const resolvedParams = await params;
-  const tenantDomain = resolvedParams.domain;
-
-  const tenantResult = await db
-    .select()
-    .from(tenants)
-    .where(eq(tenants.subdomain, tenantDomain))
-    .limit(1);
-
-  if (!tenantResult || tenantResult.length === 0) {
-    notFound();
-  }
-
-  const tenant = tenantResult[0];
+  const tenant = await getStorefrontTenant(resolvedParams.domain);
   const themeSettings = tenant.themeSettings;
 
   const customStyles = {

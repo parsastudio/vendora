@@ -151,7 +151,7 @@ export function InviteStaffDialog({ roles }: InviteStaffDialogProps) {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-full bg-stone-950 px-6 py-2.5 text-xs font-bold text-white hover:bg-stone-850"
+                  className="rounded-full bg-stone-950 px-6 py-2.5 text-xs font-bold text-white hover:bg-stone-900"
                 >
                   {isPending ? "Generating..." : "Generate Invitation"}
                 </button>

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { orders, orderItems } from "@/lib/db/schema/orders";
+import { orders, orderItems, transactions } from "@/lib/db/schema/orders";
 import { inventory } from "@/lib/db/schema/products";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/features/auth/lib/auth";

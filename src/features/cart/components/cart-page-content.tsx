@@ -7,6 +7,7 @@ import Link from "next/link";
 import { CartItemsList } from "./cart-items-list";
 import { CouponPromoForm } from "./coupon-promo-form";
 import { CartTotalsSummary } from "./cart-totals-summary";
+import { hasBogoEligibleItems } from "@/features/cart/utils/bogo";
 
 interface CartPageContentProps {
   tenantId: string;
@@ -137,7 +138,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
         </p>
         <Link
           href={`/${domain}`}
-          className="rounded-full bg-stone-950 px-8 py-3 text-xs font-bold text-white shadow-sm hover:bg-stone-850"
+          className="rounded-full bg-stone-950 px-8 py-3 text-xs font-bold text-white shadow-sm hover:bg-stone-800 dark:bg-zinc-50 dark:text-zinc-950"
         >
           Return to Storefront
         </Link>
@@ -145,9 +146,7 @@ export function CartPageContent({ tenantId, domain }: CartPageContentProps) {
     );
   }
 
-  const hasBogoActive = items.some(
-    (item) => item.attributes.color === "black" || item.attributes.bogo === "true",
-  );
+  const hasBogoActive = hasBogoEligibleItems(items);
 
   return (
     <div className="mt-16 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">

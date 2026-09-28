@@ -80,10 +80,14 @@ export default function AdminLoginPage() {
             {!require2FA ? (
               <>
                 <div className="space-y-1.5">
-                  <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                  <label
+                    htmlFor="login-email"
+                    className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+                  >
                     Email Address
                   </label>
                   <input
+                    id="login-email"
                     type="email"
                     required
                     value={email}
@@ -93,10 +97,14 @@ export default function AdminLoginPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                  <label
+                    htmlFor="login-password"
+                    className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+                  >
                     Password
                   </label>
                   <input
+                    id="login-password"
                     type="password"
                     required
                     value={password}
@@ -107,10 +115,14 @@ export default function AdminLoginPage() {
               </>
             ) : (
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+                <label
+                  htmlFor="login-otp"
+                  className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+                >
                   Two-factor Verification Code
                 </label>
                 <input
+                  id="login-otp"
                   type="text"
                   required
                   maxLength={6}
@@ -127,7 +139,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full rounded-full bg-stone-950 py-3.5 text-xs font-bold text-white hover:bg-stone-850 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+              className="w-full rounded-full bg-stone-950 py-3.5 text-xs font-bold text-white hover:bg-stone-900 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
             >
               {isPending ? "Connecting..." : require2FA ? "Verify Identity" : "Log In"}
             </button>
@@ -135,11 +147,11 @@ export default function AdminLoginPage() {
             {!require2FA && (
               <>
                 <div className="relative flex py-2 items-center">
-                  <div className="flex-grow border-t border-stone-150 dark:border-zinc-900"></div>
+                  <div className="flex-grow border-t border-stone-200 dark:border-zinc-900"></div>
                   <span className="flex-shrink mx-4 text-stone-400 dark:text-zinc-500 text-[9px] font-black uppercase tracking-widest">
                     Sandbox exploration
                   </span>
-                  <div className="flex-grow border-t border-stone-150 dark:border-zinc-900"></div>
+                  <div className="flex-grow border-t border-stone-200 dark:border-zinc-900"></div>
                 </div>
 
                 <button

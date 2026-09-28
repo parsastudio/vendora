@@ -111,42 +111,36 @@ Building a high-throughput multi-tenant engine required solving critical archite
 
 ## 📂 Architecture & Directory Layout
 
-```text
 src/
-├── app/                  # Next.js 16 App Router
-│   ├── (admin)/          # Tenant admin console (Analytics, Products, Orders, Staff)
-│   ├── (store)/          # Dynamic storefront routes resolved per merchant domain
-│   ├── api/              # Secure REST APIs (Admin endpoints, V1 Headless API, Webhooks)
-│   ├── globals.css       # Design tokens & Tailwind CSS v4 configuration
-│   └── middleware.ts     # Edge routing proxy delegating multi-tenant rewrites
-├── features/             # Feature-Driven Architecture (Vertical Slices)
-│   ├── analytics/        # Cohort retention, sales velocity, and abandoned cart metrics
-│   ├── api-keys/         # Cryptographic developer token generator and hash validators
-│   ├── auth/             # NextAuth credentials provider, session vault, and TOTP 2FA
-│   ├── cart/             # High-precision cart math, BOGO engine, and Zustand state
-│   ├── checkout/         # Multi-step checkout orchestrator and Stripe payment actions
-│   ├── developer/        # REST sandbox runner, API docs, and outbound webhook manager
-│   ├── inventory/        # Warehouse allocation service with PostgreSQL row-level locks
-│   ├── orders/           # Order tracking, customer self-service returns, and invoices
-│   ├── products/         # Variant managers, SKU generators, and category tree taxonomy
-│   ├── staff/            # Role-based access control (RBAC) and team invitation tokens
-│   ├── tenant/           # Domain resolvers, theme style injectors, and demo seeders
-│   └── workflows/        # React Flow visual builder, event bus, and webhook dispatcher
-├── lib/                  # Shared infrastructure & utilities
-│   ├── db/               # Drizzle ORM PostgreSQL schema definitions and migrations
-│   ├── logger.ts         # Redacted enterprise Pino logging instance
-│   ├── redis.ts          # Pooled Redis client for caching and session management
-│   ├── s3.ts             # AWS S3 presigned URL generator for secure asset uploads
-│   └── stripe.ts         # Stripe client for secure payment sessions
-└── types/                # Strict TypeScript entity schemas and session extensions
-```
+├── app/ # Next.js 16 App Router
+│ ├── (admin)/ # Tenant admin console (Analytics, Products, Orders, Staff)
+│ ├── (store)/ # Dynamic storefront routes resolved per merchant domain
+│ ├── api/ # Secure REST APIs (Admin endpoints, V1 Headless API, Webhooks)
+│ ├── globals.css # Design tokens & Tailwind CSS v4 configuration
+│ └── middleware.ts # Edge routing proxy delegating multi-tenant rewrites
+├── features/ # Feature-Driven Architecture (Vertical Slices)
+│ ├── analytics/ # Cohort retention, sales velocity, and abandoned cart metrics
+│ ├── api-keys/ # Cryptographic developer token generator and hash validators
+│ ├── auth/ # NextAuth credentials provider, session vault, and TOTP 2FA
+│ ├── cart/ # High-precision cart math, BOGO engine, and Zustand state
+│ ├── checkout/ # Multi-step checkout orchestrator and Stripe payment actions
+│ ├── developer/ # REST sandbox runner, API docs, and outbound webhook manager
+│ ├── inventory/ # Warehouse allocation service with PostgreSQL row-level locks
+│ ├── orders/ # Order tracking, customer self-service returns, and invoices
+│ ├── products/ # Variant managers, SKU generators, and category tree taxonomy
+│ ├── staff/ # Role-based access control (RBAC) and team invitation tokens
+│ ├── tenant/ # Domain resolvers, theme style injectors, and demo seeders
+│ └── workflows/ # React Flow visual builder, event bus, and webhook dispatcher
+├── lib/ # Shared infrastructure & utilities
+│ ├── db/ # Drizzle ORM PostgreSQL schema definitions and migrations
+│ ├── logger.ts # Redacted enterprise Pino logging instance
+│ ├── redis.ts # Pooled Redis client for caching and session management
+│ ├── s3.ts # AWS S3 presigned URL generator for secure asset uploads
+│ └── stripe.ts # Stripe client for secure payment sessions
+└── types/ # Strict TypeScript entity schemas and session extensions
 
 ---
 
 ## 💭 Senior Architect's Note
 
 Vendora is not a cosmetic dashboard template; every network boundary, database transaction, row-level lock, and cryptographic hash was built to satisfy the operational demands of high-load enterprise commerce. It proves that a headless retail platform can be built with complete multi-tenant isolation, clean architectural separation, and uncompromising speed.
-
-```
-
-```

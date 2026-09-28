@@ -107,7 +107,7 @@ export async function POST(request: Request) {
         });
       }
 
-      if (couponId && deductImmediately) {
+      if (couponId) {
         await tx
           .update(discounts)
           .set({ usageCount: sql`${discounts.usageCount} + 1` })

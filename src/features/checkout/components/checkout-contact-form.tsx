@@ -22,39 +22,51 @@ export function CheckoutContactForm({
       </h3>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="sm:col-span-2 space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="checkout-name"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Full Name
           </label>
           <input
+            id="checkout-name"
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="checkout-email"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Email Address
           </label>
           <input
+            id="checkout-email"
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest">
+          <label
+            htmlFor="checkout-phone"
+            className="block text-[10px] font-black text-stone-400 dark:text-zinc-500 uppercase tracking-widest"
+          >
             Phone Number
           </label>
           <input
+            id="checkout-phone"
             type="text"
             required
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900"
+            className="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-xs focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
           />
         </div>
       </div>
