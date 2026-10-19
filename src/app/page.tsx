@@ -4,8 +4,9 @@ import { headers } from "next/headers";
 export default async function Home() {
   const headerList = await headers();
   const host = headerList.get("host") || "localhost:3000";
-  const protocol = host.includes("localhost") ? "http" : "https";
-  const sandboxUrl = `${protocol}://demo.${host}`;
+  const isLocalhost = host.includes("localhost");
+  const protocol = isLocalhost ? "http" : "https";
+  const sandboxUrl = isLocalhost ? `${protocol}://demo.${host}` : "/demo";
 
   return (
     <div className="flex flex-col min-h-screen bg-[#fafaf9] dark:bg-[#09090b]">
