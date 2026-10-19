@@ -64,5 +64,6 @@
     "overrides": {
       "react-is": "$react-is"
     }
-  }
+  },
+  "packageManager": "pnpm@10.5.2"
 }
